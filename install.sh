@@ -14,8 +14,8 @@ IFS_ORG=$IFS
 IFS=$'\n'
 
 # original file
-ODIRS=($(find $WD/ -mindepth 1 -type d))
-OFILES=($(find $WD/ -type f))
+ODIRS=($(find ${WD}/ -mindepth 1 -type d | grep -v ".git"))
+OFILES=($(find ${WD}/ -type f | grep -E -v ".git|README.md|${0##*/}"))
 
 IFS=$IFS_ORG
 
@@ -26,9 +26,6 @@ uninstall () {
     # rm dir
     echo $'\n# rm dir'
     for odir in "${ODIRS[@]}"; do
-        if [ ${odir##*/} = '.git' ]; then
-            continue
-        fi
         dir=${odir//\/dotfiles/}
         if [ -e "${dir}" ]; then
             echo "rm -rf ${dir}"
@@ -40,9 +37,6 @@ uninstall () {
     # rm symbolic link of OFILE
     echo $'\n# rm symbolic link'
     for ofile in "${OFILES[@]}"; do
-        if [ ${ofile##*/} = ${0##*/} ]; then
-            continue
-        fi
         file=${ofile//\/dotfiles/}
         if [ -e "${file}" ]; then
             echo "rm -rf ${file}"
@@ -67,9 +61,6 @@ install() {
     # make dir
     echo $'\n# make dir'
     for odir in "${ODIRS[@]}"; do
-        if [ ${odir##*/} = '.git' ]; then
-            continue
-        fi
         dir=${odir//\/dotfiles/}
         if [ ! -e "${dir}" ]; then
             echo "mkdir $dir"
@@ -85,9 +76,6 @@ install() {
     # make symbolic link of OFILE
     echo $'\n# make symbolic link'
     for ofile in "${OFILES[@]}"; do
-        if [ ${ofile##*/} = ${0##*/} ]; then
-            continue
-        fi
         file=${ofile//\/dotfiles/}
         if [ ! -e "${file}" ]; then
             echo "${ofile} --> ${file}"
