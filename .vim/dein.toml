@@ -1,0 +1,206 @@
+# plugins
+
+[[plugins]] # 暗黒美夢王から授かった闇の力
+repo = 'Shougo/dein.vim'
+
+[[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
+
+[[plugins]] # カーソル位置のコンテキストのftを判定する
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]] # toml用 syntax
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]] # カラースキーマ
+repo = 'cocopon/iceberg.vim'
+hook_add = '''
+    if !has('gui_running')
+        set t_Co=256
+    endif
+    " colorscheme 設定は source 後に行う必要があるので VimEnter で行う。
+    " 但し Colorscheme イベントの発生が抑制されないよう nented を付ける。
+    au MyAutoCmd VimEnter * nested colorscheme iceberg
+'''
+
+[[plugins]] # コード自動補完プラグイン(neocomplcacheの後続)
+repo = 'Shougo/neocomplete.vim'
+if   = '''! has('lua')'''
+hook_add = '''
+    " Vim起動時にneocompleteを有効化
+    let g:neocomplete#enable_at_startup = 1
+    " 大文字が入力されるまで大文字小文字の区別を無視
+    let g:neocomplete#enable_smart_case = 1
+    " キーワードの最小長
+    let g:neocomplete#min_keyword_length = 3
+    " キーワードの最大長
+    let g:neocomplete#max_keyword_width = 10000
+    " 補完を表示する最小長
+    let g:neocomplete#auto_completion_start_length = 3
+    " 区切り文字まで補完
+    let g:neocomplete#enable_auto_delimiter = 1
+    " ポップアップメニューで表示される候補数
+    let g:neocomplete#max_list = 20
+    " 1文字目の入力から補完のポップアップを表示
+    let g:neocomplete#auto_completion_start_length = 1
+    " シンタックスをキャッシュするときの最小長
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    " preview window を勝手に閉じない
+    let g:neocomplete#enable_auto_close_preview = 0
+    AutoCmd InsertLeave * silent! pclose!
+
+    let g:neocomplete#force_overwrite_completefunc = 1
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.c =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp =
+                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+'''
+
+[[plugins]] # スニペット補完
+repo = 'Shougo/neosnippet.vim'
+if   = '''! has('lua')'''
+hook_add = '''
+    " エンターキーで補完候補の確定. スニペットの展開もエンターキーで確定
+    imap <expr><CR> neosnippet#expandable() ? "<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "<C-y>" : "<CR>"
+    " タブキーで補完候補の選択. スニペット内のジャンプもタブキーでジャンプ
+    imap <expr><TAB> pumvisible() ? "<C-n>" : neosnippet#jumpable() ? "<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
+'''
+
+[[plugins]] # デフォルトスニペット
+repo = 'Shougo/neosnippet-snippets'
+if   = '''! has('lua')'''
+
+[[plugins]] # Vimで非同期処理を実現するためのプラグイン
+repo = 'Shougo/vimproc.vim'
+hook_post_update = '''
+  if dein#util#_is_windows()
+    let cmd = 'tools\\update-dll-mingw'
+  elseif dein#util#_is_cygwin()
+    let cmd = 'make -f make_cygwin.mak'
+  elseif executable('gmake')
+    let cmd = 'gmake'
+  else
+    let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
+
+[[plugins]] # Vim上でShellを使えるようにするプラグイン
+repo = 'Shougo/vimshell.vim'
+
+[[plugins]] # 統合ユーザインターフェース的なプラグイン
+repo = 'Shougo/unite.vim'
+
+[[plugins]] # Vim上でのファイル操作をサポートするプラグイン
+repo = 'Shougo/vimfiler.vim'
+
+[[plugins]] # バッファ上のコードを実行するためのプラグイン
+repo = 'thinca/vim-quickrun'
+
+[[plugins]] # ヘルプを自動で折りたたむプラグイン
+repo = 'thinca/vim-ft-help_fold'
+
+[[plugins]] # pythinのコード補完を行うプラグイン
+repo = 'davidhalter/jedi-vim'
+hook_add = '''
+    au MyAutoCmd FileType python setlocal omnifunc=jedi#completions
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+'''
+
+[[plugins]] # ステータスバーをかっこよくするプラグイン
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+    let g:lightline = {
+                \ 'colorscheme': 'wombat',
+                \ }
+    set laststatus=2    " 末尾から2行目にステータスラインを表示
+    set showmode        " 現在のモードを表示
+    set showcmd         " 入力コマンドを表示
+    set ruler           " カーソル位置を表示する
+'''
+
+[[plugins]] # 対応する'end'を自動挿入してくれるプラグイン
+repo = 'tpope/vim-endwise'
+
+[[plugins]] # 囲んでいるものに対して操作を行うプラグイン
+repo = 'tpope/vim-surround'
+
+[[plugins]] # テンプレート挿入プラグイン
+repo = 'thinca/vim-template'
+
+[[plugins]] # インデント可視化プラグイン
+repo = 'nathanaelkane/vim-indent-guides'
+hook_add = '''
+    " vim立ち上げたときに、自動的にvim-indent-guidesをオンにする
+    let g:indent_guides_enable_on_vim_startup=1
+    " ガイドをスタートするインデントの量
+    let g:indent_guides_start_level=2
+    " 自動カラーを無効にする
+    let g:indent_guides_auto_colors=0
+    " 奇数インデントのカラー
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=darkgray ctermbg=236
+    " 偶数インデントのカラー
+    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgray ctermbg=239
+    " ハイライト色の変化の幅
+    let g:indent_guides_color_change_percent = 30
+    " ガイドの幅
+    let g:indent_guides_guide_size = 1
+'''
+
+#[[plugins]] # gitの差分を表示するプラグイン
+#repo = 'airblade/vim-gitgutter'
+
+#[[plugins]]
+#repo = 'Townk/vim-autoclose'
+
+#[[plugins]]
+#repo = 'justmao945/vim-clang'
+
+[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
+repo = 'kannokanno/previm'
+hook_add = '''
+    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+'''
+
+[[plugins]] # Markdownをブラウザで表示するプラグイン
+repo = 'tyru/open-browser.vim'
+
+[[plugins]] # Markdownのシンタックスハイライトやルールマッチング
+repo = 'rcmdnk/vim-markdown'
+
+#[[plugins]]
+#repo = 'Shougo/vimshell', { 'rev': '3787e5' }
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+    " 引数なしでvimを開くとNERDTreeを起動
+    let file_name = expand('%')
+    if has('vim_starting') &&  file_name == ''
+      au MyAutoCmd VimEnter * NERDTree ./
+    endif
+    " 隠しファイルのON/OFF
+    "let g:NERDTreeShowHidden=1
+    " Ctrl-eでNERDTreeを表示
+    map <C-e> :NERDTreeToggle<CR>
+
+    "let g:NERDTreeMinimalUI=1
+    " ディレクトリ表示
+    let g:NERDTreeDirArrows = 0
+    "let g:NERDTreeDirArrowExpandable  = '▶'
+    "let g:NERDTreeDirArrowCollapsible = '▼'
+    " マウス操作
+    let g:NERDTreeMouseMode=2
+    "他のバッファをすべて閉じた時, NERDTreeも一緒に閉じる
+    au MyAutoCmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+'''
