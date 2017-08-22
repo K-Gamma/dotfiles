@@ -1,0 +1,16 @@
+[user]
+	name = K-Ganma
+	email = katou.gannma-@hotmail.co.jp
+[color]
+	ui = true
+[core]
+	pager = less -cm
+	quotepath = false
+	editor = vim
+[url "https://"]
+	insteadOf = git://
+[credential]
+	helper = cache
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative

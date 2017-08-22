@@ -44,19 +44,20 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-alias la="ls -a"
-alias ll="ls -la"
-alias lh="ls -lh"
+alias la='ls -a'
+alias ll='ls -la'
+alias lh='ls -lh'
 
 # rm
 alias rm='rm -i -v'
-alias del="rm -rf"
+alias del='rm -rf'
 
 # other
 alias df='df -h'
 alias ps='ps --sort=start_time'
-alias apv="appletviewer"
-alias x="exit"
+alias apv='appletviewer'
+alias x='exit'
+alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
 
 # GoogleDrive
@@ -67,9 +68,9 @@ alias gdrive_u='fusermount -u ~/googledrive'
 alias keepass='gdrive_m | mono ~/KeePass/KeePass.exe &'
 
 # cputmp
-alias cputmp="cat /sys/class/thermal/thermal_zone0/temp | echo \`cat\`  / 1000  | bc | echo \`cat\` °C"
+alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo \`cat\`  / 1000  | bc | echo \`cat\` °C'
 # gputmp
-alias gputmp="nvidia-settings -q '[gpu:0]/GPUCoreTemp' | grep Attribute  | awk '{print \$4}' | tr -d . | echo \`cat\` °C"
+alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk '{print \$4}' | tr -d . | echo \`cat\` °C'
 
 # latexmk
 alias lmk='latexmk'
@@ -87,10 +88,11 @@ alias ga='git add'
 alias gm='git merge'
 alias gf='git fetch'
 alias gup='git fetch && git rebase'
-alias ggpush='git push origin $(current_branch)'
+alias gpush='git push origin $(current_branch)'
 alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
-alias gl='git log --graph'
+alias gl='git lg'
+alias gla='git lga'
 alias gd='git diff'
 alias gdc='git diff --cached'
 alias gr='git rebase'
@@ -99,4 +101,3 @@ alias gsd='gst && gd'
 alias gsa='gst && ga'
 alias gsco='gst && gco'
 alias gsrh='gst + grh'
-

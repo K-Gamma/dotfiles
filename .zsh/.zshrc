@@ -51,9 +51,7 @@ zplug load
 # + プラグイン設定{{{
 # ++ zplug/zplug
 # ++ zsh-users/zsh-completions
-
 # ++ zsh-users/zsh-autosuggestions
-
 # ++ supercrabtree/k
 
 # ++ zsh-users/zaw {{{
@@ -86,7 +84,6 @@ if zplug check 'joel-porquet/zsh-dircolors-solarized';then
     setupsolarized dircolors.ansi-light
 fi
 # ++ }}}
-
 
 # ++ zsh-users/zsh-syntax-highlighting
 
@@ -274,11 +271,10 @@ setopt mark_dirs
 setopt nonomatch
 
 # 3秒以上かかったら自動的に消費時間の統計情報を表示する
-REPORTTIME=3
+#REPORTTIME=3
 # + }}}
 
 # + 履歴 {{{
-
 # 余分な空白は詰めて記録
 setopt hist_reduce_blanks  
 

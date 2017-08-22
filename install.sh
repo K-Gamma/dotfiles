@@ -15,7 +15,7 @@ IFS=$'\n'
 
 # original file
 ODIRS=($(find ${WD}/ -mindepth 1 -type d | grep -v ".git"))
-OFILES=($(find ${WD}/ -type f | grep -E -v ".git|README.md|${0##*/}"))
+OFILES=($(find ${WD}/ -type f | grep -E -v ".git/|README.md|${0##*/}"))
 
 IFS=$IFS_ORG
 

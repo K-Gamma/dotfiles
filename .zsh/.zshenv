@@ -22,14 +22,15 @@ export ZPLUG_HOME=$ZDOTDIR/.zplug
 export LSCOLORS=gxfxcxdxbxegedabagacad
 # XDG
 export XDG_CONFIG_HOME=~/.config
-# PAGER
-export PAGER=less
+# pager
+export PAGER="less -cm"
 # Editor
 export EDITOR=vim
-# 日本語 less
-export JLESSCHARSET=japanese
+# less
+export LESSCHARSET=utf-8
+export JLESSCHARSET=utf-8
 # less で行番号をつける
-export LESS='-N'
+export LESS='-r'
 # w3mのホーム
 export HTTP_HOME="http://www.google.co.jp/"
 
