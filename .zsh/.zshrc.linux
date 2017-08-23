@@ -3,7 +3,7 @@
 
 # .zshrc コンパイル {{{
 if [ ! -f $ZDOTDIR/.zshrc.zwc -o $ZDOTDIR/.zshrc.linux -nt ~$ZDOTDIR/.zshrc.zwc ]; then
-    zcompile $ZDOTDIR/.zshrc
+    zcompile $ZDOTDIR/.zshrc.zwc $ZDOTDIR/.zshrc.linux
 fi
 #}}}
 
@@ -96,8 +96,8 @@ fi
 # デフォルト機能設定 {{{
 # + 入力 {{{
 # ++ キーバインド {{{
-# Vim like キーバインド
-bindkey -v
+# Emacs like キーバインド
+bindkey -e
 
 # history の検索
 bindkey '^P' history-beginning-search-backward
@@ -340,8 +340,8 @@ setopt rec_exact
 # 補完するかの質問は画面を超える時にのみに行う
 LISTMAX=0
 
-autoload -Uz compinit && compinit
-
+# 他でよばれているのでコメントアウト
+#autoload -Uz compinit && compinit
 # 補完侯補をメニューから選択
 # select=2: 補完候補を一覧から選択, 補完候補が2つ以上なければすぐに補完
 zstyle ':completion:*' menu select=2
@@ -361,7 +361,13 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
 
 # sudo でも補完の対象
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin \
+    /usr/local/bin  \
+    /usr/sbin       \
+    /usr/bin        \
+    /sbin           \
+    /bin            \
+    /usr/X11R6/bin
 
 # 補完候補をキャッシュ
 zstyle ':completion:*' use-cache true
@@ -378,7 +384,16 @@ zstyle ':completion:*' list-separator '-->'
 # + }}}
 
 # + エイリアス {{{
-# }}}
+# execute man with the Esc-h
+(( ${+aliases[run-help]} )) && unalias run-help
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-svn
+
+# Don't write to history
+alias run-help=' run-help'
+alias man=' man'
+
 # global aliases
 alias -g ...='cd ../..'
 alias -g ....='cd ../../..'
@@ -397,19 +412,19 @@ alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
 alias -s {mp3,frac}=audacious
 alias -s {html,htm}=firefox
 function extract() {
-  case $1 in
-    *.tar.gz|*.tgz) tar xzvf $1;;
-    *.tar.xz) tar Jxvf $1;;
-    *.zip) unzip $1;;
-    *.lzh) lha e $1;;
-    *.tar.bz2|*.tbz) tar xjvf $1;;
-    *.tar.Z) tar zxvf $1;;
-    *.gz) gzip -d $1;;
-    *.bz2) bzip2 -dc $1;;
-    *.Z) uncompress $1;;
-    *.tar) tar xvf $1;;
-    *.arj) unarj $1;;
-  esac
+    case $1 in
+        *.tar.gz|*.tgz) tar xzvf $1;;
+        *.tar.xz) tar Jxvf $1;;
+        *.zip) unzip $1;;
+        *.lzh) lha e $1;;
+        *.tar.bz2|*.tbz) tar xjvf $1;;
+        *.tar.Z) tar zxvf $1;;
+        *.gz) gzip -d $1;;
+        *.bz2) bzip2 -dc $1;;
+        *.Z) uncompress $1;;
+        *.tar) tar xvf $1;;
+        *.arj) unarj $1;;
+    esac
 }
 alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=extract
 
@@ -442,6 +457,7 @@ alias x='exit'
 alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
 
+
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ~/googledrive'
 alias gdrive_u='fusermount -u ~/googledrive'
@@ -463,6 +479,7 @@ alias lmkc='latexmk -c'
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 
 # git aliases
+alias git'g'
 alias gc='git commit -v'    # option -v : show change point
 alias gco='git checkout'
 alias gba='git branch -a'
@@ -483,14 +500,23 @@ alias gsd='gst && gd'
 alias gsa='gst && ga'
 alias gsco='gst && gco'
 alias gsrh='gst + grh'
+# + }}}
 # }}}
 
 # その他 {{{
+# 不足している機能を配列に記憶し, 問題が発生した場合, 診断を楽にする
+typeset -ga debian_missing_features
+
 # PATHの重複回避
 typeset -U path PATH
 
 # pyenv
 eval "$(pyenv init -)"
+
+# setting for zprof
+#if (which zprof > /dev/null 2>&1) ;then
+#  zprof
+#fi
 # }}}
 
 

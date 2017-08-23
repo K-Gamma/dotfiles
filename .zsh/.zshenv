@@ -15,6 +15,9 @@
 # │   └── ...
 # └── ...
 
+# setting for zprof restart zsh
+#zmodload zsh/zprof && zprof
+
 # global initialization files are skipped.
 unsetopt global_rcs
 # Zsh's home setting
