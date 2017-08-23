@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -u
 # @(#) This script make symbolic link of dotfiles.
 
 if [ $# -gt 1 ]; then
@@ -20,11 +20,11 @@ OFILES=($(find ${WD}/ -type f | grep -E -v ".git/|README.md|${0##*/}"))
 IFS=$IFS_ORG
 
 # 関数の定義
-# install {{{
+# Install {{{
 install() {
     local odir dir
-    # make dir
-    echo $'\n# make dir'
+    # Make dir
+    echo $'\n# Make dir'
     for odir in "${ODIRS[@]}"; do
         dir=${odir//\/dotfiles/}
         if [ ! -e "${dir}" ]; then
@@ -38,8 +38,8 @@ install() {
     done
 
     local ofile file
-    # make symbolic link of OFILE
-    echo $'\n# make symbolic link'
+    # Make symbolic link
+    echo $'\n# Make symbolic link'
     for ofile in "${OFILES[@]}"; do
         file=${ofile//\/dotfiles/}
         if [ ! -e "${file}" ]; then
@@ -52,22 +52,25 @@ install() {
         fi
     done
 
-    # ++++++++++++++++ other config ++++++++++++++++ #
-    echo $'\n# +++++++ other config +++++++ #'
 
-    # make symbolic link of .zshenv into ~/
+    # ---------------- other config ---------------- #
+
+    # Make symbolic link of .zshenv into ~/
     if [ -f ~/.zsh/.zshenv -a ! -f ~/.zshenv ]; then
         echo "~/.zsh/.zshenv --> ~/.zshenv"
         ln -sf ~/.zsh/.zshenv ~/.zshenv
     fi
+
+    echo $'\n\n|++++++++++++++++ DOTFILES IS INSTALLED ! ++++++++++++++++|\n\n'
+
 }
 # }}}
 
-# uninstall {{{
+# Uninstall {{{
 uninstall () {
     local ofile file
-    # rm symbolic link of OFILE
-    echo $'\n# rm symbolic link'
+    # Remove symbolic link
+    echo $'\n# Remove symbolic link'
     for ofile in "${OFILES[@]}"; do
         file=${ofile//\/dotfiles/}
         if [ -e "${file}" ]; then
@@ -76,9 +79,9 @@ uninstall () {
         fi
     done
 
-    # rm dir
+    # Remove dir
     local odir dir
-    echo $'\n# rm dir'
+    echo $'\n# Remove dir'
     for odir in "${ODIRS[@]}"; do
         dir=${odir//\/dotfiles/}
         if [ -e "${dir}" ]; then
@@ -87,14 +90,17 @@ uninstall () {
         fi
     done
 
-    # ++++++++++++++++ other config ++++++++++++++++ #
-    echo $'\n# +++++++ other config +++++++ #'
 
-    # rm symbolic link of .zshenv into ~/
+    # ---------------- other config ---------------- #
+
+    # Remove symbolic link of .zshenv into ~/
     if [ -L ~/.zshenv ]; then
         echo "rm -rf ~/.zshenv"
         rm -rf ~/.zshenv
     fi
+
+    echo "\n\n|++++++++++++++++ DOTFILES IS DELETED ! ++++++++++++++++|\n\n"
+
 }
 # }}}
 

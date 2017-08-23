@@ -1,3 +1,4 @@
+# When OS type is Linux:
 # This file is sourced only for interactive shells.
 # It should contain commands to set up aliases, functions, options, key bindings, etc:
 
@@ -410,7 +411,7 @@ alias -s py=python
 alias -s hs=runhaskell
 alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
 alias -s {mp3,frac}=audacious
-alias -s {html,htm}=firefox
+alias -s {html,htm,md}=firefox
 function extract() {
     case $1 in
         *.tar.gz|*.tgz) tar xzvf $1;;

@@ -27,8 +27,8 @@ Are you sure you want to clean those ? [y/N] > y
 ```
 
 ## Requirements
-You'll need to install some software (duh).
-- git
-- zsh
-- vim
+You'll need to install the following software.
+- Git
+- Zsh
+- Vim
 
