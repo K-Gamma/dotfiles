@@ -1,41 +1,45 @@
-# Add environment variables here:
+# This file is sourced on all invocations of the shell.
+# If the -f flag is present or if the NO_RCS option is
+# set within this file, all other initialization files
+# are skipped.
+#
+# This file should contain commands to set the command
+# search path, plus other important environment variables.
+# This file should not contain commands that produce
+# output or assume the shell is attached to a tty.
+#
+# ~ ($HOME)/
+# ├── .zshenv --> $HOME/.zsh/.zshenv
+# ├── .zsh/ ($ZDOTDIR)
+# │   ├── (zsh's dotfiles) --> $HOME/dotfiles/.zsh/(zsh's dotfiles)
+# │   └── ...
+# └── ...
 
-setopt no_global_rcs
+# global initialization files are skipped.
+unsetopt global_rcs
+# Zsh's home setting
 export ZDOTDIR=$HOME/.zsh
-
-source $ZDOTDIR/.zprofile
-
-#$HOME/.
-#├── .zshenv -> $HOME/.zsh/.zshenv
-#├── .zsh
-#│   ├──.zprofile -> $HOME/dotfiles/.zsh/.zprofile
-#│   ├──.zshenv -> $HOME/dotfiles/.zsh/.zshenv
-#│   └──.zshrc -> $HOME/dotfiles/.zsh/.zshrc
-#└── …
-
+# zplug's home setting
+export ZPLUG_HOME=$ZDOTDIR/.zplug
+# path
+if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]
+then
+    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
+fi
 # Language
 export LANG=ja_JP.UTF-8
-# zplug's home
-export ZPLUG_HOME=$ZDOTDIR/.zplug
 # default dircolors
 export LSCOLORS=gxfxcxdxbxegedabagacad
-# XDG
+# XDG Base Directory Specification
 export XDG_CONFIG_HOME=~/.config
 # pager
 export PAGER="less -cm"
 # Editor
 export EDITOR=vim
 # less
+export LESS='-r'
 export LESSCHARSET=utf-8
 export JLESSCHARSET=utf-8
-# less で行番号をつける
-export LESS='-r'
-# w3mのホーム
-export HTTP_HOME="http://www.google.co.jp/"
-
-# PATH の設定
-PATH=$PATH:/usr/local/bin
-
 # 履歴ファイルの保存先
 export HISTFILE=$ZDOTDIR/.zsh_history
 # メモリに保存される履歴の件数
@@ -53,12 +57,12 @@ export CUDA_HOME=/usr/local/cuda
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:'/usr/local/cuda/samples/common/inc':'/usr/local/cuda-8.0/include'
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:'/usr/local/cuda/samples/common/inc':'/usr/local/cuda-8.0/include'
 
-# pyenv
+# pyenv paths
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
-# anaconda
+# anaconda path
 export PATH="$PYENV_ROOT/versions/anaconda3-4.3.0/bin/:$PATH"
 
-# gpufan
+# gpufan control script's path
 export PATH="/opt/:$PATH"

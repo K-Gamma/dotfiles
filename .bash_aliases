@@ -48,9 +48,9 @@ alias gdrive_u='fusermount -u ~/googledrive'
 alias keepass='gdrive_m | mono ~/KeePass/KeePass.exe &'
 
 # cputmp alias
-alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo \`cat\`  / 1000  | bc | echo \`cat\` °C'
+alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo `cat`  / 1000  | bc | echo `cat` °C'
 # gputmp alias
-alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk '{print \$4}' | tr -d . | echo \`cat\` °C'
+alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "{print \$4}" | tr -d . | echo `cat` °C'
 
 # latexmk aliases
 alias lmk='latexmk'
