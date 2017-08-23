@@ -2,7 +2,7 @@
 # It should contain commands to set up aliases, functions, options, key bindings, etc:
 
 # .zshrc コンパイル {{{
-if [ ! -f $ZDOTDIR/.zshrc.zwc -o $ZDOTDIR/.zshrc.linux -nt ~$ZDOTDIR/.zshrc.zwc ]; then
+if [ ! -f $ZDOTDIR/.zshrc.zwc -o $(readlink $ZDOTDIR/.zshrc.linux) -nt $ZDOTDIR/.zshrc.zwc ]; then
     zcompile $ZDOTDIR/.zshrc.zwc $ZDOTDIR/.zshrc.linux
 fi
 #}}}
