@@ -1,43 +1,10 @@
 # Add aliases you want to use only in the login shell here:
 
-# global aliases
-alias -g ...='cd ../..'
-alias -g ....='cd ../../..'
-alias -g .....='cd ../../../..'
-alias -g @g='| grep'
-alias -g @l='| less'
-alias -g @h='| head'
-alias -g @t='| tail'
-alias -g @s='| sed'
-alias -g @c='| cat'
-
-# suffix aliases
-alias -s py=python
-alias -s hs=runhaskell
-alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
-alias -s {mp3,frac}=audacious
-alias -s {html,htm}=firefox
-function extract() {
-  case $1 in
-    *.tar.gz|*.tgz) tar xzvf $1;;
-    *.tar.xz) tar Jxvf $1;;
-    *.zip) unzip $1;;
-    *.lzh) lha e $1;;
-    *.tar.bz2|*.tbz) tar xjvf $1;;
-    *.tar.Z) tar zxvf $1;;
-    *.gz) gzip -d $1;;
-    *.bz2) bzip2 -dc $1;;
-    *.Z) uncompress $1;;
-    *.tar) tar xvf $1;;
-    *.arj) unarj $1;;
-  esac
-}
-alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=extract
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls -F --color=auto'
+    alias ls='ls --color=auto'
+    alias ll='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
     alias grep='grep --color=auto'
@@ -51,6 +18,12 @@ alias la='ls -A'
 alias lh='ls -lh'
 alias l='ls -CF'
 
+# cd aliases
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
 # rm aliases
 alias rm='rm -i -v'
 alias del='rm -rf'
@@ -62,6 +35,10 @@ alias apv='appletviewer'
 alias x='exit'
 alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ~/googledrive'

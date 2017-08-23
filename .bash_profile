@@ -1,22 +1,7 @@
 # Add environment variables here:
 
-setopt no_global_rcs
-export ZDOTDIR=$HOME/.zsh
-
-source $ZDOTDIR/.zprofile
-
-#$HOME/.
-#├── .zshenv -> $HOME/.zsh/.zshenv
-#├── .zsh
-#│   ├──.zprofile -> $HOME/dotfiles/.zsh/.zprofile
-#│   ├──.zshenv -> $HOME/dotfiles/.zsh/.zshenv
-#│   └──.zshrc -> $HOME/dotfiles/.zsh/.zshrc
-#└── …
-
 # Language
 export LANG=ja_JP.UTF-8
-# zplug's home
-export ZPLUG_HOME=$ZDOTDIR/.zplug
 # default dircolors
 export LSCOLORS=gxfxcxdxbxegedabagacad
 # XDG
@@ -32,16 +17,6 @@ export JLESSCHARSET=utf-8
 export LESS='-r'
 # w3mのホーム
 export HTTP_HOME="http://www.google.co.jp/"
-
-# PATH の設定
-PATH=$PATH:/usr/local/bin
-
-# 履歴ファイルの保存先
-export HISTFILE=$ZDOTDIR/.zsh_history
-# メモリに保存される履歴の件数
-export HISTSIZE=1000
-# 履歴ファイルに保存される履歴の件数
-export SAVEHIST=100000
 
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
