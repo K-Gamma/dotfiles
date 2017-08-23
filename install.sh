@@ -20,41 +20,6 @@ OFILES=($(find ${WD}/ -type f | grep -E -v ".git/|README.md|${0##*/}"))
 IFS=$IFS_ORG
 
 # 関数の定義
-# uninstall {{{
-uninstall () {
-    local odir dir
-    # rm dir
-    echo $'\n# rm dir'
-    for odir in "${ODIRS[@]}"; do
-        dir=${odir//\/dotfiles/}
-        if [ -e "${dir}" ]; then
-            echo "rm -rf ${dir}"
-            rm -rf ${dir}
-        fi
-    done
-
-    local ofile file
-    # rm symbolic link of OFILE
-    echo $'\n# rm symbolic link'
-    for ofile in "${OFILES[@]}"; do
-        file=${ofile//\/dotfiles/}
-        if [ -e "${file}" ]; then
-            echo "rm -rf ${file}"
-            rm -rf ${file}
-        fi
-    done
-
-    # ++++++++++++++++ other config ++++++++++++++++ #
-    echo $'\n# +++++++ other config +++++++ #'
-
-    # rm symbolic link of .zshenv into ~/
-    if [ -L ~/.zshenv ]; then
-        echo "rm -rf ~/.zshenv"
-        rm -rf ~/.zshenv
-    fi
-}
-# }}}
-
 # install {{{
 install() {
     local odir dir
@@ -98,6 +63,40 @@ install() {
 }
 # }}}
 
+# uninstall {{{
+uninstall () {
+    local ofile file
+    # rm symbolic link of OFILE
+    echo $'\n# rm symbolic link'
+    for ofile in "${OFILES[@]}"; do
+        file=${ofile//\/dotfiles/}
+        if [ -e "${file}" ]; then
+            echo "rm -rf ${file}"
+            rm -rf ${file}
+        fi
+    done
+
+    # rm dir
+    local odir dir
+    echo $'\n# rm dir'
+    for odir in "${ODIRS[@]}"; do
+        dir=${odir//\/dotfiles/}
+        if [ -e "${dir}" ]; then
+            echo "rm -rf ${dir}"
+            rm -rf ${dir}
+        fi
+    done
+
+    # ++++++++++++++++ other config ++++++++++++++++ #
+    echo $'\n# +++++++ other config +++++++ #'
+
+    # rm symbolic link of .zshenv into ~/
+    if [ -L ~/.zshenv ]; then
+        echo "rm -rf ~/.zshenv"
+        rm -rf ~/.zshenv
+    fi
+}
+# }}}
 
 if [ $# -eq 1 ]; then
     if [ $1 = "clean" ]; then
