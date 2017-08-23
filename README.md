@@ -22,7 +22,7 @@ But, Please note that all installed plugins will also be deleted.
 ```sh
 $ cd dotfiles
 $ bash ./install.sh clean
-Are you sure you want to clean those ? [y/N] > y
+Are you sure to deleted dotfiles and some plugin ? [y/N] > y
 # Remove symbolic link and dir
 ```
 

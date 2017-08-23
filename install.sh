@@ -106,7 +106,7 @@ uninstall () {
 
 if [ $# -eq 1 ]; then
     if [ $1 = "clean" ]; then
-        read -p 'Are you sure you want to clean those ? [y/N] > ' ANSWER
+        read -p 'Are you sure to deleted dotfiles and some plugin ? [y/N] > ' ANSWER
         case $ANSWER in
             "Y" | "y" | "yes" | "Yes" | "YES" ) uninstall;;
             * ) exit 1;;
