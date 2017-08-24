@@ -480,7 +480,7 @@ alias lmkc='latexmk -c'
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 
 # git aliases
-alias git'g'
+alias g='git'
 alias gc='git commit -v'    # option -v : show change point
 alias gco='git checkout'
 alias gba='git branch -a'

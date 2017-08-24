@@ -19,7 +19,6 @@ OFILES=($(find ${WD}/ -type f | grep -E -v ".git/|README.md|${0##*/}"))
 
 IFS=$IFS_ORG
 
-# 関数の定義
 # Install {{{
 install() {
     local odir dir
@@ -105,7 +104,7 @@ uninstall () {
 # }}}
 
 if [ $# -eq 1 ]; then
-    if [ $1 = "clean" ]; then
+    if [ $1 = "uninstall" -o $1 = "u" ]; then
         read -p 'Are you sure to deleted dotfiles and some plugin ? [y/N] > ' ANSWER
         case $ANSWER in
             "Y" | "y" | "yes" | "Yes" | "YES" ) uninstall;;
@@ -115,7 +114,6 @@ if [ $# -eq 1 ]; then
         echo "Error: wrong arguments" 1>&2
         exit 1
     fi
-    exit 0
 fi
 install
 
