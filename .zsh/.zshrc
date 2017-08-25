@@ -1,6 +1,6 @@
-# This file is loaded in the login shells and interactive shells.
+# This file is sourced in the login shells and interactive shells.
 
-case ${OSTYPE} in
+case "${OSTYPE}" in
     darwin*) # Mac
         source $ZDOTDIR/.zshrc.darwin
         ;;

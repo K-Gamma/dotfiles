@@ -15,57 +15,89 @@
 # │   └── ...
 # └── ...
 
-# setting for zprof restart zsh
+# Setting for zprof restart zsh
 #zmodload zsh/zprof && zprof
 
-# global initialization files are skipped.
+# Global initialization files aren't sourced.
 unsetopt global_rcs
-# Zsh's home setting
-export ZDOTDIR=$HOME/.zsh
-# zplug's home setting
-export ZPLUG_HOME=$ZDOTDIR/.zplug
-# path
-if [[ -z "$PATH" || "$PATH" == "/bin:/usr/bin" ]]
-then
-    export PATH="/usr/local/bin:/usr/bin:/bin:/usr/games"
-fi
+
+# Set up the environment variables. {{{
 # Language
 export LANG=ja_JP.UTF-8
-# default dircolors
+
+# Default dircolors
 export LSCOLORS=gxfxcxdxbxegedabagacad
+
 # XDG Base Directory Specification
 export XDG_CONFIG_HOME=~/.config
-# pager
+
+# Pager
 export PAGER="less -cm"
+
 # Editor
 export EDITOR=vim
-# less
+
+# Less
 export LESS='-r'
 export LESSCHARSET=utf-8
 export JLESSCHARSET=utf-8
-# 履歴ファイルの保存先
+
+# + Zsh Setting {{{
+# Zsh's home
+export ZDOTDIR=$HOME/.zsh
+
+# zplug's home
+export ZPLUG_HOME=$ZDOTDIR/.zplug
+
+# Specify a set of characters to be treated as part of a word.
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+
+# In the line editor, the number of matches to list without
+# asking first. If set to zero, the shell asks only if the top
+# of the listing would scroll off the screen.
+export LISTMAX=0
+
+# + History Setting {{{
+# Set history file destination
 export HISTFILE=$ZDOTDIR/.zsh_history
-# メモリに保存される履歴の件数
+
+# Number of items stored in memory
 export HISTSIZE=1000
-# 履歴ファイルに保存される履歴の件数
+
+# Number of items stored in history file
 export SAVEHIST=100000
+# + }}}
+# + }}}
 
-# colored GCC warnings and errors
+# + 'GCC' Setting {{{
+# Colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+# + }}}
 
-## CUDA and cuDNN paths
+# + 'CUDA' and 'cuDNN' Setting {{{
 export PATH=/usr/local/cuda-8.0/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64:/lib:$LD_LIBRARY_PATH
 export CUDA_HOME=/usr/local/cuda
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:'/usr/local/cuda/samples/common/inc':'/usr/local/cuda-8.0/include'
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:'/usr/local/cuda/samples/common/inc':'/usr/local/cuda-8.0/include'
+# + }}}
 
-# pyenv paths
+# + 'pyenv' Setting {{{
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+# + }}}
 
-# anaconda path
+# + 'Anaconda' Setting {{{
 export PATH="$PYENV_ROOT/versions/anaconda3-4.3.0/bin/:$PATH"
+# + }}}
 
-# gpufan control script's path
+# + My command Setting {{{
 export PATH="/opt/:$PATH"
+# + }}}
+# }}}
+
+
+# vim: foldmethod=marker
+# vim: foldcolumn=3
+# vim: foldlevel=0

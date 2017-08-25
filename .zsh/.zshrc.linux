@@ -1,200 +1,253 @@
 # When OS type is Linux:
 # This file is sourced only for interactive shells.
-# It should contain commands to set up aliases, functions, options, key bindings, etc:
+# It should contain commands to set up aliases, fun
+# -ctions, options, key bindings, etc:
+# See /usr/share/zsh/help
 
-# .zshrc コンパイル {{{
+# Compile '.zshrc' to speed up loading. {{{
 if [ ! -f $ZDOTDIR/.zshrc.zwc -o $(readlink $ZDOTDIR/.zshrc.linux) -nt $ZDOTDIR/.zshrc.zwc ]; then
     zcompile $ZDOTDIR/.zshrc.zwc $ZDOTDIR/.zshrc.linux
 fi
 #}}}
 
-# プラグイン機能管理 {{{
-# + プラグインインストール {{{
-# プラグイン管理プラグインzplug/zplugのインストール
-if [ ! -f $ZPLUG_HOME/init.zsh ]; then
-    mkdir -p $ZPLUG_HOME
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME
-fi
-source $ZPLUG_HOME/init.zsh
-
-# プラグインインストール
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug 'zsh-users/zsh-completions'
-zplug 'zsh-users/zsh-autosuggestions'
-zplug 'supercrabtree/k'
-zplug 'zsh-users/zaw'
-zplug 'joel-porquet/zsh-dircolors-solarized'
-zplug 'zsh-users/zsh-syntax-highlighting', defer:2
-if ! zplug check; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# ++ cdrの設定 (zplug load 前に書かないと zaw-cdr がスキップされる) {{{
+# Build-in Function Settings {{{
+# TODO: adjustment
+# + Autoload {{{
+autoload -Uz colors && colors
 autoload -Uz is-at-least
-
-if [ ! -d ${XDG_CACHE_HOME:-$HOME/.cache}/shell ]; then
-    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/shell"
-fi
 if is-at-least 4.3.10; then
+    autoload -Uz vcs_info
     autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-    add-zsh-hook chpwd chpwd_recent_dirs
-    zstyle ':chpwd:*' recent-dirs-max 500
-    zstyle ":chpwd:*" recent-dirs-default true
-    zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-$HOME/.cache}/shell/chpwd-recent-dirs"
-    zstyle ':chpwd:*' recent-dirs-pushd true
 fi
-# ++ }}}
 
-# インストールされたプラグインを読み込み, PATHに追加
-zplug load
+# Can execute man with the Esc-h
+if (( ${+aliases[run-help]} )); then
+    unalias run-help
+fi
+autoload -Uz run-help
+autoload -Uz run-help-git
+autoload -Uz run-help-svn
 # + }}}
-#
-# + プラグイン設定{{{
-# ++ zplug/zplug
-# ++ zsh-users/zsh-completions
-# ++ zsh-users/zsh-autosuggestions
-# ++ supercrabtree/k
 
-# ++ zsh-users/zaw {{{
-if zplug check 'zsh-users/zaw';then
-    bindkey '\C-d' zaw-cdr
-    bindkey '\C-g' zaw-git-branches
-    bindkey '\C-@' zaw-gitdir
-
-    function zaw-src-gitdir () {
-        _dir=$(git rev-parse --show-cdup 2>/dev/null)
-        if [ $? -eq 0 ]
-        then
-            candidates=( $(git ls-files ${_dir} | perl -MFile::Basename -nle \
-                '$a{dirname $_}++; END{delete $a{"."}; print for sort keys %a}') )
-        fi
-        actions=("zaw-src-gitdir-cd")
-        act_descriptions=("change directory in git repos")
-    }
-
-    function zaw-src-gitdir-cd () {
-        BUFFER="cd $1"
-        zle accept-line
-    }
-    zaw-register-src -n gitdir zaw-src-gitdir
-fi
-# ++ }}}
-
-# ++ joel-porquet/zsh-dircolors-solarized {{{
-if zplug check 'joel-porquet/zsh-dircolors-solarized';then
-    setupsolarized dircolors.ansi-light
-fi
-# ++ }}}
-
-# ++ zsh-users/zsh-syntax-highlighting
-
-# + }}}
-# }}}
-
-# デフォルト機能設定 {{{
-# + 入力 {{{
-# ++ キーバインド {{{
-# Emacs like キーバインド
-bindkey -e
-
-# history の検索
-bindkey '^P' history-beginning-search-backward
-bindkey '^N' history-beginning-search-forward
-if is-at-least 4.3.10; then
-    bindkey '^R' history-incremental-pattern-search-backward
-    bindkey '^S' history-incremental-pattern-search-forward
-fi
-# ++ }}}
-
-# ^Dでログアウトしない。
-setopt ignoreeof
-
-# cd を省略
+# TODO: English commentary
+# + Options {{{
+# ++ Changing Directories {{{
+# Omit cd
 setopt auto_cd
 
-# cd -[tab]で過去のディレクトリ
+# Add cd directory to directories stack
+# For example, 'cd - [tab]' allows you to jump to a
+# directories in the past
 setopt auto_pushd
 
-# cd した先のディレクトリをディレクトリスタックに追加する
-setopt auto_pushd
+# Omit '~'
+setopt cdable_vars
 
-# ディレクトリスタックの重複回避
+# Don’t puhf the same directory onto th directories stack
 setopt pushd_ignore_dups
+# ++ }}}
 
-# 拡張 glob を有効にする(ワイルドカード強化)
-setopt extended_glob
-
-# 単語の一部として扱われる文字のセットを指定
-WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
-
-# 中止しているプロセスと同じ名前のコマンドを実行したとき, それを実行
-setopt auto_resume
-
-# 複数のリダイレクトやパイプに対応
-setopt multios
-
-# リダイレクトで上書き禁止
-unsetopt noclobber
-
-# C-q, C-sを使わない
-setopt no_flow_control
-
-# コマンドラインでも # 以降をコメントと見なす
-setopt interactive_comments
-
-# カーソル位置は保持したままファイル名一覧を順次その場で表示
+# ++ Completion {{{
+# Don't change the position of prompt when completing
 setopt always_last_prompt
 
-# 明確なドットの指定なしで.から始まるファイルをマッチ
-setopt globdots
+# Move the cursor to the end after complete completion
+setopt always_to_end
 
-# mkdir {1-3} で フォルダ1, 2, 3を作れる
+# 補完候補が複数あるとき一覧表示
+setopt auto_list
+
+# tabで補完候補を切り替える
+setopt auto_menu
+
+# 変数名, 括弧の対応を補完する
+setopt auto_param_keys
+
+# ディレクトリを補完すると最後にスラッシュを追加する
+setopt auto_param_slash
+
+# ディレクトリの補完で追加したスラッシュを削除する
+setopt auto_remove_slash
+
+# aliasを展開して補完
+setopt complete_aliases
+
+# 語の途中でもカーソル位置で補完
+setopt complete_in_word
+
+# tab補完が成功しない時ビープで通知しない
+setopt list_beep
+
+# 補完候補を詰めて表示
+setopt list_packed
+
+# 補完候補一覧でファイルの種別をマーク表示
+setopt list_types
+
+# 続きがある場合, まだ決定しない
+setopt rec_exact
+# ++ }}}
+
+# ++ Expansion and Globbing {{{
+# For example, Can make folders 1, 2, 3 by 'mkdir {1-3}'
 setopt brace_ccl
-# + }}}
 
-# + 出力 {{{
-autoload -Uz colors && colors
+# Use additional characters for globs
+setopt extended_glob
 
-# ++ プロンプト設定 {{{
-# 表示毎にPROMPTの変数展開, コマンド置換, 算術演算等の評価をする
+# Do not require a leading ‘.’ in a filename to be matched explicit
+setopt glob_dots
+
+# sや&の展開修飾マッチングをパターンマッチにする
+setopt hist_subst_pattern
+
+# オプションの = 以降の補完を可能にする
+setopt magic_equal_subst
+
+# If directory matches by expanding file name, appends / to the end
+setopt mark_dirs
+
+# Suppress glob warning
+unsetopt nomatch
+
+# 展開に含まれる配列を別々に展開する
+setopt rc_expand_param
+# ++ }}}
+
+# ++ History {{{
+# 時刻を記録
+setopt extended_history
+
+# if conflict occurred, delete the old one.
+setopt hist_ignore_all_dups
+
+# Erase extra blanks
+setopt hist_ignore_dups
+
+# If there is a space at the beginning, don't record history
+setopt hist_ignore_space
+
+# historyコマンドは履歴に登録しない
+setopt hist_no_store
+
+# Stuff the extra spaces and record
+setopt hist_reduce_blanks
+
+# 同時に起動したzshの間でヒストリを共有しない
+unsetopt share_history
+# ++ }}}
+
+# ++ Input/Output {{{
+# エイリアスを拡張する
+setopt aliases
+
+# Don't overwrite with redirect
+setopt clobber
+
+# スペルミスの修正をする
+setopt correct
+
+# コマンド行の全ての引数に対してスペルミスの修正を行う
+setopt correct_all
+
+# Don't use 'C-q' and 'C-s'
+setopt no_flow_control
+
+# EOFを読み込んでも終了しない
+setopt ignore_eof
+
+# メールファイルにアクセスがあると警告を発する
+setopt mail_warning
+
+# コマンド名に/が含まれていてもそれを含めたパスの探索を行う
+setopt path_dirs
+
+# Japanese file name can be displayed
+setopt print_eight_bit
+
+# 'rm *'の実行前に10秒間の猶予を与える
+set -o RM_STAR_WAIT
+# ++ }}}
+
+# ++ Job Control {{{
+# If you enter a command with the same name as the suspended process, execute it
+setopt auto_resume
+
+# List jobs in the long format by default
+setopt long_list_jobs
+# ++ }}}
+
+# ++ Prompting {{{
+# Even if there isn't line feed code at the end of the output string, it is displayed
+unsetopt prompt_cr
+
+# Evaluate PROMPT variable expansion, command substitution, arithmetic operation etc for each display
 setopt prompt_subst
 
-# コマンド実行後は右プロンプトを消す
+# Delete the right prompt after executing the command
 setopt transient_rprompt
+# ++ }}}
 
+# ++ Scripts and Functions {{{
+# Handle to multiple redirects and pipes.
+setopt multios
+# ++ }}}
+
+# ++ Zsh Line Editor {{{
+# Don't sound a beep
+unsetopt beep
+
+# Emacs like key bind
+setopt emacs
+
+# Use ZLE
+setopt zle
+# ++ }}}
+# + }}}
+
+# TODO: adjustment
+# + Typeset {{{
+# An array to note missing features to ease diagnosis in case of problems
+typeset -ga debian_missing_features
+
+# Avoid duplication of $PATH
+typeset -U path PATH
+# + }}}
+
+# TODO: adjustment
+# + Zstyle (The zsh/zutil Module Settings) {{{
+# ++ Prompt Settings {{{
 # +++ PROMPT Setting {{{
 function left-prompt {
-    FIRST='025m%}'      # ユーザ, ホスト名の文字色
-    FIRST_B='254m%}'    # ユーザ, ホスト名の背景色
-    SECOND='007m%}'     # カレントディレクトリの文字色
-    SECOND_B='238m%}'   # カレントディレクトリの背景色
+    local first='025m%}'        # Text color of the user and host name 
+    local first_b='254m%}'      # Background color of the user and host name
+    local second='007m%}'       # Text color of the current directory
+    local second_b='238m%}'     # Background color of the current directory
+    local sharp='\ue0b0'        # Triangle
+    local fg='%{[38;5;'
+    local bg='%{[30;48;5;'
+    local reset='%{[0m%}'
+    local user_and_host="${bg}${first_b}${fg}${first}"
+    local dir="${bg}${second_b}${fg}${second}"
 
-    sharp='\ue0b0'
-    FG='%{[38;5;'
-    BG='%{[30;48;5;'
-    RESET='%{[0m%}'
-    USER_AND_HOST="${BG}${FIRST_B}${FG}${FIRST}"
-    DIR="${BG}${SECOND_B}${FG}${SECOND}"
-
-    echo "${USER_AND_HOST}%n@%m${BG}${SECOND_B}${FG}${FIRST_B}${sharp} ${DIR}%~${RESET}${FG}${SECOND_B}${sharp} ${RESET}"
+    echo "${user_and_host}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+    return 0
 }
 PROMPT='`left-prompt`'
 # +++ }}}
+
 PROMPT2="%{$fg[green]%}%_> %{$reset_color%}"
-setopt correct
 SPROMPT="%{$fg[red]%}correct: %R -> %r [nyae]? %{$reset_color%}"
+
 # +++ RPROMPT Setting {{{
+function branch-mark {
+    echo '\ue0a0^ '
+    return 0
+}
 if is-at-least 4.3.10; then
     # ++++ Use vcs_info {{{
-    function branch-mark {
-        echo '\ue0a0^ '
-    }
-    autoload -Uz vcs_info
     zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' formats "%F{green}%c%u`branch-mark`[%b]%f"
+    zstyle ':vcs_info:*' formats "%F{green}%c%u$(branch-mark)[%b]%f"
     if is-at-least 4.3.10; then
         zstyle ':vcs_info:git:*' check-for-changes true
         zstyle ':vcs_info:git:*' stagedstr "%F{yellow}"
@@ -223,126 +276,47 @@ else
             color='%{'${fg[cyan]}'%}'
         fi
         # echo ${color}${res}'%{'${reset_color}'%}'
-        echo ${color} # 色だけ返す
+        echo ${color}
+        return 0
     }
     function get-branch-name {
-        # gitディレクトリじゃない場合のエラーは捨てます
         echo `git rev-parse --abbrev-ref HEAD 2> /dev/null`
+        return 0
     }
     function branch-status-check {
-        local prefix branchname suffix
-        # .gitの中だから除外
         if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
-            return
+            return 0
         fi
-        branchname=`get-branch-name`
-        # ブランチ名が無いので除外
+        local branchname=`get-branch-name`
         if [[ -z $branchname ]]; then
-            return
+            return 0
         fi
-        prefix=`get-branch-status` #色だけ返ってくる
-        suffix='%{'${reset_color}'%}'
-        echo ${prefix}'\ue0a0'${branchname}${suffix}
+        local prefix=`get-branch-status`
+        local suffix='%{'${reset_color}'%}'
+        echo ${prefix}$(branch-mark)${branchname}${suffix}
+        return 0
     }
     RPROMPT=$'`branch-status-check`'
     # ++++ }}}
 fi
 # +++ }}}
-# ++}}}
+# ++ }}}
 
-# 日本語ファイル名を表示可能にする
-setopt print_eight_bit
+# ++ 'cdr' settings (Required before 'zplug load') {{{
+if [ ! -d ${XDG_CACHE_HOME:-$HOME/.cache}/shell ]; then
+    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/shell"
+fi
+if is-at-least 4.3.10; then
+    add-zsh-hook chpwd chpwd_recent_dirs
+    zstyle ':chpwd:*' recent-dirs-max 500
+    zstyle ":chpwd:*" recent-dirs-default true
+    zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-$HOME/.cache}/shell/chpwd-recent-dirs"
+    zstyle ':chpwd:*' recent-dirs-pushd true
+fi
+# ++ }}}
 
-# バックグラウンドジョブが終了したらすぐに知らせる
-setopt notify
-
-# ビープを鳴らさない
-setopt no_beep
-
-# 出力の文字列末尾に改行コードが無い場合でも表示
-unsetopt promptcr
-
-# 内部コマンド jobs の出力をデフォルトで jobs -l にする
-setopt long_list_jobs
-
-# ファイル名の展開で辞書順ではなく数値的にソート
-setopt numeric_glob_sort
-
-# ファイル名の展開でディレクトリにマッチした場合末尾に / を付加
-setopt mark_dirs
-
-# globの警告抑制
-setopt nonomatch
-
-# 3秒以上かかったら自動的に消費時間の統計情報を表示する
-#REPORTTIME=3
-# + }}}
-
-# + 履歴 {{{
-# 余分な空白は詰めて記録
-setopt hist_reduce_blanks  
-
-# 重複を記録しない
-setopt hist_ignore_dups
-
-# 衝突した場合の古いほうを削除
-setopt hist_ignore_all_dups
-
-# スペースで始まる場合, 履歴を残さない
-setopt hist_ignore_space
-
-# historyコマンドは履歴に登録しない
-setopt hist_no_store
-
-# ヒストリを呼び出してから実行する間に一旦編集
-setopt hist_verify
-
-# 同時に起動したzshの間でヒストリを共有する
-setopt share_history
-
-# 時刻を記録
-setopt extended_history
-# + }}}
-
-# + 補完 {{{
-# 補完候補が複数あるとき一覧表示
-setopt auto_list
-
-# tabで補完候補を切り替える
-setopt auto_menu
-
-# 補完候補を詰めて表示
-setopt list_packed
-
-# 補完候補一覧でファイルの種別をマーク表示
-setopt list_types
-
-# --prefix=/usr などの = 以降も補完
-setopt magic_equal_subst
-
-# 変数名, 括弧の対応を補完する
-setopt auto_param_keys
-
-# ディレクトリ名の最後に自動的に/を追加
-setopt auto_param_slash
-
-# aliasを展開して補完
-setopt complete_aliases
-
-# 補完候補リストの日本語を正しく表示
-setopt print_eight_bit
-
-# 語の途中でもカーソル位置で補完
-setopt complete_in_word
-
-# 続きがある場合, まだ決定しない
-setopt rec_exact
-
-# 補完するかの質問は画面を超える時にのみに行う
-LISTMAX=0
-
-# 他でよばれているのでコメントアウト
-#autoload -Uz compinit && compinit
+# TODO: English commentary
+# ++ Completion Settings {{{
 # 補完侯補をメニューから選択
 # select=2: 補完候補を一覧から選択, 補完候補が2つ以上なければすぐに補完
 zstyle ':completion:*' menu select=2
@@ -382,20 +356,11 @@ zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 
 # セパレータ
 zstyle ':completion:*' list-separator '-->'
+# ++ }}}
 # + }}}
 
-# + エイリアス {{{
-# execute man with the Esc-h
-(( ${+aliases[run-help]} )) && unalias run-help
-autoload -Uz run-help
-autoload -Uz run-help-git
-autoload -Uz run-help-svn
-
-# Don't write to history
-alias run-help=' run-help'
-alias man=' man'
-
-# global aliases
+# + Aliases {{{
+# global
 alias -g ...='cd ../..'
 alias -g ....='cd ../../..'
 alias -g .....='cd ../../../..'
@@ -406,7 +371,7 @@ alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| cat'
 
-# suffix aliases
+# suffix
 alias -s py=python
 alias -s hs=runhaskell
 alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
@@ -426,18 +391,32 @@ function extract() {
         *.tar) tar xvf $1;;
         *.arj) unarj $1;;
     esac
+    return 0
 }
 alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=extract
 
-# enable color support of ls and also add handy aliases
+# Don't write to history
+alias run-help=' run-help'
+alias man=' man'
+
+# Enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls -F --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+    case "${OSTYPE}" in
+        darwin*)
+            alias ls='ls -GF'
+            ;;
+        linux*)
+            if [ -f ~/.dircolors ]; then
+                eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+            fi
+            alias ls='ls -F --color=auto'
+            alias dir='dir --color=auto'
+            alias vdir='vdir --color=auto'
+            alias grep='grep --color=auto'
+            alias fgrep='fgrep --color=auto'
+            alias egrep='egrep --color=auto'
+            ;;
+    esac
 fi
 
 # some more ls aliases
@@ -455,9 +434,10 @@ alias df='df -h'
 alias ps='ps --sort=start_time'
 alias apv='appletviewer'
 alias x='exit'
+alias g='git'
+alias v='vim'
 alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
-
 
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ~/googledrive'
@@ -478,47 +458,121 @@ alias lmkc='latexmk -c'
 
 # apt update & upgrade & autoremove alias
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
+# + }}}
 
-# git aliases
-alias git='g'
-alias gc='git commit -v'    # option -v : show change point
-alias gco='git checkout'
-alias gba='git branch -a'
-alias ga='git add'
-alias gm='git merge'
-alias gf='git fetch'
-alias gup='git fetch && git rebase'
-alias gpush='git push origin $(current_branch)'
-alias grh='git reset HEAD'
-alias grhh='git reset HEAD --hard'
-alias gl='git lg'
-alias gla='git lga'
-alias gd='git diff'
-alias gdc='git diff --cached'
-alias gr='git rebase'
-alias gst='git status --status --branch'
-alias gsd='gst && gd'
-alias gsa='gst && ga'
-alias gsco='gst && gco'
-alias gsrh='gst + grh'
+# + Named Directories {{{
+function name_dir()
+{
+    local dir=$1
+    local name=$2
+
+    if [ -d $dir ]; then
+        hash -d $name=$dir
+        return 0
+    else
+        return 1
+    fi
+    return 0
+}
+
+name_dir ~/.dotfiles/ dotfiles
+name_dir ~/workspace/ workspace
+name_dir ~/.zsh/ .zsh
+name_dir ~/.vim/ .vim
+# + }}}
+
+# + Keybind {{{
+# Emacs like keybind
+bindkey -e
+
+# History search
+bindkey '^P' history-beginning-search-backward
+bindkey '^N' history-beginning-search-forward
+if is-at-least 4.3.10; then
+    bindkey '^R' history-incremental-pattern-search-backward
+    bindkey '^S' history-incremental-pattern-search-forward
+fi
 # + }}}
 # }}}
 
-# その他 {{{
-# 不足している機能を配列に記憶し, 問題が発生した場合, 診断を楽にする
-typeset -ga debian_missing_features
+# Plugin Settings {{{
+# + Plugin Install {{{
+# Install zplug/zplug
+if [ ! -f $ZPLUG_HOME/init.zsh ]; then
+    mkdir -p $ZPLUG_HOME
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+fi
+source $ZPLUG_HOME/init.zsh
 
-# PATHの重複回避
-typeset -U path PATH
+# Install zsh's other plugin
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zsh-autosuggestions'
+zplug 'supercrabtree/k'
+zplug 'zsh-users/zaw'
+zplug 'joel-porquet/zsh-dircolors-solarized'
+zplug 'zsh-users/zsh-syntax-highlighting', defer:2
 
-# pyenv
-eval "$(pyenv init -)"
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
-# setting for zprof
+# Source plugins and add commands to $PATH
+zplug load
+# + }}}
+
+# + Plugin Settings{{{
+# ++ zplug/zplug
+# ++ zsh-users/zsh-completions
+# ++ zsh-users/zsh-autosuggestions
+# ++ supercrabtree/k
+
+# ++ zsh-users/zaw {{{
+if zplug check 'zsh-users/zaw';then
+    bindkey '\C-d' zaw-cdr
+    bindkey '\C-g' zaw-git-branches
+    bindkey '\C-@' zaw-gitdir
+
+    function zaw-src-gitdir () {
+        _dir=$(git rev-parse --show-cdup 2>/dev/null)
+        if [ $? -eq 0 ]
+        then
+            candidates=( $(git ls-files ${_dir} | perl -MFile::Basename -nle \
+                '$a{dirname $_}++; END{delete $a{"."}; print for sort keys %a}') )
+        fi
+        actions=("zaw-src-gitdir-cd")
+        act_descriptions=("change directory in git repos")
+        return 0
+    }
+
+    function zaw-src-gitdir-cd () {
+        BUFFER="cd $1"
+        zle accept-line
+        return 0
+    }
+    zaw-register-src -n gitdir zaw-src-gitdir
+fi
+# ++ }}}
+
+# ++ joel-porquet/zsh-dircolors-solarized {{{
+if zplug check 'joel-porquet/zsh-dircolors-solarized';then
+    setupsolarized dircolors.ansi-light
+fi
+# ++ }}}
+
+# ++ zsh-users/zsh-syntax-highlighting
+
+# + }}}
+# }}}
+
+# Settings for zprof
 #if (which zprof > /dev/null 2>&1) ;then
 #  zprof
 #fi
-# }}}
 
 
 # vim: foldmethod=marker
