@@ -11,7 +11,7 @@ $ bash ./install.sh
 # Make dir and symbolic link
 $ exec $SHELL -l
 # Install zplug and zsh's plugins
-$ vim
+$ vim -c q
 # Install dein.vim and vim's plugins
 ```
 
