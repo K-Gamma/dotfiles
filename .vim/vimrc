@@ -31,6 +31,7 @@ augroup MyAutoCmd
     autocmd!
 augroup END
 " + }}}
+
 " }}}
 
 " プラグイン機能設定 {{{
