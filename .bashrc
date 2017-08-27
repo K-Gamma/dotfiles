@@ -72,6 +72,26 @@ shopt -s xpg_echo
 
 # Prompt Settings {{{
 #echo "%{[38;5;045m%}%n@%m${reset}:%{[38;5;250m%}%~${reset}\$ "
+## +++ PROMPT Setting {{{
+#function left-prompt {
+#    local first='025m%}'        # Text color of the user and host name 
+#    local first_b='254m%}'      # Background color of the user and host name
+#    local second='007m%}'       # Text color of the current directory
+#    local second_b='238m%}'     # Background color of the current directory
+#    local sharp='\ue0b0'        # Triangle
+#    local fg='%{[38;5;'
+#    local bg='%{[30;48;5;'
+#    local reset='%{[0m%}'
+#    local user_and_host="${bg}${first_b}${fg}${first}"
+#    local dir="${bg}${second_b}${fg}${second}"
+#
+#    echo "%{$fg[red]%}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+#    #echo "${user_and_host}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+#    return 0
+#}
+#PROMPT='`left-prompt`'
+##PROMPT="%{$fg[cyan]%}%}%{$bg[white]%}%}[%n@%m]%{${reset_color}%}"
+## +++ }}}
 
 # Set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then

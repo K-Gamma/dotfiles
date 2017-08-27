@@ -218,30 +218,19 @@ typeset -U path PATH
 # + Zstyle (The zsh/zutil Module Settings) {{{
 # ++ Prompt Settings {{{
 # +++ PROMPT Setting {{{
-function left-prompt {
-    local first='025m%}'        # Text color of the user and host name 
-    local first_b='254m%}'      # Background color of the user and host name
-    local second='007m%}'       # Text color of the current directory
-    local second_b='238m%}'     # Background color of the current directory
-    local sharp='\ue0b0'        # Triangle
-    local fg='%{[38;5;'
-    local bg='%{[30;48;5;'
-    local reset='%{[0m%}'
-    local user_and_host="${bg}${first_b}${fg}${first}"
-    local dir="${bg}${second_b}${fg}${second}"
-
-    echo "${user_and_host}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+function triangle-mark {
+    echo '\ue0b0 '
     return 0
 }
-PROMPT='`left-prompt`'
+PROMPT="%K{254}%F{025}%n@%m%K{238}%F{254}$(triangle-mark)%K{238}%F{007}%~%k%F{238}$(triangle-mark)%f"
 # +++ }}}
 
-PROMPT2="%{$fg[green]%}%_> %{$reset_color%}"
-SPROMPT="%{$fg[red]%}correct: %R -> %r [nyae]? %{$reset_color%}"
+PROMPT2="%F{green}%_> %f"
+SPROMPT="%F{red}correct: %R -> %r [nyae]? %f"
 
 # +++ RPROMPT Setting {{{
 function branch-mark {
-    echo '\ue0a0^ '
+    echo '\ue0a0 '
     return 0
 }
 if is-at-least 4.3.10; then
@@ -261,42 +250,39 @@ else
     # ++++ Don't use vcs_info {{{
     function get-branch-status {
         local res color
-        output=`git status --short 2> /dev/null`
+        output=$(git status --short 2> /dev/null)
         if [ -z "$output" ]; then
             res=':' # status Clean
-            color='%{'${fg[green]}'%}'
+            color='%F{green}'
         elif [[ $output =~ "[\n]?\?\? " ]]; then
             res='?:' # Untracked
-            color='%{'${fg[yellow]}'%}'
+            color='%F{yellow}'
         elif [[ $output =~ "[\n]? M " ]]; then
             res='M:' # Modified
-            color='%{'${fg[red]}'%}'
+            color='%F{red}'
         else
             res='A:' # Added to commit
-            color='%{'${fg[cyan]}'%}'
+            color='%F{cyan}'
         fi
-        # echo ${color}${res}'%{'${reset_color}'%}'
         echo ${color}
         return 0
     }
     function get-branch-name {
-        echo `git rev-parse --abbrev-ref HEAD 2> /dev/null`
+        echo $(git rev-parse --abbrev-ref HEAD 2> /dev/null)
         return 0
     }
     function branch-status-check {
         if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
             return 0
         fi
-        local branchname=`get-branch-name`
+        local branchname=$(get-branch-name)
         if [[ -z $branchname ]]; then
             return 0
         fi
-        local prefix=`get-branch-status`
-        local suffix='%{'${reset_color}'%}'
-        echo ${prefix}$(branch-mark)${branchname}${suffix}
+        echo "$(get-branch-status)$(branch-mark)[${branchname}]%f"
         return 0
     }
-    RPROMPT=$'`branch-status-check`'
+    RPROMPT='$(branch-status-check)'
     # ++++ }}}
 fi
 # +++ }}}
@@ -438,6 +424,7 @@ alias g='git'
 alias v='vim'
 alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
 
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ~/googledrive'
@@ -447,9 +434,9 @@ alias gdrive_u='fusermount -u ~/googledrive'
 alias keepass='gdrive_m | mono ~/KeePass/KeePass.exe &'
 
 # cputmp alias
-alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo \`cat\`  / 1000  | bc | echo \`cat\` °C'
+alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo $(cat) / 1000  | bc | echo $(cat) °C'
 # gputmp alias
-alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk '{print \$4}' | tr -d . | echo \`cat\` °C'
+alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "{print \$4}" | tr -d . | echo $(cat)°C'
 
 # latexmk aliases
 alias lmk='latexmk'

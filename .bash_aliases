@@ -48,6 +48,8 @@ alias g='git'
 alias v='vim'
 alias relogin='exec $SHELL -l'
 alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+
 
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ~/googledrive'
@@ -57,9 +59,9 @@ alias gdrive_u='fusermount -u ~/googledrive'
 alias keepass='gdrive_m | mono ~/KeePass/KeePass.exe &'
 
 # cputmp alias
-alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo `cat`  / 1000  | bc | echo `cat` °C'
+alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo $(cat) / 1000  | bc | echo $(cat) °C'
 # gputmp alias
-alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "{print \$4}" | tr -d . | echo `cat` °C'
+alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "{print \$4}" | tr -d . | echo $(cat)°C'
 
 # latexmk aliases
 alias lmk='latexmk'
