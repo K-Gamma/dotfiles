@@ -4,6 +4,33 @@ if 0 | endif
 " Turn off vi compatible mode
 if &compatible | set compatible! | endif
 
+
+let g:vimrc#is_windows = has('win32')
+let g:vimrc#is_cygwin = has('win32unix')
+let g:vimrc#is_unix = has('unix') && !g:vimrc#is_cygwin
+let g:vimrc#is_gui = has('gui_running')
+let g:vimrc#dotvim = expand('~/.vim')
+if has('kaoriya')
+	let g:no_vimrc_example=0
+	let g:vimrc_local_finish=1
+	let g:gvimrc_local_finish=1
+ 
+	"$VIM/plugins/kaoriya/autodate.vim
+	let plugin_autodate_disable  = 1
+	"$VIM/plugins/kaoriya/cmdex.vim
+	let plugin_cmdex_disable     = 1
+	"$VIM/plugins/kaoriya/dicwin.vim
+	let plugin_dicwin_disable    = 1
+	"$VIMRUNTIME/plugin/format.vim
+	let plugin_format_disable    = 1
+	"$VIM/plugins/kaoriya/hz_ja.vim
+	let plugin_hz_ja_disable     = 1
+	"$VIM/plugins/kaoriya/scrnmode.vim
+	let plugin_scrnmode_disable  = 1
+	"$VIM/plugins/kaoriya/verifyenc.vim
+	let plugin_verifyenc_disable = 1
+endif
+
 " + Encoding {{{
 " Required:
 set encoding=UTF-8                              " Set encode to utf-8.
@@ -155,6 +182,7 @@ set hlsearch    " 検索結果をハイライトする
 set ignorecase  " 検索時に文字の大小を区別しない
 set smartcase   " 検索時に大文字を含んでいたら大小を区別する
 set nowrapscan  " 検索をファイルの先頭へループしない
+set magic
 " + }}}
 
 " + キーマッピング "{{{
@@ -249,6 +277,12 @@ filetype on
 filetype plugin indent on 
 " + }}}
 " }}}
+"" dotfiles
+" bchretien/dotfiles
+" aiya000/dotfiles
+" kumonopanya/hi
+
+" echo &term
 
 " vim: foldmethod=marker
 " vim: foldcolumn=3
