@@ -70,6 +70,7 @@ shopt -s nullglob
 shopt -s xpg_echo
 # }}}
 
+# TODO: adjustment
 # Prompt Settings {{{
 #echo "%{[38;5;045m%}%n@%m${reset}:%{[38;5;250m%}%~${reset}\$ "
 ## +++ PROMPT Setting {{{

@@ -29,20 +29,20 @@ if [ -x /usr/bin/lesspipe ]; then
 fi
 
 # + History Setting {{{
-# Number of items stored in memory
+# Number of items stored in memory.
 export HISTSIZE=1000
-# Number of items stored in history file
+# Number of items stored in history file.
 export HISTFILESIZE=100000
 
 # Don't put duplicate lines or lines starting with space in the history.
 export HISTCONTROL=ignoreboth
 
-# time add to history
+# Time add to history.
 HISTTIMEFORMAT='%Y/%m/%d(%a) %T %z  '
 # + }}}
 
 # + 'GCC' Setting {{{
-# Colored GCC warnings and errors
+# Colored GCC warnings and errors.
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 # + }}}
 
