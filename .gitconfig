@@ -26,6 +26,7 @@
 	al = config --get-regexp alias.* # エイリアス一覧を確認
 	# add
 	ad = add
+    adn = add -n # 登録されるファイル名を表示
 	adu = add -u # 変更部分のみ
 	ada = add -A # 全てのファイル
 	# commit
@@ -61,9 +62,9 @@
 	# submodule
 	sm = submodule
 	# reset
-	rad = reset HEAD
-	rscm = reset --soft HEAD^ # commitのみ取り消し, ファイルの変更は残す
-	rhcm = reset --hard HEAD^ # commitもファイルの変更も全て取り消す
+	rad = reset HEAD # add を取り消す
+	rscm = reset --soft HEAD^ # commit のみ取り消し, ファイルの変更は残す
+	rhcm = reset --hard HEAD^ # commit もファイルの変更も全て取り消す
 	# log
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
