@@ -21,6 +21,7 @@
 # Global initialization files aren't sourced.
 unsetopt global_rcs
 
+# TODO: adjustment
 # Set up the environment variables. {{{
 # Language
 export LANG=ja_JP.UTF-8
@@ -43,10 +44,10 @@ export LESSCHARSET=utf-8
 export JLESSCHARSET=utf-8
 
 # + Zsh Setting {{{
-# Zsh's home
+# Zsh's home.
 export ZDOTDIR=$HOME/.zsh
 
-# zplug's home
+# zplug's home.
 export ZPLUG_HOME=$ZDOTDIR/.zplug
 
 # Specify a set of characters to be treated as part of a word.
@@ -58,19 +59,19 @@ export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 export LISTMAX=0
 
 # + History Setting {{{
-# Set history file destination
+# Set history file destination.
 export HISTFILE=$ZDOTDIR/.zsh_history
 
-# Number of items stored in memory
+# Number of items stored in memory.
 export HISTSIZE=1000
 
-# Number of items stored in history file
+# Number of items stored in history file.
 export SAVEHIST=100000
 # + }}}
 # + }}}
 
 # + 'GCC' Setting {{{
-# Colored GCC warnings and errors
+# Colored GCC warnings and errors.
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 # + }}}
 
@@ -92,6 +93,7 @@ eval "$(pyenv init -)"
 export PATH="$PYENV_ROOT/versions/anaconda3-4.3.0/bin/:$PATH"
 # + }}}
 
+# TODO: adjustment
 # + My command Setting {{{
 export PATH="/opt/:$PATH"
 # + }}}

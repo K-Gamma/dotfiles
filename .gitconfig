@@ -1,8 +1,9 @@
 [user]
 	name = K-Ganma
-	email = katou.gannma-@hotmail.co.jp
+	email = k-ganma@outlook.com
 [color]
 	ui = true
+    diff = true
 [core]
 	pager = less -cm
 	quotepath = false
@@ -11,6 +12,25 @@
 	insteadOf = git://
 [credential]
 	helper = cache
+[merge]
+	ff = false
+[pull]
+	ff = only
+[gui]
+	encoding = utf-8 # 文字コード設定
+[receive]
+	denyNonFastforwards = false # 強制pushを許可
+[core]
+	quotepath = false # 日本語コミットの文字コード化を防ぐ
 [alias]
+    ad = add
+	st = status
+	cm = commit
+	cmm = commit -m
+	co = checkout
+	br = branch
+	cob = checkout -b
+	sm = submodule
+	ps = push
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative

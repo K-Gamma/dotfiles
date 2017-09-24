@@ -29,162 +29,160 @@ autoload -Uz run-help-git
 autoload -Uz run-help-svn
 # + }}}
 
-# TODO: English commentary
 # + Options {{{
 # ++ Changing Directories {{{
-# Omit cd
+# Omit cd.
 setopt auto_cd
 
-# Add cd directory to directories stack
-# For example, 'cd - [tab]' allows you to jump to a
-# directories in the past
+# Add cd directory to directories stack.
+# For example, 'cd - [tab]' allows you to jump to a directories in the past.
 setopt auto_pushd
 
-# Omit '~'
+# Omit '~'.
 setopt cdable_vars
 
-# Don’t puhf the same directory onto th directories stack
+# Don't puhf the same directory onto the directories stack.
 setopt pushd_ignore_dups
 # ++ }}}
 
 # ++ Completion {{{
-# Don't change the position of prompt when completing
+# Don't change the position of prompt when completing.
 setopt always_last_prompt
 
-# Move the cursor to the end after complete completion
+# Move the cursor to the end after complete completion.
 setopt always_to_end
 
-# 補完候補が複数あるとき一覧表示
+# Automatically list choices on an ambiguous completion.
 setopt auto_list
 
-# tabで補完候補を切り替える
+# Toggle completion candidate by tab.
 setopt auto_menu
 
-# 変数名, 括弧の対応を補完する
+# Complement variable name and correspondence of parentheses.
 setopt auto_param_keys
 
-# ディレクトリを補完すると最後にスラッシュを追加する
+# If a parameter is completed whose content is the name of a directory, then add a trailing slash instead of a space.
 setopt auto_param_slash
 
-# ディレクトリの補完で追加したスラッシュを削除する
+# Remove slash added a trailing by auto_param_slash.
 setopt auto_remove_slash
 
-# aliasを展開して補完
+# Expand aliases and complement it.
 setopt complete_aliases
 
-# 語の途中でもカーソル位置で補完
-setopt complete_in_word
+# Complement even if the cursor is in the middle of word.
+unsetopt complete_in_word
 
-# tab補完が成功しない時ビープで通知しない
-setopt list_beep
+# Don't beep on an ambiguous completion.
+unsetopt list_beep
 
-# 補完候補を詰めて表示
+# Try to make the completion list smaller.
 setopt list_packed
 
-# 補完候補一覧でファイルの種別をマーク表示
+# Show the type of each file with a trailing identifying mark.
 setopt list_types
 
-# 続きがある場合, まだ決定しない
-setopt rec_exact
+# If can completion the continuation of a word, it isn't accepted yet.
+unsetopt rec_exact
 # ++ }}}
 
 # ++ Expansion and Globbing {{{
-# For example, Can make folders 1, 2, 3 by 'mkdir {1-3}'
+# For example, Can make folders 1, 2, 3 by 'mkdir {1-3}'.
 setopt brace_ccl
 
-# Use additional characters for globs
+# Use additional characters for globs.
 setopt extended_glob
 
-# Do not require a leading ‘.’ in a filename to be matched explicit
+# Don't require a leading '.' in a filename to be matched explicit.
 setopt glob_dots
 
-# sや&の展開修飾マッチングをパターンマッチにする
+# Substitutions using the :s and :& history modifiers are performed with pattern matching instead of string matching.
 setopt hist_subst_pattern
 
-# オプションの = 以降の補完を可能にする
+# Allows the completion after '=' in the option.
 setopt magic_equal_subst
 
-# If directory matches by expanding file name, appends / to the end
+# If directory matches by expanding file name, appends / to the end.
 setopt mark_dirs
 
-# Suppress glob warning
+# Suppress glob warning.
 unsetopt nomatch
 
-# 展開に含まれる配列を別々に展開する
+# Expand arrays included in expansion separately.
 setopt rc_expand_param
 # ++ }}}
 
 # ++ History {{{
-# 時刻を記録
+# Save each command’s beginning timestamp and the duration to the history file
 setopt extended_history
 
 # if conflict occurred, delete the old one.
 setopt hist_ignore_all_dups
 
-# Erase extra blanks
+# Erase extra blanks.
 setopt hist_ignore_dups
 
-# If there is a space at the beginning, don't record history
+# If there is a space at the beginning, don't record history.
 setopt hist_ignore_space
 
-# historyコマンドは履歴に登録しない
+# Remove the history command from the history list when invoked.
 setopt hist_no_store
 
-# Stuff the extra spaces and record
+# Stuff the extra spaces and record.
 setopt hist_reduce_blanks
 
-# 同時に起動したzshの間でヒストリを共有しない
+# Don't share the history among zsh's started at the same time.
 unsetopt share_history
 # ++ }}}
 
 # ++ Input/Output {{{
-# エイリアスを拡張する
+# Expand aliases.
 setopt aliases
 
-# Don't overwrite with redirect
+# Don't overwrite with redirect.
 setopt clobber
 
-# スペルミスの修正をする
+# Try to correct the spelling of commands.
 setopt correct
 
-# コマンド行の全ての引数に対してスペルミスの修正を行う
+# Try to correct the spelling of all arguments in a line.
 setopt correct_all
 
-# Don't use 'C-q' and 'C-s'
+# Don't use 'C-q' and 'C-s'.
 setopt no_flow_control
 
-# EOFを読み込んでも終了しない
+# Do not exit on end-of-file.
 setopt ignore_eof
 
-# メールファイルにアクセスがあると警告を発する
+# Print a warning message if a mail file has been accessed since the shell last checked.
 setopt mail_warning
 
-# コマンド名に/が含まれていてもそれを含めたパスの探索を行う
+# Perform a path search even on command names with slashes in them.
 setopt path_dirs
 
-# Japanese file name can be displayed
+# Japanese file name can be displayed.
 setopt print_eight_bit
 
-# 'rm *'の実行前に10秒間の猶予を与える
-set -o RM_STAR_WAIT
+# If querying the user before executing 'rm *' or 'rm path/*', first wait ten seconds and ignore anything typed in that time.
+setopt RM_STAR_WAIT
 # ++ }}}
 
 # ++ Job Control {{{
-# If you enter a command with the same name as the suspended process, execute it
+# If you enter a command with the same name as the suspended process, execute it.
 setopt auto_resume
 
-# List jobs in the long format by default
+# List jobs in the long format by default.
 setopt long_list_jobs
 # ++ }}}
 
 # ++ Prompting {{{
-# Even if there isn't line feed code at the end of the output string, it is displayed
+# Even if there isn't line feed code at the end of the output string, it is displayed.
 unsetopt prompt_cr
 
-# Evaluate PROMPT variable expansion, command substitution, arithmetic operation etc for each display
+# Evaluate PROMPT variable expansion, command substitution, arithmetic operation etc for each display.
 setopt prompt_subst
 
-# Delete the right prompt after executing the command
+# Delete the right prompt after executing the command.
 setopt transient_rprompt
 # ++ }}}
 
@@ -194,13 +192,13 @@ setopt multios
 # ++ }}}
 
 # ++ Zsh Line Editor {{{
-# Don't sound a beep
+# Don't sound a beep.
 unsetopt beep
 
-# Emacs like key bind
+# Emacs like key bind.
 setopt emacs
 
-# Use ZLE
+# Use ZLE.
 setopt zle
 # ++ }}}
 # + }}}
@@ -345,6 +343,7 @@ zstyle ':completion:*' list-separator '-->'
 # ++ }}}
 # + }}}
 
+# TODO: addition
 # + Aliases {{{
 # global
 alias -g ...='cd ../..'
@@ -468,6 +467,7 @@ name_dir ~/.zsh/ .zsh
 name_dir ~/.vim/ .vim
 # + }}}
 
+# TODO: addition
 # + Keybind {{{
 # Emacs like keybind
 bindkey -e
@@ -512,6 +512,7 @@ fi
 zplug load
 # + }}}
 
+# TODO: addition
 # + Plugin Settings{{{
 # ++ zplug/zplug
 # ++ zsh-users/zsh-completions
