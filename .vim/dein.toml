@@ -166,17 +166,17 @@ hook_add = '''
 #[[plugins]]
 #repo = 'justmao945/vim-clang'
 
-[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
-repo = 'kannokanno/previm'
-hook_add = '''
-    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-'''
+#[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
+#repo = 'kannokanno/previm'
+#hook_add = '''
+#    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+#'''
 
-[[plugins]] # Markdownをブラウザで表示するプラグイン
-repo = 'tyru/open-browser.vim'
+#[[plugins]] # Markdownをブラウザで表示するプラグイン
+#repo = 'tyru/open-browser.vim'
 
-[[plugins]] # Markdownのシンタックスハイライトやルールマッチング
-repo = 'rcmdnk/vim-markdown'
+#[[plugins]] # Markdownのシンタックスハイライトやルールマッチング
+#repo = 'rcmdnk/vim-markdown'
 
 #[[plugins]]
 #repo = 'Shougo/vimshell', { 'rev': '3787e5' }
