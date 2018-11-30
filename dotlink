@@ -1,0 +1,145 @@
+###############################################################################
+#                         _       _    __ _ _                                 #
+#                      __| | ___ | |_ / _(_) | ___  ___                       #
+#                     / _` |/ _ \| __| |_| | |/ _ \/ __|                      #
+#                    | (_| | (_) | |_|  _| | |  __/\__ \                      #
+#                     \__,_|\___/ \__|_| |_|_|\___||___/                      #
+#                                                                             #
+###############################################################################
+# This file contains dotfiles linksets.
+# You can comment out by adding "#" at the beginning of the line.
+# And an empty line is ignored by dot.
+#
+# Format:
+# <dotfile>,<linkto>
+#
+# the script automatically add directory information to the file path.
+# So, you should write like below:
+#     .vimrc,.vimrc
+#
+# You can load from outside of the dotfiles directory:
+#     ~/Dropbox/.netrc,.netrc
+#
+# You can easily copy the existing file to the dotfiles repository
+# and add new link list by
+#     dot add [-m "some comment"] original_file dotfiles_path
+# or, just
+#     dot add original_file
+# In the second example, the script automatically completes the second
+# arguments and confirm whether or not to execute that command.
+#
+#===========================================================================}}}
+# dotrc:                                                                    {{{
+#==============================================================================
+# Configuration file of dot command.
+
+dotrc, .config/dot/dotrc
+
+#===========================================================================}}}
+# Xmodmap:                                                                  {{{
+#==============================================================================
+# xmodmap is a utility for modifying keymaps and pointing button
+# mappings in Xorg.
+
+system/Xmodmap, .Xmodmap
+
+#===========================================================================}}}
+# netrc:                                                                    {{{
+#==============================================================================
+# (contain private information)
+
+${HOME}/Dropbox/ubuntu_home/.netrc.gpg, .netrc.gpg
+
+#===========================================================================}}}
+# history:                                                                  {{{
+#==============================================================================
+# (Some history file)
+
+${HOME}/Dropbox/ubuntu_home/history/bash_history, .bash_history
+${HOME}/Dropbox/ubuntu_home/history/python_history, .python_history
+${HOME}/Dropbox/ubuntu_home/history/zsh_history, .zsh/.zsh_history
+
+#===========================================================================}}}
+# gitconfig:                                                                {{{
+#==============================================================================
+
+.gitconfig, .gitconfig
+
+#===========================================================================}}}
+# [vim](http://www.vim.org/):                                               {{{
+#==============================================================================
+# Vim is an advanced text editor that seeks to provide the power of the
+# de-facto Unix editor 'Vi', with a more complete feature set.
+
+vimfiles/vimrc,    .vim/vimrc
+vimfiles/dein.toml, .vim/dein.toml
+
+vimfiles/ftplugin/tex_quickrun.vim,      .vim/ftplugin/tex_quickrun.vim
+vimfiles/ftplugin/markdown_quickrun.vim, .vim/ftplugin/markdown_quickrun.vim
+
+#===========================================================================}}}
+# [neovim](https://neovim.io/):                                             {{{
+#==============================================================================
+# Neovim is a project that seeks to aggressively refactor Vim
+
+#neovim/init.vim, .config/nvim/init.vim
+
+#===========================================================================}}}
+# bashfiles:                                                               {{{
+#==============================================================================
+
+bashfiles/bash_aliases, .bash_aliases
+bashfiles/bash_profile, .bash_profile
+bashfiles/bashrc, .bashrc
+
+#===========================================================================}}}
+# [zsh](http://zsh.sourceforge.net/):                                       {{{
+#==============================================================================
+# Zsh is a shell designed for interactive use, although it is also a
+# powerful scripting language.
+
+zshfiles/zshrc, .zsh/.zshrc
+zshfiles/zshenv, .zsh/.zshenv
+zshfiles/zshenv, .zshenv
+
+#===========================================================================}}}
+# dircolors:                                                                {{{
+#==============================================================================
+# dircolors is a file set up dircolor.
+
+dircolors, .dircolors
+
+#===========================================================================}}}
+# [ipython](http://ipython.org/):                                           {{{
+#==============================================================================
+# IPython provides a rich architecture for interactive computing with:
+#     - Powerful interactive shells (terminal and Qt-based).
+#     - A browser-based notebook with support for code, rich text, mathematical
+#       expressions, inline plots and other rich media.
+#     - Support for interactive data visualization and use of GUI toolkits.
+#     - Flexible, embeddable interpreters to load into your own projects.
+#     - Easy to use, high performance tools for parallel computing.
+
+
+#===========================================================================}}}
+# [latexmk](http://www.ctan.org/pkg/latexmk/):                              {{{
+#==============================================================================
+# Latexmk completely automates the process of generating a LaTeX document.
+
+latexmkrc, .latexmkrc
+
+#===========================================================================}}}
+# [pandoc](http://pandoc.org/):                                             {{{ 
+#==============================================================================
+# If you need to convert files from one markup format into another, pandoc is
+# your swiss-army knife.
+
+
+#===========================================================================}}}
+# [tig](https://github.com/jonas/tig):                                      {{{
+#==============================================================================
+
+
+#===========================================================================}}}
+
+# vim: fdm=marker fdc=3 fdl=0

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Xmodmap
+Comment=xmodmap ~/.Xmodmap
+Exec=/usr/bin/xmodmap .Xmodmap
+Type=Application
+Icon=application-default-icon
