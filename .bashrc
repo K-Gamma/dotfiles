@@ -1,9 +1,18 @@
-# This file is sourced in the login shells and interactive
-# shells. Please add command to set variables that are not
-# environment variables, shell function, the command line
-# completion etc:
+# ${HOME}/.bashrc: executed by bash(1) for non-login shells.
+# See /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 
-# Set up the shopt of built-in function. {{{
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+    *) return;;
+esac
+
+# make less more friendly for non-text input files, see lesspipe(1)
+if [[ -x /usr/bin/lesspipe ]]; then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
+
+# set up the shopt of built-in function {{{
 # If set, a command name that is the name of  a  directory
 # is  executed  as  if it were the argument to the cd com-
 # mand.  This option is only used by interactive shells.
@@ -71,7 +80,7 @@ shopt -s xpg_echo
 # }}}
 
 # TODO: adjustment
-# Prompt Settings {{{
+# set up about the prompt {{{
 #echo "%{[38;5;045m%}%n@%m${reset}:%{[38;5;250m%}%~${reset}\$ "
 ## +++ PROMPT Setting {{{
 #function left-prompt {
@@ -137,12 +146,12 @@ case "$TERM" in
 esac
 # }}}
 
-# Get the alias definitions.
-if [ -f ~/.bash_aliases ]; then
+# get the alias definitions
+if [[ -f ~/.bash_aliases ]]; then
     . ~/.bash_aliases
 fi
 
-# Enable completion features.
+# enable programmable completion features
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
         . /usr/share/bash-completion/bash_completion
@@ -152,6 +161,4 @@ if ! shopt -oq posix; then
 fi
 
 
-# vim: foldmethod=marker
-# vim: foldcolumn=3
-# vim: foldlevel=0
+# vim: fdm=marker fdc=3 fdl=0
