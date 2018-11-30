@@ -1,0 +1,14 @@
+! Remove the CapsLock function from CapsLock key
+remove lock = Caps_Lock
+
+! Assign Control_L to the CapsLock key
+keycode 66 = Control_L
+
+! To use easily Escape and Zenkaku_Hankaku
+keycode 100 = Escape
+keycode 101 = Zenkaku_Hankaku
+keycode 102 = Escape
+! To use code generation with CLion.
+keycode 118 = Insert 
+
+add control = Control_L
