@@ -1,57 +1,131 @@
+# ${HOME}/.bashrc: executed by bash(1) for non-login shells.
+# See /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
-      *) return;;
+    *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
+# make less more friendly for non-text input files, see lesspipe(1)
+if [[ -x /usr/bin/lesspipe ]]; then
+    eval "$(SHELL=/bin/sh lesspipe)"
+fi
 
-# append to the history file, don't overwrite it
-shopt -s histappend
+# set up the shopt of built-in function {{{
+# If set, a command name that is the name of  a  directory
+# is  executed  as  if it were the argument to the cd com-
+# mand.  This option is only used by interactive shells.
+shopt -s autocd
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
-# time add to history
-HISTTIMEFORMAT='%Y/%m/%d(%a) %T %z  '
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# Check the window size after each command and, if necess-
+# ary, update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+# If set, bash replaces directory names with  the  results
+# of  word  expansion when performing filename completion.
+# This changes the contents of the readline  editing  buf-
+# fer.   If  not  set,  bash attempts to preserve what the
+# user typed.
+shopt -s direxpand
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+# If set, bash attempts spelling correction  on  directory
+# names  during word completion if the directory name ini-
+# tially supplied does not exist.
+shopt -s dirspell
 
-# set variable identifying the chroot you work in (used in the prompt below)
+# If set, bash includes filenames beginning with a `.'  in
+# the results of pathname expansion.
+shopt -s dotglob
+
+# If set, a non-interactive shell will not exit if it can-
+# not execute the file specified as  an  argument  to  the
+# exec  builtin  command.   An  interactive shell does not
+# exit if exec fails.
+shopt -s execfail
+
+# Use additional characters for globs
+shopt -s extglob
+
+# If set, the pattern ** used in a pathname expansion con-
+# text will match all files and zero or  more  directories
+# and  subdirectories.  If the pattern is followed by a /,
+# only directories and subdirectories match.
+shopt -s globstar
+
+# If  set,  and  a file that bash is checking for mail has
+# been accessed since the last time it  was  checked,  the
+# message  ``The  mail in mailfile has been read'' is dis-
+# played.
+shopt -s mailwarn
+
+# If set, bash matches  filenames  in  a  case-insensitive
+# fashion when performing pathname expansion (see Pathname
+# Expansion above).
+shopt -s nocaseglob
+
+# If set, bash  matches  patterns  in  a  case-insensitive
+# fashion when performing matching while executing case or
+# [[ conditional commands.
+shopt -s nocasematch
+
+# If set, bash allows patterns which match no  files  (see
+# Pathname  Expansion  above)  to expand to a null string,
+# rather than themselves.
+shopt -s nullglob
+
+# If   set,  the  echo  builtin  expands  backslash-escape
+# sequences by default.
+shopt -s xpg_echo
+# }}}
+
+# TODO: adjustment
+# set up about the prompt {{{
+#echo "%{[38;5;045m%}%n@%m${reset}:%{[38;5;250m%}%~${reset}\$ "
+## +++ PROMPT Setting {{{
+#function left-prompt {
+#    local first='025m%}'        # Text color of the user and host name 
+#    local first_b='254m%}'      # Background color of the user and host name
+#    local second='007m%}'       # Text color of the current directory
+#    local second_b='238m%}'     # Background color of the current directory
+#    local sharp='\ue0b0'        # Triangle
+#    local fg='%{[38;5;'
+#    local bg='%{[30;48;5;'
+#    local reset='%{[0m%}'
+#    local user_and_host="${bg}${first_b}${fg}${first}"
+#    local dir="${bg}${second_b}${fg}${second}"
+#
+#    echo "%{$fg[red]%}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+#    #echo "${user_and_host}%n@%m${bg}${second_b}${fg}${first_b}${sharp} ${dir}%~${reset}${fg}${second_b}${sharp} ${reset}"
+#    return 0
+#}
+#PROMPT='`left-prompt`'
+##PROMPT="%{$fg[cyan]%}%}%{$bg[white]%}%}[%n@%m]%{${reset_color}%}"
+## +++ }}}
+
+# Set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
+# Set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
+# Uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
 #force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -64,35 +138,27 @@ unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \W\a\]$PS1"
-    ;;
-*)
-    ;;
+    xterm*|rxvt*)
+        PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \W\a\]$PS1"
+        ;;
+    *)
+        ;;
 esac
+# }}}
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
+# get the alias definitions
+if [[ -f ~/.bash_aliases ]]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# enable programmable completion features
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-# PATH Setting
-PATH=$PATH:/usr/local/bin
 
-# pyenv
-eval "$(pyenv init -)"
+# vim: fdm=marker fdc=3 fdl=0
