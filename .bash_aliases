@@ -6,22 +6,15 @@ alias man=' man'
 
 # Enable color support of ls and also add handy aliases.
 if [ -x /usr/bin/dircolors ]; then
-    case "${OSTYPE}" in
-        darwin*)
-            alias ls='ls -GF'
-            ;;
-        linux*)
-            if [ -f ~/.dircolors ]; then
-                eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-            fi
-            alias ls='ls -F --color=auto'
-            alias dir='dir --color=auto'
-            alias vdir='vdir --color=auto'
-            alias grep='grep --color=auto'
-            alias fgrep='fgrep --color=auto'
-            alias egrep='egrep --color=auto'
-            ;;
-    esac
+    if [ -f ~/.dircolors ]; then
+        eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    fi
+    alias ls='ls -F --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
@@ -52,8 +45,8 @@ alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [ $
 
 
 # GoogleDrive aliases
-alias gdrive_m='google-drive-ocamlfuse ~/googledrive'
-alias gdrive_u='fusermount -u ~/googledrive'
+alias gdrive_m='google-drive-ocamlfuse ~/google-drive'
+alias gdrive_u='fusermount -u ~/google-drive'
 
 # KeePass alias
 alias keepass='gdrive_m | mono ~/KeePass/KeePass.exe &'
@@ -70,3 +63,6 @@ alias lmkc='latexmk -c'
 
 # apt update & upgrade & autoremove alias
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
+
+
+# vim: fdm=marker fdc=3 fdl=0

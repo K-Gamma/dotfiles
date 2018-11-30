@@ -1,11 +1,12 @@
 # plugins
 
-[[plugins]] # 暗黒美夢王から授かった闇の力
+# Required:
+[[plugins]]
 repo = 'Shougo/dein.vim'
 
 [[plugins]] # カーソル位置のコンテキストに合わせてftを切り替える
 repo = 'osyo-manga/vim-precious'
-depends = ['context_filetype.vim']
+depends = ['Shougo/context_filetype.vim']
 
 [[plugins]] # カーソル位置のコンテキストのftを判定する
 repo = 'Shougo/context_filetype.vim'
@@ -17,9 +18,6 @@ on_ft = 'toml'
 [[plugins]] # カラースキーマ
 repo = 'cocopon/iceberg.vim'
 hook_add = '''
-    if !has('gui_running')
-        set t_Co=256
-    endif
     " colorscheme 設定は source 後に行う必要があるので VimEnter で行う。
     " 但し Colorscheme イベントの発生が抑制されないよう nented を付ける。
     au MyAutoCmd VimEnter * nested colorscheme iceberg
@@ -27,7 +25,7 @@ hook_add = '''
 
 [[plugins]] # コード自動補完プラグイン(neocomplcacheの後続)
 repo = 'Shougo/neocomplete.vim'
-if   = '''! has('lua')'''
+if   = 'has("lua")'
 hook_add = '''
     " Vim起動時にneocompleteを有効化
     let g:neocomplete#enable_at_startup = 1
@@ -49,45 +47,63 @@ hook_add = '''
     let g:neocomplete#sources#syntax#min_keyword_length = 3
     " preview window を勝手に閉じない
     let g:neocomplete#enable_auto_close_preview = 0
-    AutoCmd InsertLeave * silent! pclose!
-
+    "AutoCmd InsertLeave * silent! pclose!
+    
     let g:neocomplete#force_overwrite_completefunc = 1
     if !exists('g:neocomplete#force_omni_input_patterns')
         let g:neocomplete#force_omni_input_patterns = {}
     endif
     let g:neocomplete#force_omni_input_patterns.c =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
     let g:neocomplete#force_omni_input_patterns.cpp =
-                \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 '''
 
-[[plugins]] # スニペット補完
+[[plugins]] # スニペット補完プラグイン
 repo = 'Shougo/neosnippet.vim'
-if   = '''! has('lua')'''
+if   = 'has("lua")'
 hook_add = '''
-    " エンターキーで補完候補の確定. スニペットの展開もエンターキーで確定
-    imap <expr><CR> neosnippet#expandable() ? "<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "<C-y>" : "<CR>"
-    " タブキーで補完候補の選択. スニペット内のジャンプもタブキーでジャンプ
-    imap <expr><TAB> pumvisible() ? "<C-n>" : neosnippet#jumpable() ? "<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
+    " If not use default snippets:
+    "let g:neosnippet#disable_runtime_snippets = {
+    "   '_' : 1,
+    "}
+
+    " Enable snipMate compatibility feature.
+    let g:neosnippet#enable_snipmate_compatibility = 1
+
+    " Tell Neosnippet about the other snippets
+    " You can set multiple values in comma-separated string or list.
+    let g:neosnippet#snippets_directory='~/.vim/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets/'
+
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 '''
 
 [[plugins]] # デフォルトスニペット
 repo = 'Shougo/neosnippet-snippets'
-if   = '''! has('lua')'''
+depends = ['Shougo/neosnippet.vim']
+if   = 'has("lua")'
+
+#[[plugins]] # 追加スニペット
+#repo = 'honza/vim-snippets'
+#depends = ['Shougo/neosnippet.vim']
+#if   = 'has("lua")'
 
 [[plugins]] # Vimで非同期処理を実現するためのプラグイン
 repo = 'Shougo/vimproc.vim'
 hook_post_update = '''
-  if dein#util#_is_windows()
-    let cmd = 'tools\\update-dll-mingw'
-  elseif dein#util#_is_cygwin()
-    let cmd = 'make -f make_cygwin.mak'
-  elseif executable('gmake')
-    let cmd = 'gmake'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
+    if dein#util#_is_windows()
+        let cmd = 'tools\\update-dll-mingw'
+    elseif dein#util#_is_cygwin()
+        let cmd = 'make -f make_cygwin.mak'
+    elseif executable('gmake')
+        let cmd = 'gmake'
+    else
+        let cmd = 'make'
+    endif
+
+    let g:dein#plugin.build = cmd
 '''
 
 [[plugins]] # Vim上でShellを使えるようにするプラグイン
@@ -105,24 +121,38 @@ repo = 'thinca/vim-quickrun'
 [[plugins]] # ヘルプを自動で折りたたむプラグイン
 repo = 'thinca/vim-ft-help_fold'
 
-[[plugins]] # pythinのコード補完を行うプラグイン
-repo = 'davidhalter/jedi-vim'
-hook_add = '''
-    au MyAutoCmd FileType python setlocal omnifunc=jedi#completions
-    let g:jedi#completions_enabled = 0
-    let g:jedi#auto_vim_configuration = 0
-    if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
-'''
+#[[plugins]] # pythinのコード補完を行うプラグイン
+#repo = 'davidhalter/jedi-vim'
+#on_ft = 'python'
+#hook_add = '''
+#    au MyAutoCmd FileType python setlocal omnifunc=jedi#completions
+#    " Jediの自動初期化を無効
+#    let g:jedi#auto_initialization = 0
+#    " vimオプションの自動初期化を無効
+#    let g:jedi#auto_vim_configuration = 0
+#    " tabで定義へ
+#    let g:jedi#use_tabs_not_buffers = 1
+#    " split したとき
+#    let g:jedi#use_splits_not_buffers = "winwidth"
+#    " 補完を無効にする？
+#    let g:jedi#completions_enabled = 0
+#    if !exists('g:neocomplete#force_omni_input_patterns')
+#        let g:neocomplete#force_omni_input_patterns = {}
+#    endif
+#    let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+#'''
+
+#[[plugins]] # Pythonバージョンに沿った正しい補完リストを返すためのプラグイン
+#repo = 'lambdalisue/vim-pyenv'
+#depends = ['davidhalter/jedi-vim']
+#on_ft = 'python'
 
 [[plugins]] # ステータスバーをかっこよくするプラグイン
 repo = 'itchyny/lightline.vim'
 hook_add = '''
     let g:lightline = {
-                \ 'colorscheme': 'wombat',
-                \ }
+        \   'colorscheme': 'wombat',
+        \}
     set laststatus=2    " 末尾から2行目にステータスラインを表示
     set showmode        " 現在のモードを表示
     set showcmd         " 入力コマンドを表示
@@ -141,20 +171,20 @@ repo = 'thinca/vim-template'
 [[plugins]] # インデント可視化プラグイン
 repo = 'nathanaelkane/vim-indent-guides'
 hook_add = '''
-    " vim立ち上げたときに、自動的にvim-indent-guidesをオンにする
-    let g:indent_guides_enable_on_vim_startup=1
-    " ガイドをスタートするインデントの量
-    let g:indent_guides_start_level=2
-    " 自動カラーを無効にする
-    let g:indent_guides_auto_colors=0
-    " 奇数インデントのカラー
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=darkgray ctermbg=236
-    " 偶数インデントのカラー
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgray ctermbg=239
-    " ハイライト色の変化の幅
-    let g:indent_guides_color_change_percent = 30
-    " ガイドの幅
-    let g:indent_guides_guide_size = 1
+   " vim立ち上げたときに、自動的にvim-indent-guidesをオンにする
+   let g:indent_guides_enable_on_vim_startup=1
+   " ガイドをスタートするインデントの量
+   let g:indent_guides_start_level=2
+   " 自動カラーを無効にする
+   let g:indent_guides_auto_colors=0
+   " 奇数インデントのカラー
+   autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=darkgray ctermbg=236
+   " 偶数インデントのカラー
+   autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=darkgray ctermbg=239
+   " ハイライト色の変化の幅
+   let g:indent_guides_color_change_percent = 30
+   " ガイドの幅
+   let g:indent_guides_guide_size = 1
 '''
 
 #[[plugins]] # gitの差分を表示するプラグイン
@@ -166,34 +196,35 @@ hook_add = '''
 #[[plugins]]
 #repo = 'justmao945/vim-clang'
 
-#[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
-#repo = 'kannokanno/previm'
-#hook_add = '''
-#    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-#'''
+[[plugins]] # Markdownをブラウザで表示するプラグイン
+repo = 'tyru/open-browser.vim'
 
-#[[plugins]] # Markdownをブラウザで表示するプラグイン
-#repo = 'tyru/open-browser.vim'
+[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
+repo = 'kannokanno/previm'
+depends = ['tyru/open-browser.vim']
+hook_add = '''
+    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+'''
 
-#[[plugins]] # Markdownのシンタックスハイライトやルールマッチング
-#repo = 'rcmdnk/vim-markdown'
+[[plugins]] # Markdownのシンタックスハイライトやルールマッチング
+repo = 'rcmdnk/vim-markdown'
 
 #[[plugins]]
 #repo = 'Shougo/vimshell', { 'rev': '3787e5' }
 
-[[plugins]]
+[[plugins]] # ディレクトリをツリー状に表示
 repo = 'scrooloose/nerdtree'
 hook_add = '''
     " 引数なしでvimを開くとNERDTreeを起動
     let file_name = expand('%')
     if has('vim_starting') &&  file_name == ''
-      au MyAutoCmd VimEnter * NERDTree ./
+    au MyAutoCmd VimEnter * NERDTree ./
     endif
     " 隠しファイルのON/OFF
     "let g:NERDTreeShowHidden=1
     " Ctrl-eでNERDTreeを表示
     map <C-e> :NERDTreeToggle<CR>
-
+    
     "let g:NERDTreeMinimalUI=1
     " ディレクトリ表示
     let g:NERDTreeDirArrows = 0
@@ -204,3 +235,41 @@ hook_add = '''
     "他のバッファをすべて閉じた時, NERDTreeも一緒に閉じる
     au MyAutoCmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 '''
+
+[[plugins]] # Evernoteをvimで編集するためのプラグイン
+repo = 'kakkyz81/evervim'
+if   = 'has("python")'
+hook_add = '''
+    let g:evervim_devtoken="S=s533:U=abed4cd:E=167c163b509:C=16069b287a0:P=1cd:A=en-devtoken:V=2:H=b4bd277f1b46b05d02ece119f6d33e56"
+'''
+
+#[[plugins]] # geeknoteとの連携プラグイン
+#repo = 'neilagabriel/vim-geeknote'
+#if   = 'has("python")'
+#hook_add = '''
+#    let g:GeeknoteMaxExplorerWidth=60 " リストの横幅を制限
+#    autocmd FileType geeknote setlocal nonumber " 行数表示を消す
+#'''
+
+[[plugins]] # Conceal機能を拡張するLaTeX用プラグイン
+repo = 'KeitaNakamura/tex-conceal.vim'
+if   = 'has("conceal")'
+on_ft = 'latex'
+hook_add = '''
+    " Concealの上付き, 下付き文字を無効
+    set conceallevel=2
+    let g:tex_conceal="adgmb"
+    " カーソル行だけ生ソースが見える
+    set concealcursor=""
+'''
+
+[[plugins]] # かの有名なfzf
+repo = 'junegunn/fzf'
+build = './install'
+rtp = ''
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = ['junegunn/fzf']
+
+# vim: fdm=marker fdc=3 fdl=0
