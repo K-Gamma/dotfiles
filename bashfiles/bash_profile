@@ -23,7 +23,7 @@ export LESS='-r'
 export LESSCHARSET=utf-8
 export JLESSCHARSET=utf-8
 # Make less more friendly for non-text input files, see lesspipe(1)
-if [ -x /usr/bin/lesspipe ]; then
+if [[ -x /usr/bin/lesspipe ]]; then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
@@ -67,7 +67,7 @@ export MANPATH=/usr/local/texlive/2018/texmf-dist/doc/man${MANPATH}
 # + }}}
 
 # + for virtualenvwrapper {{{
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+if [[ -f /usr/local/bin/virtualenvwrapper.sh ]]; then
     export WORKON_HOME=${HOME}/.virtualenvs
     export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
     source /usr/local/bin/virtualenvwrapper.sh
@@ -89,22 +89,22 @@ export CPATH=${CUDA_HOME}/samples/common/inc:${CUDA_HOME}/include:${CPATH}
 
 # + for Ruby {{{
 # for rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="${HOME}/.rbenv/bin:${PATH}"
 eval "$(rbenv init -)"
 # for ruby-build
-export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+export PATH="${HOME}/.rbenv/plugins/ruby-build/bin:${PATH}"
 # + }}}
 
 # + for ssh0/dot {{{
-if [ -f ${HOME}/.config/dot ]; then
+if [[ -f ${HOME}/.config/dot ]]; then
     export DOT_REPO="https://github.com/K-Ganma/dotfiles.git"
     export DOT_DIR="${HOME}/.dotfiles"
-    fpath=(${HOME}/.config/dot $fpath)
+    fpath=(${HOME}/.config/dot ${fpath})
     source ${HOME}/.config/dot/dot.sh
 # + }}}
 
 # + for My command {{{
-export PATH="/opt/:$PATH"
+export PATH="/opt/:${PATH}"
 # + }}}
 # }}}
 
@@ -118,9 +118,9 @@ shopt -s checkwinsize
 # }}}
 
 # Gain the aliases etc. {{{
-if [ -f ~/.bashrc ]; then
+if [[ -f ~/.bashrc ]]; then
     . ~/.bashrc
 fi
 # }}}
 
-# vim: fdm=marker fdc=3 fdl=0
+# vim: ft=sh fdm=marker fdc=3 fdl=0

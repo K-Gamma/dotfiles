@@ -5,8 +5,8 @@
 alias man=' man'
 
 # Enable color support of ls and also add handy aliases.
-if [ -x /usr/bin/dircolors ]; then
-    if [ -f ~/.dircolors ]; then
+if [[ -x /usr/bin/dircolors ]]; then
+    if [[ -f ~/.dircolors ]]; then
         eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     fi
     alias ls='ls -F --color=auto'
@@ -39,9 +39,9 @@ alias apv='appletviewer'
 alias x='exit'
 alias g='git'
 alias v='vim'
-alias relogin='exec $SHELL -l'
-alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
-alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+alias relogin='exec ${SHELL} -l'
+alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m ${c}" ; [[ $(($c%16)) -eq 15 ]] && echo;done;echo'
+alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [[ $(($c%16)) -eq 15 ]] && echo;done;echo'
 
 
 # GoogleDrive aliases
@@ -65,4 +65,4 @@ alias lmkc='latexmk -c'
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 
 
-# vim: fdm=marker fdc=3 fdl=0
+# vim: ft=sh fdm=marker fdc=3 fdl=0

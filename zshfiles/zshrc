@@ -4,8 +4,8 @@
 # See /usr/share/zsh/help
 
 # Compile '.zshrc' to speed up loading. {{{
-if [[ ! -f $ZDOTDIR/.zshrc.zwc ]] || [[ $(readlink $ZDOTDIR/.zshrc) -nt $ZDOTDIR/.zshrc.zwc ]]; then
-    zcompile $ZDOTDIR/.zshrc.zwc $ZDOTDIR/.zshrc
+if [[ ! -f ${ZDOTDIR}/.zshrc.zwc ]] || [[ $(readlink ${ZDOTDIR}/.zshrc) -nt ${ZDOTDIR}/.zshrc.zwc ]]; then
+    zcompile ${ZDOTDIR}/.zshrc.zwc ${ZDOTDIR}/.zshrc
 fi
 #}}}
 
@@ -211,7 +211,7 @@ setopt zle
 # An array to note missing features to ease diagnosis in case of problems
 typeset -ga debian_missing_features
 
-# Avoid duplication of $PATH
+# Avoid duplication of ${PATH}
 typeset -U path PATH
 # + }}}
 
@@ -261,13 +261,13 @@ else
     function get-branch-status {
         local res color
         output=$(git status --short 2> /dev/null)
-        if [[ -z "$output" ]]; then
+        if [[ -z "${output}" ]]; then
             res=':' # status Clean
             color='%F{green}'
-        elif [[ $output =~ "[\n]?\?\? " ]]; then
+        elif [[ ${output} =~ "[\n]?\?\? " ]]; then
             res='?:' # Untracked
             color='%F{yellow}'
-        elif [[ $output =~ "[\n]? M " ]]; then
+        elif [[ ${output} =~ "[\n]? M " ]]; then
             res='M:' # Modified
             color='%F{red}'
         else
@@ -282,11 +282,11 @@ else
         return 0
     }
     function branch-status-check {
-        if [[ "$PWD" =~ '/\.git(/.*)?$' ]]; then
+        if [[ "${PWD}" =~ '/\.git(/.*)?$' ]]; then
             return 0
         fi
         local branchname=$(get-branch-name)
-        if [[ -z $branchname ]]; then
+        if [[ -z ${branchname} ]]; then
             return 0
         fi
         echo "$(get-branch-status)$(branch-mark)[${branchname}]%f"
@@ -299,14 +299,14 @@ fi
 # ++ }}}
 
 # ++ 'cdr' settings (Required before 'zplug load') {{{
-if [[ ! -d ${XDG_CACHE_HOME:-$HOME/.cache}/shell ]]; then
-    mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/shell"
+if [[ ! -d ${XDG_CACHE_HOME:-${HOME}/.cache}/shell ]]; then
+    mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/shell"
 fi
 if is-at-least 4.3.10; then
     add-zsh-hook chpwd chpwd_recent_dirs
     zstyle ':chpwd:*' recent-dirs-max 500
     zstyle ":chpwd:*" recent-dirs-default true
-    zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-$HOME/.cache}/shell/chpwd-recent-dirs"
+    zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/chpwd-recent-dirs"
     zstyle ':chpwd:*' recent-dirs-pushd true
 fi
 # ++ }}}
@@ -336,7 +336,7 @@ zstyle ':completion:*' keep-prefix
 zstyle ':completion:*' completer _complete _ignored _prefix
 
 # 補完候補に着色
-if [[ -n "$LS_COLORS" ]]; then
+if [[ -n "${LS_COLORS}" ]]; then
     zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 
@@ -358,7 +358,7 @@ zstyle ':completion:*:sudo:*' command-path \
 
 # 補完候補をキャッシュ
 zstyle ':completion:*' use-cache true #yes?
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/shell/completion-cache-dirs"
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/completion-cache-dirs"
 
 # 詳細情報を非表示
 zstyle ':completion:*' verbose no
@@ -425,8 +425,8 @@ if [[ -x /usr/bin/dircolors ]]; then
             alias ls='ls -GF'
             ;;
         linux*)
-            if [[ -f ~/.dircolors ]]; then
-                eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+            if [[ -f ${HOME}/.dircolors ]]; then
+                eval "$(dircolors -b ${HOME}/.dircolors)" || eval "$(dircolors -b)"
             fi
             alias ls='ls -F --color=auto'
             alias dir='dir --color=auto'
@@ -461,13 +461,13 @@ alias x='exit'
 alias g='git'
 alias v='vim'
 alias clip='xsel --clipboard --input'
-alias relogin='exec $SHELL -l'
-alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m $c" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
-alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m$c\e[0m" ; [ $(($c%16)) -eq 15 ] && echo;done;echo'
+alias relogin='exec ${SHELL} -l'
+alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m ${c}" ; [[ $((${c}%16)) -eq 15 ]] && echo;done;echo'
+alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m${c}\e[0m" ; [[ $((${c}%16)) -eq 15 ]] && echo;done;echo'
 
 # GoogleDrive aliases
-alias gdrive_m='google-drive-ocamlfuse ~/google-drive'
-alias gdrive_u='fusermount -u ~/google-drive'
+alias gdrive_m='google-drive-ocamlfuse ${HOME}/google-drive'
+alias gdrive_u='fusermount -u ${HOME}/google-drive'
 alias gdrive_r='rm -rf ${HOME}/.gdfuse/default/cache'
 
 # cputmp alias
@@ -491,19 +491,19 @@ function name_dir()
     local dir=$1
     local name=$2
 
-    if [[ -d $dir ]]; then
-        hash -d $name=$dir
-        return 0
+    if [[ -d ${dir} ]]; then
+        hash -d ${name}=${dir}
+    return 0
     else
         return 1
     fi
     return 0
 }
 
-name_dir ~/.dotfiles/ dotfiles
-name_dir ~/workspace/ workspace
-name_dir ~/.zsh/ .zsh
-name_dir ~/.vim/ .vim
+name_dir ${HOME}/.dotfiles/ dotfiles
+name_dir ${HOME}/workspace/ workspace
+name_dir ${HOME}/.zsh/ .zsh
+name_dir ${HOME}/.vim/ .vim
 # + }}}
 
 # TODO: addition
@@ -529,11 +529,11 @@ fi
 # Plugin Settings {{{
 # + Plugin Install {{{
 # Install zplug/zplug
-if [[ ! -f $ZPLUG_HOME/init.zsh ]]; then
-    mkdir -p $ZPLUG_HOME
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME
+if [[ ! -f ${ZPLUG_HOME}/init.zsh ]]; then
+    mkdir -p ${ZPLUG_HOME}
+    git clone https://github.com/zplug/zplug ${ZPLUG_HOME}
 fi
-source $ZPLUG_HOME/init.zsh
+source ${ZPLUG_HOME}/init.zsh
 
 # Install zsh"s other plugin
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
@@ -560,7 +560,7 @@ if ! zplug check --verbose; then
     fi
 fi
 
-# Source plugins and add commands to $PATH
+# Source plugins and add commands to ${PATH}
 zplug load
 # + }}}
 
@@ -616,7 +616,7 @@ fd() {
     local dir
     dir=$(find ${1:-.} -path '*/\.*' -prune \
         -o -type d -print 2> /dev/null | fzf +m) &&
-        cd "$dir"
+        cd "${dir}"
     }
 # +++ }}}
 
@@ -625,8 +625,8 @@ fd() {
 fbr() {
   local branches branch
   branches=$(git branch -vv) &&
-  branch=$(echo "$branches" | fzf +m) &&
-  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+  branch=$(echo "${branches}" | fzf +m) &&
+  git checkout $(echo "${branch}" | awk '{print $1}' | sed "s/.* //")
 }
 # ++++ }}}
 
@@ -634,9 +634,9 @@ fbr() {
 fbrm() {
   local branches branch
   branches=$(git branch --all | grep -v HEAD) &&
-  branch=$(echo "$branches" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
-  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+  branch=$(echo "${branches}" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
+  git checkout $(echo "${branch}" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 # ++++ }}}
 
@@ -670,13 +670,13 @@ fi
 
 # ++ supercrabtree/k {{{
 if zplug check 'supercrabtree/k';then
-    source $ZPLUG_REPOS/supercrabtree/k/k.sh
+    source ${ZPLUG_REPOS}/supercrabtree/k/k.sh
 fi
 # ++ }}}
 
 # ++ zsh-users/zsh-autosuggestions {{{
 if zplug check 'zsh-users/zsh-autosuggestions';then
-    source $ZPLUG_REPOS/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source ${ZPLUG_REPOS}/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 # }}}
 
