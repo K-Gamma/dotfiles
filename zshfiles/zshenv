@@ -21,7 +21,7 @@
 # Global initialization files aren't sourced.
 unsetopt global_rcs
 
-# Set up the environment variables. {{{
+# set up some environment variables. {{{
 # Language
 export LANG=ja_JP.UTF-8
 
@@ -101,54 +101,10 @@ export LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH}
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 # + }}}
 
-# + for Java {{{
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-# + }}}
-
-# + for Go {{{
-export GOROOT=/usr/local
-export PATH=${GOROOT}/bin:${PATH}
-# + }}}
-
-# + for TeX Live {{{
-export PATH=/usr/local/texlive/2018/bin/x86_64-linux:${PATH}
-export INFOPATH=/usr/local/texlive/2018/texmf-dist/doc/info:${INFOPATH}
-export MANPATH=/usr/local/texlive/2018/texmf-dist/doc/man${MANPATH}
-# + }}}
-
-# + for virtualenvwrapper {{{
-if [[ -f /usr/local/bin/virtualenvwrapper.sh ]]; then
-    export WORKON_HOME=${HOME}/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    source /usr/local/bin/virtualenvwrapper.sh
-    export VIRTUAL_ENV_DISABLE_PROMPT=1
+# Road some local environment variables.
+if [[ -f "${ZDOTDIR}/.zshenv.local" ]]; then
+    source "${ZDOTDIR}/.zshenv.local"
 fi
-# + }}}
-
-# + for CUDA and cuDNN {{{
-export CUDA_HOME=/usr/local/cuda
-export PATH=${CUDA_HOME}/bin:${PATH}
-export LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
-export CPATH=${CUDA_HOME}/samples/common/inc:${CUDA_HOME}/include:${CPATH}
-# + }}}
-
-## + for Caffe {{{
-#export CAFFE_ROOT=${HOME}/caffe
-#export PYTHONPATH=${CAFFE_ROOT}/python:${PYTHONPATH}
-#export CPATH=${PYENV_ROOT}/versions/2.7.14/include/python2.7:${CPATH}
-## + }}}
-
-# + for Ruby {{{
-# for rbenv
-export PATH="${HOME}/.rbenv/bin:${PATH}"
-eval "$(rbenv init -)"
-# for ruby-build
-export PATH="${HOME}/.rbenv/plugins/ruby-build/bin:${PATH}"
-# + }}}
-
-# + for My command {{{
-export PATH=/opt/:${PATH}
-# + }}}
 # }}}
 
 # vim: fdm=marker fdc=3 fdl=0
