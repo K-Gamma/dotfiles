@@ -6,6 +6,12 @@
 # Language
 export LANG=ja_JP.UTF-8
 
+# PATH
+export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+
+# TERM
+export TERM=xterm-256color
+
 # Default dircolors
 export LSCOLORS=gxfxcxdxbxegedabagacad
 
@@ -58,6 +64,11 @@ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 # + for Go {{{
 export GOROOT=/usr/local
 export PATH=${GOROOT}/bin:${PATH}
+# + }}}
+
+# + for Python {{{
+export PYTHON_INCLUDE_DIRS="/usr/include/python2.7"
+export PYTHON_LIBRARYS="/usr/lib/x86_64-linux-gnu/libpython2.7.so"
 # + }}}
 
 # + for TeX Live {{{

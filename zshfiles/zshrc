@@ -4,8 +4,8 @@
 # See /usr/share/zsh/help
 
 # Compile '.zshrc' to speed up loading. {{{
-if [[ ! -f ${ZDOTDIR}/.zshrc.zwc ]] || [[ $(readlink ${ZDOTDIR}/.zshrc) -nt ${ZDOTDIR}/.zshrc.zwc ]]; then
-    zcompile ${ZDOTDIR}/.zshrc.zwc ${ZDOTDIR}/.zshrc
+if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ $(readlink "${ZDOTDIR}/.zshrc") -nt "${ZDOTDIR}/.zshrc.zwc" ]]; then
+    zcompile "${ZDOTDIR}/.zshrc.zwc" "${ZDOTDIR}/.zshrc"
 fi
 #}}}
 
@@ -286,7 +286,7 @@ else
             return 0
         fi
         local branchname=$(get-branch-name)
-        if [[ -z ${branchname} ]]; then
+        if [[ -z "${branchname}" ]]; then
             return 0
         fi
         echo "$(get-branch-status)$(branch-mark)[${branchname}]%f"
@@ -299,7 +299,7 @@ fi
 # ++ }}}
 
 # ++ 'cdr' settings (Required before 'zplug load') {{{
-if [[ ! -d ${XDG_CACHE_HOME:-${HOME}/.cache}/shell ]]; then
+if [[ ! -d "${XDG_CACHE_HOME:-${HOME}/.cache}/shell" ]]; then
     mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/shell"
 fi
 if is-at-least 4.3.10; then
@@ -348,13 +348,13 @@ zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
 
 # sudo でも補完の対象
 zstyle ':completion:*:sudo:*' command-path \
-    /usr/local/sbin \
-    /usr/local/bin  \
-    /usr/sbin       \
-    /usr/bin        \
-    /sbin           \
-    /bin            \
-    /usr/X11R6/bin
+    "/usr/local/sbin" \
+    "/usr/local/bin"  \
+    "/usr/sbin"       \
+    "/usr/bin"        \
+    "/sbin"           \
+    "/bin"            \
+    "/usr/X11R6/bin"
 
 # 補完候補をキャッシュ
 zstyle ':completion:*' use-cache true #yes?
@@ -419,13 +419,13 @@ alias man=' man'
 alias sudo='sudo '
 
 # Enable color support of ls and also add handy aliases
-if [[ -x /usr/bin/dircolors ]]; then
+if [[ -x "/usr/bin/dircolors" ]]; then
     case "${OSTYPE}" in
         darwin*)
             alias ls='ls -GF'
             ;;
         linux*)
-            if [[ -f ${HOME}/.dircolors ]]; then
+            if [[ -f "${HOME}/.dircolors" ]]; then
                 eval "$(dircolors -b ${HOME}/.dircolors)" || eval "$(dircolors -b)"
             fi
             alias ls='ls -F --color=auto'
@@ -498,7 +498,7 @@ function name_dir()
     local dir=$1
     local name=$2
 
-    if [[ -d ${dir} ]]; then
+    if [[ -d "${dir}" ]]; then
         hash -d ${name}=${dir}
     return 0
     else
@@ -507,10 +507,10 @@ function name_dir()
     return 0
 }
 
-name_dir ${HOME}/.dotfiles/ dotfiles
-name_dir ${HOME}/workspace/ workspace
-name_dir ${HOME}/.zsh/ .zsh
-name_dir ${HOME}/.vim/ .vim
+name_dir "${HOME}/.dotfiles/" dotfiles
+name_dir "${HOME}/workspace/" workspace
+name_dir "${HOME}/.zsh/" .zsh
+name_dir "${HOME}/.vim/" .vim
 # + }}}
 
 # TODO: addition
@@ -536,27 +536,27 @@ fi
 # Plugin Settings {{{
 # + Plugin Install {{{
 # Install zplug/zplug
-if [[ ! -f ${ZPLUG_HOME}/init.zsh ]]; then
+if [[ ! -f "${ZPLUG_HOME}/init.zsh" ]]; then
     mkdir -p ${ZPLUG_HOME}
-    git clone https://github.com/zplug/zplug ${ZPLUG_HOME}
+    git clone 'https://github.com/zplug/zplug' "${ZPLUG_HOME}"
 fi
-source ${ZPLUG_HOME}/init.zsh
+source "${ZPLUG_HOME}/init.zsh"
 
 # Install zsh"s other plugin
-zplug "zplug/zplug", hook-build:"zplug --self-manage"
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-zplug "b4b4r07/enhancd"
-zplug "joel-porquet/zsh-dircolors-solarized"
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-zplug "junegunn/fzf", as:command, use:bin/fzf-tmux # for tmux
-zplug "mollifier/anyframe"
-zplug "mrowa44/emojify", as:command
-zplug "ssh0/dot", use:"*.sh"
-zplug "supercrabtree/k"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "Tarrasch/zsh-autoenv"
+zplug 'b4b4r07/enhancd'
+zplug 'joel-porquet/zsh-dircolors-solarized'
+zplug 'junegunn/fzf-bin', as:command, from:gh-r, rename-to:fzf
+zplug 'junegunn/fzf', as:command, use:bin/fzf-tmux # for tmux
+zplug 'mollifier/anyframe'
+zplug 'mrowa44/emojify', as:command
+zplug 'ssh0/dot', use:'*.sh'
+zplug 'supercrabtree/k'
+zplug 'zsh-users/zsh-autosuggestions'
+zplug 'zsh-users/zsh-completions'
+zplug 'zsh-users/zsh-syntax-highlighting', defer:2
+zplug 'Tarrasch/zsh-autoenv'
 
 
 # Install plugins if there are plugins that have not been installed
@@ -579,7 +579,7 @@ zplug load
 # ++ b4b4r07/enhancd {{{
 #if zplug check b4b4r07/enhancd; then
 #    # setting if enhancd is available
-#    export ENHANCD_FILTER=fzf-tmux
+#    export ENHANCD_FILTER='fzf-tmux'
 #    export ENHANCD_DOT_SHOW_FULLPATH=1
 #fi
 # ++ }}}
@@ -600,8 +600,8 @@ fv() {
     local file
     
     file="$(fzf)"
-    if [[ -n ${file} ]]; then
-        vim ${file}
+    if [[ -n "${file}" ]]; then
+        vim "${file}"
     fi
 }
 # +++ }}}
@@ -612,8 +612,8 @@ vg() {
 
     file="$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
 
-    if [[ -n ${file} ]]; then
-        vim ${file}
+    if [[ -n "${file}" ]]; then
+        vim "${file}"
     fi
 }
 # +++ }}}
@@ -677,19 +677,19 @@ fi
 
 # ++ supercrabtree/k {{{
 if zplug check 'supercrabtree/k';then
-    source ${ZPLUG_REPOS}/supercrabtree/k/k.sh
+    source "${ZPLUG_REPOS}/supercrabtree/k/k.sh"
 fi
 # ++ }}}
 
 # ++ zsh-users/zsh-autosuggestions {{{
 if zplug check 'zsh-users/zsh-autosuggestions';then
-    source ${ZPLUG_REPOS}/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source "${ZPLUG_REPOS}/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 # }}}
 
 # ++ zsh-users/zsh-completions {{{
-if [[ -d ${ZPLUG_REPOS}/zsh-users/zsh-completions/src/ ]] ; then
-    export fpath=(${ZPLUG_REPOS}/zsh-users/zsh-completions/src/ ${fpath})
+if [[ -d "${ZPLUG_REPOS}/zsh-users/zsh-completions/src/" ]] ; then
+    export fpath=("${ZPLUG_REPOS}/zsh-users/zsh-completions/src/" ${fpath})
 fi
 # ++ }}}
 
