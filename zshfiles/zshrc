@@ -305,7 +305,7 @@ fi
 if is-at-least 4.3.10; then
     add-zsh-hook chpwd chpwd_recent_dirs
     zstyle ':chpwd:*' recent-dirs-max 500
-    zstyle ":chpwd:*" recent-dirs-default true
+    zstyle ':chpwd:*' recent-dirs-default true
     zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/chpwd-recent-dirs"
     zstyle ':chpwd:*' recent-dirs-pushd true
 fi
@@ -475,7 +475,7 @@ alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m${c}\e[0m" ; [
 # GoogleDrive aliases
 alias gdrive_m='google-drive-ocamlfuse ${HOME}/google-drive'
 alias gdrive_u='fusermount -u ${HOME}/google-drive'
-alias gdrive_r='rm -rf ${HOME}/.gdfuse/default/cache'
+alias gdrive_r='rm -rf "${HOME}/.gdfuse/default/cache"'
 
 # cputmp alias
 alias cputmp='echo $(echo $(cat /sys/class/thermal/thermal_zone0/temp) / 1000 | bc) °C'
@@ -670,7 +670,7 @@ FZF-EOF"
 
 # ++ ssh0/dot {{{
 if zplug check 'ssh0/dot';then
-    export DOT_REPO="https://github.com/K-Ganma/dotfiles.git"
+    export DOT_REPO='https://github.com/K-Ganma/dotfiles.git'
     export DOT_DIR="${HOME}/.dotfiles"
 fi
 # ++ }}}
