@@ -450,7 +450,7 @@ alias tl='tree -l'
 alias tf='tree -f'
 
 # rm aliases
-alias rm='rm -i -v'
+alias rm='echo "notice: Please use the \`trash-put\`" && rm -i -v'
 alias del='rm -rf'
 if type trash-put &> /dev/null; then
     alias tp='trash-put'
