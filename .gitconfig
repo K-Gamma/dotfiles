@@ -14,6 +14,8 @@
 	helper = /usr/share/doc/git/contrib/credential/netrc/git-credential-netrc
 [merge]
 	ff = false
+	tool = vimdiff
+	conflictstyle = diff3
 [pull]
 	ff = only
 [gui]
@@ -70,3 +72,10 @@
 	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	# archive
 	ac = !git archive HEAD > `git symbolic-ref --short HEAD`.tar.gz
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[mergetool]
+	prompt = false

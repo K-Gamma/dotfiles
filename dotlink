@@ -89,6 +89,7 @@ vimfiles/ftplugin/markdown_quickrun.vim, .vim/ftplugin/markdown_quickrun.vim
 #==============================================================================
 
 bashfiles/bash_aliases, .bash_aliases
+bashfiles/bash_logout, .bash_logout
 bashfiles/bash_profile, .bash_profile
 bashfiles/bashrc, .bashrc
 
@@ -100,6 +101,7 @@ bashfiles/bashrc, .bashrc
 
 zshfiles/zshrc, .zsh/.zshrc
 zshfiles/zshenv, .zsh/.zshenv
+zshfiles/zlogout, .zsh/.zlogout
 zshfiles/zshenv, .zshenv
 
 #===========================================================================}}}

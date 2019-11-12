@@ -17,7 +17,7 @@ set ambiwidth=double                            " □や○文字が崩れる問
 
 " + Filetype {{{
 " Required:
-filetype off    "最後にonにする
+"filetype off    "It called in dein#begin.
 filetype plugin indent off
 " + }}}
 
@@ -97,7 +97,6 @@ augroup END
 if (v:version == 704 && has("patch785")) || v:version >= 705
     set breakindent             " インデントを考慮した行の折り返し
 endif
-set cursorline                  " カーソル行をハイライト
 set cursorline                  " カーソル行をハイライト
 augroup cch                     " カレントウィンドウにのみ罫線を引く
     autocmd! cch
@@ -190,11 +189,21 @@ set magic       " 正規表現使用時に magic モードにする
 " cmap / cnoremap |          |        |       @        |        |        |                     |
 "-----------------------------------------------------------------------------------------------"
 
-" ++ ノーマルモード "{{{
+" <C-l>でESCする
+nnoremap <C-l> <ESC>
+vnoremap <C-l> <ESC>
+inoremap <C-l> <ESC>
+cnoremap <C-l> <ESC>
+
+" コロンとセミコロン入れ替え
+noremap : ;
+noremap ; :
+
 " 保存/終了をスペースで
-nnoremap <Space>w  :w<CR>
-nnoremap <Space>q  :q<CR>
-nnoremap <Space>Q  :q!<CR>
+nnoremap <Space>w  :<C-u>w<CR>
+nnoremap <Space>W  :<C-u>wa<CR>
+nnoremap <Space>q  :<C-u>q<CR>
+"nnoremap <Space>Q  :<C-u>q!<CR>
 
 " カーソルを表示行で移動する
 nnoremap j gj
@@ -210,21 +219,21 @@ nnoremap Y y$
 " インデント
 nnoremap <silent> == gg=G''
 
-" CTRL-hjklでウィンドウ移動
+" CTRL-hjklでウィンドウ間のカーソル移動
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
 
 " バッファの移動
-nnoremap <C-p> :bp<CR>
-nnoremap <C-n> :bn<CR>
+nnoremap <C-p> :<C-u>bp<CR>
+nnoremap <C-n> :<C-u>bn<CR>
 
 " 行頭までカーソル移動
-noremap <S-h> ^
+nnoremap <S-h> ^
 
 " 行末までカーソル移動
-noremap <S-l> $
+nnoremap <S-l> $
 
 " インクリメント
 nnoremap + <C-a>
@@ -232,7 +241,7 @@ nnoremap + <C-a>
 nnoremap - <C-x>
 
 " Escの2回押しでハイライト消去
-nnoremap <silent> <Esc><Esc> :noh<CR>
+nnoremap <silent> <C-l><C-l> :<C-u>noh<CR>
 
 " 保存して閉じる, 保存せず閉じるを無効
 nnoremap ZZ <Nop>
@@ -240,20 +249,16 @@ nnoremap ZQ <Nop>
 
 " EXモード無効
 nnoremap Q <Nop>
-" 
-" ++ }}}
 
-" ++ インサートモード "{{{
-"カーソルを右へ（foward）
+" 入力中カーソルを移動
 inoremap <C-f> <right>
-"カーソルを左へ（backward）
 inoremap <C-b> <left>
 
 " 隣接した{}で改行したらインデント
 inoremap {<CR> {}<Left><CR><Esc><S-o>
 inoremap [<CR> []<Left><CR><Esc><S-o>
 inoremap (<CR> ()<Left><CR><Esc><S-o>
-" ++ }}}
+
 " + }}}
 " }}}
 
