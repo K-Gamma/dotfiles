@@ -662,7 +662,9 @@ FZF-EOF"
 # +++ }}}
 # ++ }}}
 
-# ++ junegunn/fzf
+# ++ junegunn/fzf {{{
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# ++ }}}
 
 # ++ mollifier/anyframe
 

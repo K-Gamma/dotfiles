@@ -1,80 +1,17 @@
-# This is a file to set up vim plugins
+### This is a file to set up vim plugins
+### TOML file format specification:
+### https://github.com/toml-lang/toml
 
 #===========================================================================
 
 # Required:
-# Shougo/dein.vim:                                                          {{{
-#==============================================================================
-# Dein.vim is a dark powered Vim/Neovim plugin manager.
-
-[[plugins]]
-repo = 'Shougo/dein.vim'
-
-#===========================================================================}}}
-# Shougo/deoplete.nvim:                                                     {{{
-#==============================================================================
-# deoplete provides asynchronous keyword completion system in the current buffer.
-
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-if   = 'has("nvim")'
-hook_add = '''
-    let g:deoplete#enable_at_startup = 1
-'''
-
-#===========================================================================}}}
-# roxma/nvim-yarp:                                                          {{{
-#==============================================================================
-# Yet Another Remote Plugin Framework for Neovim.
-
-[[plugins]]
-repo = 'roxma/nvim-yarp'
-if   = 'has("nvim")'
-
-#===========================================================================}}}
-# roxma/vim-hug-neovim-rpc:                                                 {{{
-#==============================================================================
-# 
-
-[[plugins]]
-repo = 'roxma/vim-hug-neovim-rpc'
-if   = 'has("nvim")'
-
-#===========================================================================}}}
-# wsdjeg/dein-ui.vim:                                                       {{{
-#==============================================================================
-# UI for Shougo's dein.vim, detached from SpaceVim
-
-[[plugins]]
-repo = 'wsdjeg/dein-ui.vim'
-
-# Dein.vim is a dark powered Vim/Neovim plugin manager.
-#===========================================================================}}}
-# Shougo/context_filetype.vim:                                              {{{
-#==============================================================================
-# Provides functions to find fenced code blocks and their filetype.
-
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-#===========================================================================}}}
-# kana/vim-textobj-user:                                                    {{{
-#==============================================================================
-# vim-textobj-user is a Vim plugin to create your own text objects without pain.
-
-[[plugins]]
-repo = 'kana/vim-textobj-user'
-
-#===========================================================================}}}
-# osyo-manga/vim-precious:                                                  {{{
-#==============================================================================
-# Set the buffer filetype based on the code block the cursor currently resides in.
-
-[[plugins]]
-repo = 'osyo-manga/vim-precious'
-depends = ['Shougo/context_filetype.vim']
-
-#===========================================================================}}}
+## airblade/vim-gitgutter:                                                   {{{
+##==============================================================================
+#
+#[[plugins]] # gitの差分を表示するプラグイン
+#repo = 'airblade/vim-gitgutter'
+#
+##===========================================================================}}}
 # cespare/vim-toml:                                                         {{{
 #==============================================================================
 
@@ -88,163 +25,12 @@ on_ft = 'toml'
 
 [[plugins]] # カラースキーマ
 repo = 'cocopon/iceberg.vim'
+merged = 0
 hook_add = '''
     " colorscheme 設定は source 後に行う必要があるので VimEnter で行う。
     " 但し Colorscheme イベントの発生が抑制されないよう nented を付ける。
     au MyAutoCmd VimEnter * nested colorscheme iceberg
 '''
-
-#===========================================================================}}}
-# Shougo/neocomplete.vim:                                                   {{{
-#==============================================================================
-
-[[plugins]] # コード自動補完プラグイン(neocomplcacheの後続)
-repo = 'Shougo/neocomplete.vim'
-if   = 'has("lua")'
-hook_add = '''
-    " Vim起動時にneocompleteを有効化
-    let g:neocomplete#enable_at_startup = 1
-    " 大文字が入力されるまで大文字小文字の区別を無視
-    let g:neocomplete#enable_smart_case = 1
-    " キーワードの最小長
-    let g:neocomplete#min_keyword_length = 3
-    " キーワードの最大長
-    let g:neocomplete#max_keyword_width = 10000
-    " 補完を表示する最小長
-    let g:neocomplete#auto_completion_start_length = 3
-    " 区切り文字まで補完
-    let g:neocomplete#enable_auto_delimiter = 1
-    " ポップアップメニューで表示される候補数
-    let g:neocomplete#max_list = 20
-    " 1文字目の入力から補完のポップアップを表示
-    let g:neocomplete#auto_completion_start_length = 1
-    " シンタックスをキャッシュするときの最小長
-    let g:neocomplete#sources#syntax#min_keyword_length = 3
-    " preview window を勝手に閉じない
-    let g:neocomplete#enable_auto_close_preview = 0
-    "AutoCmd InsertLeave * silent! pclose!
-    let g:neocomplete#force_overwrite_completefunc = 1
-    if !exists('g:neocomplete#force_omni_input_patterns')
-        let g:neocomplete#force_omni_input_patterns = {}
-    endif
-    let g:neocomplete#force_omni_input_patterns.c =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.cpp =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-'''
-
-#===========================================================================}}}
-# Shougo/neosnippet.vim:                                                    {{{
-#==============================================================================
-
-[[plugins]] # スニペット補完プラグイン
-repo = 'Shougo/neosnippet.vim'
-if   = 'has("lua")'
-hook_add = '''
-    " If not use default snippets:
-    "let g:neosnippet#disable_runtime_snippets = {
-    "   '_' : 1,
-    "}
-
-    " Enable snipMate compatibility feature.
-    let g:neosnippet#enable_snipmate_compatibility = 1
-
-    " Tell Neosnippet about the other snippets
-    " You can set multiple values in comma-separated string or list.
-    let g:neosnippet#snippets_directory='~/.vim/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets/'
-
-    " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-'''
-
-#===========================================================================}}}
-# Shougo/neosnippet-snippets:                                               {{{
-#==============================================================================
-
-[[plugins]] # デフォルトスニペット
-repo = 'Shougo/neosnippet-snippets'
-depends = ['Shougo/neosnippet.vim']
-if   = 'has("lua")'
-
-#===========================================================================}}}
-# vim-syntastic/syntastic:                                                  {{{
-#==============================================================================
-
-[[plugins]] # A syntax checking plugin
-repo = 'vim-syntastic/syntastic'
-depends = ['Shougo/neosnippet.vim']
-if   = 'has("lua")'
-hook_add = '''
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-    
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 1
-    let g:syntastic_check_on_wq = 0
-    let g:syntastic_python_checkers = ["flake8"]
-'''
-
-#===========================================================================}}}
-## honza/vim-snippets:                                                       {{{
-##==============================================================================
-#
-#[[plugins]] # 追加スニペット
-#repo = 'honza/vim-snippets'
-#depends = ['Shougo/neosnippet.vim']
-#if   = 'has("lua")'
-#
-##===========================================================================}}}
-# Shougo/vimproc.vim:                                                       {{{
-#==============================================================================
-
-[[plugins]] # Vimで非同期処理を実現するためのプラグイン
-repo = 'Shougo/vimproc.vim'
-build = 'make'
-
-#===========================================================================}}}
-# Shougo/vimshell.vim:                                                      {{{
-#==============================================================================
-
-[[plugins]] # Vim上でShellを使えるようにするプラグイン
-repo = 'Shougo/vimshell.vim'
-
-#===========================================================================}}}
-# Shougo/unite.vim:                                                         {{{
-#==============================================================================
-
-[[plugins]] # 統合ユーザインターフェース的なプラグイン
-repo = 'Shougo/unite.vim'
-
-#===========================================================================}}}
-# Shougo/vimfiler.vim:                                                      {{{
-#==============================================================================
-
-[[plugins]] # Vim上でのファイル操作をサポートするプラグイン
-repo = 'Shougo/vimfiler.vim'
-
-#===========================================================================}}}
-# thinca/vim-quickrun:                                                      {{{
-#==============================================================================
-
-[[plugins]] # バッファ上のコードを実行するためのプラグイン
-repo = 'thinca/vim-quickrun'
-
-#===========================================================================}}}
-# thinca/vim-ft-help_fold:                                                  {{{
-#==============================================================================
-
-[[plugins]] # ヘルプを自動で折りたたむプラグイン
-repo = 'thinca/vim-ft-help_fold'
-
-#===========================================================================}}}
-# tomtom/tcomment_vim:                                                      {{{
-#==============================================================================
-
-[[plugins]] # ヘルプを自動で折りたたむプラグイン
-repo = 'tomtom/tcomment_vim'
 
 #===========================================================================}}}
 ## davidhalter/jedi-vim:                                                     {{{
@@ -272,13 +58,13 @@ repo = 'tomtom/tcomment_vim'
 #'''
 #
 ##===========================================================================}}}
-## lambdalisue/vim-pyenv:                                                    {{{
+## honza/vim-snippets:                                                       {{{
 ##==============================================================================
 #
-#[[plugins]] # Pythonバージョンに沿った正しい補完リストを返すためのプラグイン
-#repo = 'lambdalisue/vim-pyenv'
-#depends = ['davidhalter/jedi-vim']
-#on_ft = 'python'
+#[[plugins]] # 追加スニペット
+#repo = 'honza/vim-snippets'
+#depends = ['neosnippet.vim']
+#on_if = 'has("lua")'
 #
 ##===========================================================================}}}
 # itchyny/lightline.vim:                                                    {{{
@@ -287,37 +73,147 @@ repo = 'tomtom/tcomment_vim'
 [[plugins]] # ステータスバーをかっこよくするプラグイン
 repo = 'itchyny/lightline.vim'
 hook_add = '''
+    if dein#tap('ale')
+        function! LLAle()
+            let l:count = ale#statusline#Count(bufnr(''))
+            let l:errors = l:count.error + l:count.style_error
+            let l:warnings = l:count.warning + l:count.style_warning
+            return l:count.total == 0 ? 'OK' : 'E:' . l:errors . ' W:' . l:warnings
+        endfunction
+    else
+        function! LLAle()
+            return ''
+        endfunction
+    endif
+
+    " Please look a default -> :help lightline
     let g:lightline = {
-        \   'colorscheme': 'wombat',
-        \}
-    set laststatus=2    " 末尾から2行目にステータスラインを表示
-    set showmode        " 現在のモードを表示
-    set showcmd         " 入力コマンドを表示
-    set ruler           " カーソル位置を表示する
+    \   'colorscheme': 'wombat',
+    \   'active': {
+    \       'left': [
+    \           [ 'mode', 'paste' ],
+    \           [ 'gitbranch', 'readonly', 'filename', 'modified', 'ale'],
+    \       ]
+    \   },
+    \   'inactive': {
+    \       'left': [ [ 'filename', 'modified', 'ale'] ],
+    \   },
+    \   'component_function': {
+    \       'gitbranch': 'gitbranch#name',
+    \       'ale': 'LLAle',
+    \   },
+    \ }
+
+set laststatus=2    " 末尾から2行目にステータスラインを表示
+set noshowmode      " 現在のモードを表示しない
+set showcmd         " 入力コマンドを表示
+set ruler           " カーソル位置を表示する
 '''
 
 #===========================================================================}}}
-# tpope/vim-endwise:                                                        {{{
+# itchyny/vim-gitbranch:                                                    {{{
 #==============================================================================
+# This plugin provides a function which returns the name of the git branch.
 
-[[plugins]] # 対応する'end'を自動挿入してくれるプラグイン
-repo = 'tpope/vim-endwise'
+[[plugins]]
+repo = 'itchyny/vim-gitbranch'
 
 #===========================================================================}}}
-# tpope/vim-surround:                                                       {{{
+## junegunn/fzf:                                                             {{{
+##==============================================================================
+#
+#[[plugins]] # かの有名なfzf
+#repo = 'junegunn/fzf'
+#build = './install'
+#rtp = ''
+#
+##===========================================================================}}}
+## junegunn/fzf.vim:                                                         {{{
+##==============================================================================
+#
+##[[plugins]]
+#repo = 'junegunn/fzf.vim'
+#depends = ['fzf']
+#
+##===========================================================================}}}
+## justmao945/vim-clang:                                                     {{{
+##==============================================================================
+#
+#[[plugins]]
+#repo = 'justmao945/vim-clang'
+#
+##===========================================================================}}}
+## kakkyz81/evervim:                                                         {{{
+##==============================================================================
+#
+#[[plugins]] # Evernoteをvimで編集するためのプラグイン
+#repo = 'kakkyz81/evervim'
+#on_if = 'has("python")'
+#hook_add = '''
+#    let g:evervim_devtoken="S=s533:U=abed4cd:E=167c163b509:C=16069b287a0:P=1cd:A=en-devtoken:V=2:H=b4bd277f1b46b05d02ece119f6d33e56"
+#'''
+#
+##===========================================================================}}}
+# kana/vim-niceblock:                                                       {{{
 #==============================================================================
+# Make blockwise Visual mode more useful
 
-[[plugins]] # 囲んでいるものに対して操作を行うプラグイン
-repo = 'tpope/vim-surround'
+[[plugins]]
+repo = 'kana/vim-niceblock'
 
 #===========================================================================}}}
-# thinca/vim-template:                                                      {{{
+# kana/vim-textobj-user:                                                    {{{
 #==============================================================================
+# vim-textobj-user is a Vim plugin to create your own text objects without pain.
 
-[[plugins]] # テンプレート挿入プラグイン
-repo = 'thinca/vim-template'
+[[plugins]]
+repo = 'kana/vim-textobj-user'
 
 #===========================================================================}}}
+# tyru/open-browser.vim:                                                    {{{
+#==============================================================================
+# Open URI with your favorite browser from your most favorite editor.
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+
+#===========================================================================}}}
+# kannokanno/previm:                                                        {{{
+#==============================================================================
+
+[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
+repo = 'kannokanno/previm'
+depends = ['open-browser.vim']
+hook_add = '''
+    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+'''
+
+#===========================================================================}}}
+## KeitaNakamura/tex-conceal.vim:                                            {{{
+##==============================================================================
+#
+#[[plugins]] # Conceal機能を拡張するLaTeX用プラグイン
+#repo = 'KeitaNakamura/tex-conceal.vim'
+#on_if = 'has("conceal")'
+#on_ft = 'latex'
+#hook_add = '''
+#    " Concealの上付き, 下付き文字を無効
+#    set conceallevel=2
+#    let g:tex_conceal="adgmb"
+#    " カーソル行だけ生ソースが見える
+#    set concealcursor=""
+#'''
+#
+##===========================================================================}}}
+## lambdalisue/vim-pyenv:                                                    {{{
+##==============================================================================
+#
+#[[plugins]] # Pythonバージョンに沿った正しい補完リストを返すためのプラグイン
+#repo = 'lambdalisue/vim-pyenv'
+#depends = ['jedi-vim']
+#on_ft = 'python'
+#
+##===========================================================================}}}
 # nathanaelkane/vim-indent-guides:                                          {{{
 #==============================================================================
 
@@ -341,43 +237,25 @@ hook_add = '''
 '''
 
 #===========================================================================}}}
-## airblade/vim-gitgutter:                                                   {{{
+## neilagabriel/vim-geeknote:                                                {{{
 ##==============================================================================
 #
-#[[plugins]] # gitの差分を表示するプラグイン
-#repo = 'airblade/vim-gitgutter'
+#[[plugins]] # geeknoteとの連携プラグイン
+#repo = 'neilagabriel/vim-geeknote'
+#on_if = 'has("python")'
+#hook_add = '''
+#    let g:GeeknoteMaxExplorerWidth=60 " リストの横幅を制限
+#    autocmd FileType geeknote setlocal nonumber " 行数表示を消す
+#'''
 #
 ##===========================================================================}}}
-## Townk/vim-autoclose:                                                      {{{
-##==============================================================================
-#
-#[[plugins]]
-#repo = 'Townk/vim-autoclose'
-#
-##===========================================================================}}}
-## justmao945/vim-clang:                                                     {{{
-##==============================================================================
-#
-#[[plugins]]
-#repo = 'justmao945/vim-clang'
-#
-##===========================================================================}}}
-## tyru/open-browser.vim:                                                    {{{
-##==============================================================================
-#
-#[[plugins]] # Markdownをブラウザで表示するプラグイン
-#repo = 'tyru/open-browser.vim'
-#
-##===========================================================================}}}
-# kannokanno/previm:                                                        {{{
+# osyo-manga/vim-precious:                                                  {{{
 #==============================================================================
+# Set the buffer filetype based on the code block the cursor currently resides in.
 
-[[plugins]] # Markdownの表示をVimのみで完結できるプラグイン
-repo = 'kannokanno/previm'
-depends = ['tyru/open-browser.vim']
-hook_add = '''
-    au MyAutoCmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-'''
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
 
 #===========================================================================}}}
 # rcmdnk/vim-markdown:                                                      {{{
@@ -387,13 +265,36 @@ hook_add = '''
 repo = 'rcmdnk/vim-markdown'
 
 #===========================================================================}}}
-## Shougo/vimshell:                                                          {{{
+## rhysd/accelerated-jk:                                                     {{{
 ##==============================================================================
+## This plugin accelerates j/k mappings' steps while j or k key is repeating.
 #
 #[[plugins]]
-#repo = 'Shougo/vimshell', { 'rev': '3787e5' }
+#repo = 'rhysd/accelerated-jk'
+#hook_add = '''
+#    nmap j <Plug>(accelerated_jk_gj)
+#    nmap k <Plug>(accelerated_jk_gk)
+#'''
 #
 ##===========================================================================}}}
+# roxma/nvim-yarp:                                                          {{{
+#==============================================================================
+# Yet Another Remote Plugin Framework for Neovim.
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+on_if = '!has("nvim") && has("python3")'
+
+#===========================================================================}}}
+# roxma/vim-hug-neovim-rpc:                                                 {{{
+#==============================================================================
+# 
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+on_if = '!has("nvim") && has("python3")'
+
+#===========================================================================}}}
 # scrooloose/nerdtree:                                                      {{{
 #==============================================================================
 
@@ -402,8 +303,8 @@ repo = 'scrooloose/nerdtree'
 hook_add = '''
     " 引数なしでvimを開くとNERDTreeを起動
     let file_name = expand('%')
-    if has('vim_starting') &&  file_name == ''
-    au MyAutoCmd VimEnter * NERDTree ./
+    if has('vim_starting') && file_name == ''
+        au MyAutoCmd VimEnter * NERDTree
     endif
     " 隠しファイルのON/OFF
     "let g:NERDTreeShowHidden=1
@@ -422,62 +323,284 @@ hook_add = '''
 '''
 
 #===========================================================================}}}
-## kakkyz81/evervim:                                                         {{{
+# Shougo/context_filetype.vim:                                              {{{
+#==============================================================================
+# Provides functions to find fenced code blocks and their filetype.
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+#===========================================================================}}}
+## Shougo/defx.nvim:                                                         {{{
 ##==============================================================================
+## The dark powered file explorer implementation
 #
-#[[plugins]] # Evernoteをvimで編集するためのプラグイン
-#repo = 'kakkyz81/evervim'
-#if   = 'has("python")'
+#[[plugins]]
+#repo = 'Shougo/defx.nvim'
+#on_if = 'has("nvim") || has("python3")'
 #hook_add = '''
-#    let g:evervim_devtoken="S=s533:U=abed4cd:E=167c163b509:C=16069b287a0:P=1cd:A=en-devtoken:V=2:H=b4bd277f1b46b05d02ece119f6d33e56"
+#    let g:dein#types#git#default_protocol = "ssh" "The default protocol used for git (github).
 #'''
 #
 ##===========================================================================}}}
-## neilagabriel/vim-geeknote:                                                {{{
+# Shougo/dein.vim:                                                          {{{
+#==============================================================================
+# Dein.vim is a dark powered Vim/Neovim plugin manager.
+
+[[plugins]]
+repo = 'Shougo/dein.vim'
+hook_add = '''
+    let g:dein#types#git#default_protocol = "ssh" "The default protocol used for git (github).
+'''
+
+#===========================================================================}}}
+## Shougo/deol.nvim:                                                         {{{
+##==============================================================================
+## Deol.nvim is a dark powered shell for Neovim. It is based on neovim or Vim terminal feature.
+#
+#[[plugins]]
+#repo = 'Shougo/deol.nvim'
+#on_if = 'has("nvim") || has("terminal")'
+#
+##===========================================================================}}}
+# Shougo/deoplete.nvim:                                                     {{{
+#==============================================================================
+# deoplete provides asynchronous keyword completion system in the current buffer.
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+on_if = '(has("nvim") || has("timers")) && has("python3")'
+hook_add = '''
+    let g:deoplete#enable_at_startup = 1
+'''
+
+#===========================================================================}}}
+# Shougo/neocomplete.vim:                                                   {{{
+#==============================================================================
+
+[[plugins]] # コード自動補完プラグイン(neocomplcacheの後続)
+repo = 'Shougo/neocomplete.vim'
+on_if = '!dein#tap("deoplete.nvim")'
+on_if = 'has("lua")'
+hook_add = '''
+    let g:neocomplete#enable_at_startup = 1
+    " 大文字が入力されるまで大文字小文字の区別を無視
+    let g:neocomplete#enable_smart_case = 1
+    " キーワードの最小長
+    let g:neocomplete#min_keyword_length = 3
+    " キーワードの最大長
+    let g:neocomplete#max_keyword_width = 10000
+    " 補完を表示する最小長
+    let g:neocomplete#auto_completion_start_length = 3
+    " 区切り文字まで補完
+    let g:neocomplete#enable_auto_delimiter = 1
+    " ポップアップメニューで表示される候補数
+    let g:neocomplete#max_list = 20
+    " 1文字目の入力から補完のポップアップを表示
+    let g:neocomplete#auto_completion_start_length = 1
+    " シンタックスをキャッシュするときの最小長
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    " preview window を勝手に閉じる
+    let g:neocomplete#enable_auto_close_preview = 1
+    "AutoCmd InsertLeave * silent! pclose!
+    let g:neocomplete#force_overwrite_completefunc = 1
+    if !exists('g:neocomplete#force_omni_input_patterns')
+        let g:neocomplete#force_omni_input_patterns = {}
+    endif
+    let g:neocomplete#force_omni_input_patterns.c =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+    let g:neocomplete#force_omni_input_patterns.cpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+'''
+
+#===========================================================================}}}
+## Shougo/neosnippet.vim:                                                    {{{
 ##==============================================================================
 #
-#[[plugins]] # geeknoteとの連携プラグイン
-#repo = 'neilagabriel/vim-geeknote'
-#if   = 'has("python")'
+#[[plugins]] # スニペット補完プラグイン
+#repo = 'Shougo/neosnippet.vim'
+#on_if = 'has("lua")'
+#on_i = 1
+#on_ft = 'snippet'
 #hook_add = '''
-#    let g:GeeknoteMaxExplorerWidth=60 " リストの横幅を制限
-#    autocmd FileType geeknote setlocal nonumber " 行数表示を消す
+#    " If not use default snippets:
+#    "let g:neosnippet#disable_runtime_snippets = {
+#    "   '_' : 1,
+#    "}
+#    "
+#
+#    " Plugin key-mappings.
+#    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+#    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#    "smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+#    "xmap <C-k>     <Plug>(neosnippet_expand_target)
+#    smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+#
+#    " SuperTab like snippets' behavior.
+#    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+#    "imap <expr><TAB>
+#    " \ pumvisible() ? "\<C-n>" :
+#    " \ neosnippet#expandable_or_jumpable() ?
+#    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+#    "smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+#    " \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+#
+#    " For conceal markers.
+#    if has('conceal')
+#        set conceallevel=2 concealcursor=niv
+#    endif
+#
+#    " Enable snipMate compatibility feature.
+#    let g:neosnippet#enable_snipmate_compatibility = 1
+#
+#    " Expand the completed snippet trigger by <CR>.
+#    "imap <expr><CR>
+#                "\ (pumvisible() && neosnippet#expandable()) ?
+#                "\ "\<Plug>(neosnippet_expand)" : "\<CR>"
 #'''
 #
 ##===========================================================================}}}
-## KeitaNakamura/tex-conceal.vim:                                            {{{
+## Shougo/neosnippet-snippets:                                               {{{
 ##==============================================================================
 #
-#[[plugins]] # Conceal機能を拡張するLaTeX用プラグイン
-#repo = 'KeitaNakamura/tex-conceal.vim'
-#if   = 'has("conceal")'
-#on_ft = 'latex'
-#hook_add = '''
-#    " Concealの上付き, 下付き文字を無効
-#    set conceallevel=2
-#    let g:tex_conceal="adgmb"
-#    " カーソル行だけ生ソースが見える
-#    set concealcursor=""
-#'''
+#[[plugins]] # デフォルトスニペット
+#repo = 'Shougo/neosnippet-snippets'
+#depends = ['neosnippet.vim']
+#on_if = 'has("lua")'
+#hook_add =  '''
+#    " Tell Neosnippet about the other snippets
+#    " You can set multiple values in comma-separated string or list.
+#    let g:neosnippet#snippets_directory='~/.vim/dein/repos/github.com/Shougo/neosnippet-snippets/neosnippets/'
+# '''
 #
 ##===========================================================================}}}
-## junegunn/fzf:                                                             {{{
+# Shougo/unite.vim:                                                         {{{
+#==============================================================================
+
+[[plugins]] # 統合ユーザインターフェース的なプラグイン
+repo = 'Shougo/unite.vim'
+
+#===========================================================================}}}
+# Shougo/vimfiler.vim:                                                      {{{
+#==============================================================================
+
+[[plugins]] # Vim上でのファイル操作をサポートするプラグイン
+repo = 'Shougo/vimfiler.vim'
+
+#===========================================================================}}}
+# Shougo/vimproc.vim:                                                       {{{
+#==============================================================================
+
+[[plugins]] # Vimで非同期処理を実現するためのプラグイン
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+
+#===========================================================================}}}
+# Shougo/vimshell.vim:                                                      {{{
+#==============================================================================
+
+[[plugins]] # Vim上でShellを使えるようにするプラグイン
+repo = 'Shougo/vimshell.vim'
+
+#===========================================================================}}}
+# thinca/vim-ft-help_fold:                                                  {{{
+#==============================================================================
+
+[[plugins]] # ヘルプを自動で折りたたむプラグイン
+repo = 'thinca/vim-ft-help_fold'
+
+#===========================================================================}}}
+# thinca/vim-qfreplace:                                                     {{{
+#==============================================================================
+
+[[plugins]] # :grepした結果を置換するプラグイン
+repo = 'thinca/vim-qfreplace'
+
+#===========================================================================}}}
+# thinca/vim-quickrun:                                                      {{{
+#==============================================================================
+
+[[plugins]] # バッファ上のコードを実行するためのプラグイン
+repo = 'thinca/vim-quickrun'
+
+#===========================================================================}}}
+# thinca/vim-template:                                                      {{{
+#==============================================================================
+
+[[plugins]] # テンプレート挿入プラグイン
+repo = 'thinca/vim-template'
+
+#===========================================================================}}}
+# tomtom/tcomment_vim:                                                      {{{
+#==============================================================================
+
+[[plugins]] # ヘルプを自動で折りたたむプラグイン
+repo = 'tomtom/tcomment_vim'
+
+#===========================================================================}}}
+## Townk/vim-autoclose:                                                      {{{
 ##==============================================================================
 #
-#[[plugins]] # かの有名なfzf
-#repo = 'junegunn/fzf'
-#build = './install'
-#rtp = ''
+#[[plugins]]
+#repo = 'Townk/vim-autoclose'
 #
 ##===========================================================================}}}
-## junegunn/fzf.vim:                                                         {{{
-##==============================================================================
-#
-##[[plugins]]
-#repo = 'junegunn/fzf.vim'
-#depends = ['junegunn/fzf']
-#
-##===========================================================================}}}
+# tpope/vim-endwise:                                                        {{{
+#==============================================================================
+
+[[plugins]] # 対応する'end'を自動挿入してくれるプラグイン
+repo = 'tpope/vim-endwise'
+
+#===========================================================================}}}
+# tpope/vim-surround:                                                       {{{
+#==============================================================================
+
+[[plugins]] # 囲んでいるものに対して操作を行うプラグイン
+repo = 'tpope/vim-surround'
+
+#===========================================================================}}}
+# w0rp/ale:                                                                 {{{
+#==============================================================================
+# Asynchronous linting/fixing for Vim and Language Server Protocol (LSP) integration.
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+    " 保存時のみ実行
+    let g:ale_lint_on_text_changed = 0
+    " 表示に関する設定
+    let g:ale_sign_error = '✗'
+    let g:ale_sign_warning = '⚠'
+    let g:airline#extensions#ale#open_lnum_symbol = '('
+    let g:airline#extensions#ale#close_lnum_symbol = ')'
+    let g:ale_echo_msg_format = '[%linter%]%code: %%s'
+    highlight link ALEErrorSign Tag
+    highlight link ALEWarningSign StorageClass
+    " Ctrl + kで次の指摘へ、Ctrl + jで前の指摘へ移動
+    nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+    nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+    "set statusline+=%#warningmsg#
+    "set statusline+=%{SyntasticStatuslineFlag()}
+    "set statusline+=%*
+    " Fix files with prettier, and then ESLint.
+    let g:ale_linters = {
+    \   'javascript': ['prettier', 'eslint'],
+    \   'python': ["flake8"],
+    \   'tex': ["chktex"],
+    \}
+'''
+
+#===========================================================================}}}
+# wsdjeg/dein-ui.vim:                                                       {{{
+#==============================================================================
+# UI for Shougo's dein.vim, detached from SpaceVim
+
+[[plugins]]
+repo = 'wsdjeg/dein-ui.vim'
+
+# Dein.vim is a dark powered Vim/Neovim plugin manager.
+#===========================================================================}}}
 
 #===========================================================================
 # vim: fdm=marker fdc=3 fdl=0
