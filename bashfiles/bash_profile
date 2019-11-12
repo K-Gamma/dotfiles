@@ -126,6 +126,10 @@ shopt -s histappend
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+# If set, aliases are expanded as described below under Aliases,
+# Aliases. This option is enabled by default for interactive shells. 
+shopt -s expand_aliases
 # }}}
 
 # Gain the aliases etc. {{{
