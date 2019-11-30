@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=gpufnctrl
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[ja_JP]=gpufnctrl
+Name=gpufnctrl
+Comment[ja_JP]=GPU fan auto Control
+Comment=GPU fan auto Control

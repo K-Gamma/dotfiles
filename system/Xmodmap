@@ -9,7 +9,4 @@ keycode 100 = Escape
 keycode 101 = Zenkaku_Hankaku
 keycode 102 = Escape
 
-! To use code generation with CLion.
-keycode 118 = Insert 
-
 add control = Control_L
