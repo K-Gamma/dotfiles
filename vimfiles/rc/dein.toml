@@ -1,0 +1,211 @@
+### TOML file format specification:
+### https://github.com/toml-lang/toml
+
+[[plugins]] # https://github.com/Shougo/dein.vim
+repo = 'Shougo/dein.vim'
+
+[[plugins]] # https://github.com/ # wsdjeg/dein-ui.vim
+repo = 'wsdjeg/dein-ui.vim'
+
+[[plugins]] # https://github.com/sheerun/vim-polyglot
+repo = 'sheerun/vim-polyglot'
+hook_add = '''
+    let g:polyglot_disabled = ['markdown', 'tsx', 'typescript', 'csv']
+'''
+
+[[plugins]] # https://github.com/tpope/vim-fugitive
+repo = 'tpope/vim-fugitive'
+
+[[plugins]] # https://github.com/tpope/vim-surround
+repo = 'tpope/vim-surround'
+
+[[plugins]] # https://github.com/dhruvasagar/vim-table-mode
+repo = 'dhruvasagar/vim-table-mode'
+
+[[plugins]] # https://github.com/tpope/vim-repeat
+repo = 'tpope/vim-repeat'
+
+[[plugins]] # https://github.com/mattn/emmet-vim
+repo = 'mattn/emmet-vim'
+
+[[plugins]] # https://github.com/mattn/sonictemplate-vim
+repo = 'mattn/sonictemplate-vim'
+
+[[plugins]] # https://github.com/jiangmiao/auto-pairs
+repo = 'jiangmiao/auto-pairs'
+
+[[plugins]] # https://github.com/alvan/vim-closetag
+repo = 'alvan/vim-closetag'
+
+[[plugins]] # https://github.com/airblade/vim-gitgutter
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]] # https://github.com/cocopon/iceberg.vim
+repo = 'cocopon/iceberg.vim'
+merged = 0
+hook_add = '''
+  set background=dark
+  autocmd MyAutoCmd VimEnter * nested colorscheme iceberg
+'''
+
+[[plugins]] # https://github.com/gko/vim-coloresque
+repo = 'gko/vim-coloresque'
+
+[[plugins]] # https://github.com/itchyny/lightline.vim
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+    " Please look a default -> :help lightline
+    let g:lightline = {
+    \   'colorscheme': 'wombat',
+    \   'active': {
+    \       'left': [
+    \           [ 'mode', 'paste' ],
+    \           [ 'gitbranch', 'readonly', 'filename', 'modified'],
+    \           [ 'lsp' ],
+    \       ]
+    \   },
+    \   'inactive': {
+    \       'left': [ [ 'filename', 'modified'] ],
+    \   },
+    \   'component_function': {
+    \       'gitbranch': 'gitbranch#name',
+    \       'lsp': 'LspStatus',
+    \   },
+    \ }
+
+    set laststatus=2    " 末尾から2行目にステータスラインを表示
+    set noshowmode      " 現在のモードを表示しない
+    set showcmd         " 入力コマンドを表示
+    set ruler           " カーソル位置を表示する
+'''
+
+[[plugins]] # https://github.com/itchyny/vim-gitbranch
+repo = 'itchyny/vim-gitbranch'
+
+[[plugins]] # https://github.com/kana/vim-textobj-user
+repo = 'kana/vim-textobj-user'
+
+[[plugins]] # https://github.com/thinca/vim-quickrun
+repo = 'thinca/vim-quickrun'
+
+[[plugins]] # https://github.com/osyo-manga/vim-precious
+# See https://github.com/Shougo/context_filetype.vim/issues/1
+repo = 'osyo-manga/vim-precious'
+depends = 'context_filetype.vim'
+
+[[plugins]] # https://github.com/Shougo/context_filetype.vim
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]] # https://github.com/thinca/vim-ft-diff_fold
+repo = 'thinca/vim-ft-diff_fold'
+
+[[plugins]] # https://github.com/thinca/vim-ft-help_fold
+repo = 'thinca/vim-ft-help_fold'
+
+# Microsoft Power {{{
+
+[[plugins]] # https://github.com/prabirshrestha/async.vim
+repo = 'prabirshrestha/async.vim'
+
+# See: https://github.com/prabirshrestha/vim-lsp/wiki
+[[plugins]] # https://github.com/prabirshrestha/vim-lsp
+repo = 'prabirshrestha/vim-lsp'
+hook_add = '''
+    if executable('clangd')
+        autocmd User lsp_setup call lsp#register_server({
+            \ 'name': 'clangd',
+            \ 'cmd': {server_info->['clangd']},
+            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+            \ })
+    endif
+
+    if executable('gopls')
+        augroup LspGo
+            au!
+            autocmd User lsp_setup call lsp#register_server({
+                        \ 'name': 'gopls',
+                        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+                        \ 'whitelist': ['go'],
+                        \ 'workspace_config': {'gopls': {
+                        \     'staticcheck': v:true,
+                        \     'completeUnimported': v:true,
+                        \     'caseSensitiveCompletion': v:true,
+                        \     'usePlaceholders': v:true,
+                        \     'completionDocumentation': v:true,
+                        \     'watchFileChanges': v:true,
+                        \     'hoverKind': 'SingleLine',
+                        \   }},
+                        \ })
+            autocmd FileType go setlocal omnifunc=lsp#complete
+            autocmd FileType go nmap <buffer> gd <plug>(lsp-definition)
+            autocmd FileType go nmap <buffer> ,n <plug>(lsp-next-error)
+            autocmd FileType go nmap <buffer> ,p <plug>(lsp-previous-error)
+        augroup END
+    endif
+
+    if executable('pyls')
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'pyls',
+                    \ 'cmd': {server_info->['pyls']},
+                    \ 'whitelist': ['python'],
+                    \ 'workspace_config': {'pyls': { 'plugins': {
+                    \       'pydocstyle': { 'enabled': v:true }
+                    \   } } },
+                    \ })
+    endif
+
+    if executable('solargraph')
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'solargraph',
+                    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'solargraph stdio']},
+                    \ 'initialization_options': {"diagnostics": "true"},
+                    \ 'whitelist': ['ruby'],
+                    \ })
+    endif
+
+    if executable('typescript-language-server')
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'javascript support using typescript-language-server',
+                    \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+                    \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
+                    \ 'whitelist': ['javascript', 'javascript.jsx', 'javascriptreact']
+                    \ })
+    endif
+
+    let g:lsp_signs_enabled = 1             " enable signs
+    let g:lsp_diagnostics_echo_cursor = 1   " enable echo under cursor when in normal mode
+
+    let g:lsp_signs_error = {'text': '✗'}
+    let g:lsp_signs_warning = {'text': '‼'}
+'''
+
+[[plugins]] # https://github.com/prabirshrestha/asyncomplete.vim
+repo = 'prabirshrestha/asyncomplete.vim'
+
+[[plugins]] # https://github.com/prabirshrestha/asyncomplete-lsp.vim
+repo = 'prabirshrestha/asyncomplete-lsp.vim'
+depends = ['vim-lsp', 'asyncomplete.vim']
+
+[[plugins]] # https://github.com/prabirshrestha/asyncomplete-neosnippet.vim
+repo = 'prabirshrestha/asyncomplete-neosnippet.vim'
+depends = ['asyncomplete.vim', 'neosnippet-snippets']
+hook_source = '''
+    call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+                \ 'name': 'neosnippet',
+                \ 'whitelist': ['*'],
+                \ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+                \ }))
+'''
+
+
+# }}}
+
+[[plugins]] # https://github.com/roxma/vim-hug-neovim-rpc
+repo = 'roxma/vim-hug-neovim-rpc'
+on_if = '!has("nvim")'
+
+[[plugins]] # https://github.com/roxma/nvim-yarp
+repo = 'roxma/nvim-yarp'
+on_if = '!has("nvim")'
+
+# vim: fdm=marker
