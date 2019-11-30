@@ -12,8 +12,8 @@ clone_repository='https://github.com/K-Ganma/dotfiles.git'
 dotdir="${HOME}/.dotfiles"
 
 # Set the path to your dotlink which describes the correspondence relation.
-#dotlink="${dotdir}/dotlink"
-#linkfiles=("${dotlink}")
+dotlink="${dotdir}/dotlink"
+linkfiles=("${dotlink}")
 
 # If you want to load additional local setting, add its path to ${linkfiles}.
 # (But it doesn't affect to `dot edit` and `dot add` command, so you should

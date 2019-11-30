@@ -60,10 +60,26 @@ ${HOME}/Dropbox/ubuntu_home/history/python_history, .python_history
 ${HOME}/Dropbox/ubuntu_home/history/zsh_history, .zsh/.zsh_history
 
 #===========================================================================}}}
+# fonts:                                                                    {{{
+#==============================================================================
+# (Some font file)
+
+fonts,  .fonts
+
+#===========================================================================}}}
+# autostart:                                                                {{{
+#==============================================================================
+# (Some auto start configuration file)
+
+config/autostart/gnome-terminal.desktop,    .config/autostart/gnome-terminal.desktop
+config/autostart/gpufnctrl.desktop,         .config/autostart/gpufnctrl.desktop
+config/autostart/xmodmap.desktop,           .config/autostart/xmodmap.desktop
+
+#===========================================================================}}}
 # gitconfig:                                                                {{{
 #==============================================================================
 
-.gitconfig, .gitconfig
+gitconfig, .gitconfig
 
 #===========================================================================}}}
 # [vim](http://www.vim.org/):                                               {{{
@@ -72,6 +88,7 @@ ${HOME}/Dropbox/ubuntu_home/history/zsh_history, .zsh/.zsh_history
 # de-facto Unix editor 'Vi', with a more complete feature set.
 
 vimfiles,   .vim
+ideavimrc,    .ideavimrc
 
 #===========================================================================}}}
 # [neovim](https://neovim.io/):                                             {{{
