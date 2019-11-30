@@ -1,0 +1,183 @@
+### TOML file format specification:
+### https://github.com/toml-lang/toml
+
+[[plugins]] # https://github.com/vim-jp/vimdoc-ja
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]] # https://github.com/kana/vim-niceblock
+repo = 'kana/vim-niceblock'
+on_map = {x = '<Plug>'}
+hook_add = '''
+    xmap I  <Plug>(niceblock-I)
+    xmap A  <Plug>(niceblock-A)
+'''
+
+[[plugins]] # https://github.com/tyru/open-browser.vim
+repo = 'tyru/open-browser.vim'
+on_map = '<Plug>(openbrowser-smart-search)'
+on_cmd = 'OpenBrowser'
+hook_add = '''
+    if has('unix')
+        let g:openbrowser_browser_commands = [
+                    \   {
+                    \       "name": "google-chrome",
+                    \       "args": ["{browser}", "{uri}"]
+                    \   }
+                    \ ]
+    endif
+    let g:netrw_nogx = 1 " disable netrw's gx mapping.
+    nmap gx <Plug>(openbrowser-smart-search)
+    vmap gx <Plug>(openbrowser-smart-search)
+'''
+
+[[plugins]] # https://github.com/kannokanno/previm
+repo = 'kannokanno/previm'
+on_cmd = 'PrevimOpen'
+depends = 'open-browser.vim'
+hook_add = '''
+    nnoremap <Leader>o :<C-u>PrevimOpen<CR>
+'''
+
+[[plugins]] # https://github.com/rhysd/vim-gfm-syntax
+repo = 'rhysd/vim-gfm-syntax'
+on_ft = 'markdown'
+
+[[plugins]] # https://github.com/thinca/vim-qfreplace
+repo = 'thinca/vim-qfreplace'
+on_ft = 'qf'
+[plugins.ftplugin]
+qf = '''
+    nnoremap <buffer> r :<C-u>Qfreplace<CR>
+'''
+
+[[plugins]] # https://github.com/kana/vim-operator-user
+repo = 'kana/vim-operator-user'
+
+[[plugins]] # https://github.com/kana/vim-operator-replace
+repo = 'kana/vim-operator-replace'
+depends = 'vim-operator-user'
+on_map = {n = '<Plug>'}
+hook_add = '''
+    map R <Plug>(operator-replace)
+'''
+
+# Dark Power {{{
+
+[[plugins]] # https://github.com/Shougo/neoyank.vim
+repo = 'Shougo/neoyank.vim'
+on_event = 'TextYankPost'
+on_source = 'denite.nvim'
+
+[[plugins]] # https://github.com/Shougo/echodoc.vim
+repo = 'Shougo/echodoc.vim'
+on_event = 'CompleteDone'
+hook_source = '''
+    let g:echodoc#type = 'virtual'
+    call echodoc#enable()
+'''
+
+[[plugins]] # https://github.com/Shougo/defx.nvim
+repo = 'Shougo/defx.nvim'
+on_if = 'has("nvim") || has("python3")'
+hook_add = '''
+    nnoremap <silent>   [Space]f
+                \ :<C-u>Defx -listed -resume -buffer-name=tab`tabpagenr()`<CR>
+'''
+hook_source = '''
+    call defx#custom#column(
+                \ 'mark', {
+                \   'readonly_icon': '✗',
+                \   'selected_icon': '✓',
+                \ })
+    call defx#custom#column(
+                \ 'icon', {
+                \   'directory_icon': '▸',
+                \   'opened_icon': '▾',
+                \   'root_icon': ' ',
+                \ })
+'''
+
+[[plugins]] # https://github.com/Shougo/neosnippet.vim
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_ft = 'snippet'
+hook_source = '''
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " SuperTab like snippets behavior.
+    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+    "imap <expr><TAB>
+    " \ pumvisible() ? "\<C-n>" :
+    " \ neosnippet#expandable_or_jumpable() ?
+    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+                \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    " For conceal markers.
+    if has('conceal')
+        set conceallevel=2 concealcursor=niv
+    endif
+
+    " Enable snipMate compatibility feature.
+    let g:neosnippet#enable_snipmate_compatibility = 1
+
+    " Tell Neosnippet about the other snippets
+    let g:neosnippet#snippets_directory=g:dein#base_path.'/repos/github.com/honza/vim-snippets/snippets'
+'''
+
+[[plugins]] # https://github.com/Shougo/neosnippet-snippets
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]] # https://github.com/honza/vim-snippets
+repo = 'honza/vim-snippets'
+
+[[plugins]] # https://github.com/Shougo/deoppet.nvim
+repo = 'Shougo/deoppet.nvim'
+on_if = 'has("nvim-0.5.0") && has("python3")'
+
+[[plugins]] # https://github.com/Shougo/denite.nvim
+repo = 'Shougo/denite.nvim'
+on_cmd = 'Denite'
+hook_add = '''
+    " Define mappings
+    autocmd FileType denite call s:denite_my_settings()
+    function! s:denite_my_settings() abort
+        nnoremap <silent><buffer><expr> <CR>
+                    \ denite#do_map('do_action')
+        nnoremap <silent><buffer><expr> d
+                    \ denite#do_map('do_action', 'delete')
+        nnoremap <silent><buffer><expr> p
+                    \ denite#do_map('do_action', 'preview')
+        nnoremap <silent><buffer><expr> q
+                    \ denite#do_map('quit')
+        nnoremap <silent><buffer><expr> i
+                    \ denite#do_map('open_filter_buffer')
+        nnoremap <silent><buffer><expr> <Space>
+                    \ denite#do_map('toggle_select').'j'
+    endfunction
+'''
+
+[[plugins]] # https://github.com/Shougo/deol.nvim
+repo = 'Shougo/deol.nvim'
+on_source = 'denite.nvim'
+on_if = 'has("nvim") || has("terminal")'
+hook_add = '''
+    nnoremap <silent> [Space]s :<C-u>Deol zsh -no-start-insert<CR>
+    nnoremap <silent> [Space]n :<C-u>call deol#new(
+                \ {'command': 'zsh', 'start_insert': 0})<CR>
+    " nnoremap <silent> [Space]s :<C-u>Deol xonsh<CR>
+    nnoremap <silent> [Window]D  :<C-u>call deol#kill_editor()<CR>
+'''
+
+[[plugins]] # https://github.com/Shougo/junkfile.vim
+repo = 'Shougo/junkfile.vim'
+on_source = 'denite.nvim'
+hook_add = '''
+  nnoremap <silent> [Window]e :<C-u>Denite junkfile:new junkfile<CR>
+'''
+# }}}
+
+# vim: fdm=marker
