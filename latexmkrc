@@ -67,6 +67,6 @@ if ($^O eq 'MSWin32') {
     # PDF ビュアーの設定 for Linux
     # Linux ではディストリビューションによってインストールされているアプリケーションが
     # 異なるため、ディストリビューションに依存しない xdg-open で開くようにする
-    $pdf_previewer               = 'xdg-open';
+    #$pdf_previewer               = 'xdg-open';
   }
 }

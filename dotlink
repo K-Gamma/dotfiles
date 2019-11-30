@@ -71,18 +71,14 @@ ${HOME}/Dropbox/ubuntu_home/history/zsh_history, .zsh/.zsh_history
 # Vim is an advanced text editor that seeks to provide the power of the
 # de-facto Unix editor 'Vi', with a more complete feature set.
 
-vimfiles/vimrc,    .vim/vimrc
-vimfiles/dein.toml, .vim/dein.toml
-
-vimfiles/ftplugin/tex_quickrun.vim,      .vim/ftplugin/tex_quickrun.vim
-vimfiles/ftplugin/markdown_quickrun.vim, .vim/ftplugin/markdown_quickrun.vim
+vimfiles,   .vim
 
 #===========================================================================}}}
 # [neovim](https://neovim.io/):                                             {{{
 #==============================================================================
 # Neovim is a project that seeks to aggressively refactor Vim
 
-#neovim/init.vim, .config/nvim/init.vim
+# covered by vim configuration.
 
 #===========================================================================}}}
 # bashfiles:                                                               {{{
