@@ -31,6 +31,10 @@ repo = 'mattn/emmet-vim'
 [[plugins]] # https://github.com/mattn/sonictemplate-vim
 repo = 'mattn/sonictemplate-vim'
 
+[[plugins]] # https://github.com/itchyny/vim-parenmatch
+repo = 'itchyny/vim-parenmatch'
+on_if = '(v:version == 704 && has("patch786")) || v:version >= 705'
+
 [[plugins]] # https://github.com/jiangmiao/auto-pairs
 repo = 'jiangmiao/auto-pairs'
 
@@ -174,6 +178,16 @@ hook_add = '''
                     \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
                     \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
                     \ 'whitelist': ['javascript', 'javascript.jsx', 'javascriptreact']
+                    \ })
+    endif
+
+    " Rust
+    if executable('rls')
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'rls',
+                    \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+                    \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+                    \ 'whitelist': ['rust'],
                     \ })
     endif
 
