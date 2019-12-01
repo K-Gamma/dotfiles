@@ -139,3 +139,5 @@ fi
 # }}}
 
 # vim: ft=sh fdm=marker fdc=3 fdl=0
+
+export PATH="$HOME/.cargo/bin:$PATH"
