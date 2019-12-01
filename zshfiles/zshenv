@@ -43,7 +43,7 @@ export XDG_CACHE_HOME="${HOME}/.cache"
 export PAGER='less -cm'
 
 # Editor
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Less
 export LESS='-r'
