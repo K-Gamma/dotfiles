@@ -22,17 +22,6 @@ repo = 'tpope/vim-surround'
 [[plugins]] # https://github.com/dhruvasagar/vim-table-mode
 repo = 'dhruvasagar/vim-table-mode'
 
-[[plugins]] # https://github.com/skanehira/translate.vim
-repo = 'skanehira/translate.vim'
-hook_add = '''
-    let g:translate_source = "en"
-    let g:translate_target = "ja"
-    let g:translate_winsize = 10
-
-    xmap <leader>tr <Plug>(VTranslate)
-    xmap <leader>tr <Plug>(VTranslateBang)
-'''
-
 [[plugins]] # https://github.com/tpope/vim-repeat
 repo = 'tpope/vim-repeat'
 
