@@ -1,22 +1,24 @@
-"-----------------------------------------------------------------------------------------------"
-"     command     |  normal  | insert |  command line  | visual | select | waiting computation |
-" map  / noremap  |    @     |        |                |   @    |   @    |          @          |
-" nmap / nnoremap |    @     |        |                |        |        |                     |
-" vmap / vnoremap |          |        |                |   @    |   @    |                     |
-" omap / onoremap |          |        |                |        |        |          @          |
-" xmap / xnoremap |          |        |                |   @    |        |                     |
-" smap / snoremap |          |        |                |        |   @    |                     |
-" map! / noremap! |          |   @    |       @        |        |        |                     |
-" imap / inoremap |          |   @    |                |        |        |                     |
-" cmap / cnoremap |          |        |       @        |        |        |                     |
-"-----------------------------------------------------------------------------------------------"
+" Key Mappings
+
+"------------------------------------------------------------------------"
+"   command     | normal | insert | cmdline | visual | select | wait comp
+"  map|noremap  |   @    |        |         |   @    |   @    |     @
+" nmap|nnoremap |   @    |        |         |        |        | 
+" vmap|vnoremap |        |        |         |   @    |   @    | 
+" omap|onoremap |        |        |         |        |        |     @
+" xmap|xnoremap |        |        |         |   @    |        |
+" smap|snoremap |        |        |         |        |   @    |
+" map!|noremap! |        |   @    |    @    |        |        |
+" imap|inoremap |        |   @    |         |        |        |
+" cmap|cnoremap |        |        |    @    |        |        |
+"------------------------------------------------------------------------"
 
 " コロンとセミコロン入れ替え
 noremap : ;
 noremap ; :
 
 " 保存/終了をスペースで
-nnoremap <Space>w  :<C-u>w<CR>
+nnoremap <space>w  :<c-u>w<cr>
 nnoremap <Space>W  :<C-u>wa<CR>
 nnoremap <Space>q  :<C-u>q<CR>
 "nnoremap <Space>Q  :<C-u>q!<CR>
@@ -45,11 +47,11 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-p> :<C-u>bp<CR>
 nnoremap <C-n> :<C-u>bn<CR>
 
-" 行頭までカーソル移動
+" 行頭・行末までカーソル移動
 nnoremap <S-h> ^
-
-" 行末までカーソル移動
+vnoremap <S-h> ^
 nnoremap <S-l> $
+vnoremap <S-l> $
 
 " インクリメント・デクリメント
 nnoremap + <C-a>
@@ -65,7 +67,7 @@ nnoremap - <C-x>
 "command! -range -nargs=1 AddNumbers
 "      \ call vimrc#add_numbers((<line2>-<line1>+1) * eval(<args>))
 
-" Escの2回押しでハイライト消去
+" Esc2回押しでハイライト消去
 nnoremap <silent> <ESC><ESC> :<C-u>noh<CR>
 
 " 保存して閉じる, 保存せず閉じるを無効
@@ -78,8 +80,3 @@ nnoremap Q <Nop>
 " 入力中カーソルを移動
 inoremap <C-f> <right>
 inoremap <C-b> <left>
-
-" 隣接した{}で改行したらインデント
-inoremap {<CR> {}<Left><CR><Esc><S-o>
-inoremap [<CR> []<Left><CR><Esc><S-o>
-inoremap (<CR> ()<Left><CR><Esc><S-o>
