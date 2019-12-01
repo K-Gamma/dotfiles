@@ -59,8 +59,8 @@ let g:config_home = empty($XDG_CONFIG_HOME) ? expand('${HOME}/.config') : $XDG_C
 let g:cache_home = empty($XDG_CACHE_HOME) ? expand('${HOME}/.cache') : $XDG_CACHE_HOME
 let g:dein#base_path = g:cache_home . '/dein'
 
-if !isdirectory(g:cache_home)
-    call mkdir(g:cache_home, 'p')
+if !isdirectory(g:dein#base_path)
+    call mkdir(g:dein#base_path, 'p')
 endif
 
 " Load dein.

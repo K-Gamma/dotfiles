@@ -462,12 +462,15 @@ fi
 
 # other aliases
 alias df='df -h'
+alias du='du -hs'
 alias ps='ps --sort=start_time'
 alias apv='appletviewer'
 alias x='exit'
 alias g='git'
 alias n='nvim'
 alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
 alias ov='vim'  # original vim
 alias clip='xsel --clipboard --input'
 alias relogin='exec ${SHELL} -l'
