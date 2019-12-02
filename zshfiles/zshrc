@@ -493,8 +493,12 @@ alias lmk='latexmk'
 alias lmkp='latexmk -pv'
 alias lmkc='latexmk -c'
 
+# python
+alias pip='pip3'
+alias python='python3'
+
 # apt update & upgrade & autoremove alias
-alias update='sh -c "apt update && sudo apt -y upgrade && apt -y autoremove"'
+alias update='sh -c "apt update && apt -y upgrade && apt -y autoremove"'
 # + }}}
 
 # + Named Directories {{{
