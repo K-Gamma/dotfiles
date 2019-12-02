@@ -1,5 +1,5 @@
 " + ファイル {{{
-set hidden                      " ファイル変更中でも他のファイルを開けるようにする
+set hidden
 set autoread                    " ファイル内容が変更されると自動読み込みする
 set browsedir=buffer            " ファイル保存ダイアログの初期ディレクトリをバッファファイル位置に指定する
 set nobackup                    " バックアップしない
@@ -9,14 +9,15 @@ autocmd MyAutoCmd SwapExists * let v:swapchoice = 'o'   " スワップファイ�
 
 " + 表示 {{{
 set display=lastline            " @で省略せず, 全て表示
-set number                      " 行番号を表示する
+"set number                      " 行番号を表示する
+set relativenumber              " 相対行番号を表示する
 set modeline                    " モードラインを有効にする
 set modelines=1                 " モードライン行数を設定
 set list                        " 不可視文字を表示する
 set listchars=tab:»-,trail:.,extends:»,precedes:«,nbsp:% ",eol:↲
 
 if (v:version == 704 && has("patch785")) || v:version >= 705
-    set breakindent             " インデントを考慮した行の折り返し
+    set breakindent
 endif
 set cursorline                  " カーソル行をハイライト
 augroup MyAutoCmd               " カレントウィンドウにのみ罫線を引く

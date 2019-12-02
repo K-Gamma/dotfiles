@@ -516,6 +516,7 @@ name_dir "${HOME}/.dotfiles/" dotfiles
 name_dir "${HOME}/workspace/" workspace
 name_dir "${HOME}/.zsh/" .zsh
 name_dir "${HOME}/.vim/" .vim
+name_dir "${HOME}/Dropbox/research" research
 # + }}}
 
 # TODO: addition

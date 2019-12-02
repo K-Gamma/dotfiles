@@ -6,8 +6,9 @@ augroup MyAutoCmd
     " Make the filetype correspond to the file
     autocmd FileType,Syntax,ColorScheme,BufNewFile,BufNew,BufRead *?
                 \ call vimrc#on_filetype()
-    " Synchronize for .toml complex syntax.
-    autocmd CursorHold *.toml syntax sync minlines=300
+    " Synchronize for complex syntax in .toml and help.
+    autocmd CursorHold *.toml syntax sync minlines=500 maxlines=1000
+    "autocmd FileType jsp,asp,php,xml,perl,help syntax sync minlines=500 maxlines=1000
 augroup END
 
 " Setting of the encoding to use for a save and reading.
