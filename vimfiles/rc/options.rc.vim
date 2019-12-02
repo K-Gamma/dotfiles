@@ -1,3 +1,5 @@
+""" Options
+
 " + ファイル {{{
 set hidden
 set autoread                    " ファイル内容が変更されると自動読み込みする
@@ -16,9 +18,13 @@ set modelines=1                 " モードライン行数を設定
 set list                        " 不可視文字を表示する
 set listchars=tab:»-,trail:.,extends:»,precedes:«,nbsp:% ",eol:↲
 
-if (v:version == 704 && has("patch785")) || v:version >= 705
+if exists('+breakindent')
     set breakindent
+    set wrap
+else
+    set nowrap
 endif
+set whichwrap=b,s,h,l,<,>,[,]       " カーソルを行頭、行末で止まらないようにする
 set cursorline                  " カーソル行をハイライト
 augroup MyAutoCmd               " カレントウィンドウにのみ罫線を引く
     autocmd WinLeave * set nocursorline
@@ -42,7 +48,6 @@ set tabstop=4                       " タブの幅
 set shiftwidth=4                    " 自動インデントの幅
 set softtabstop=0                   " タブを押した時のスペースの量（0ならtabstopの量）
 set backspace=indent,eol,start      " バックスペースを押した時の挙動
-set whichwrap=b,s,h,l,<,>,[,]       " カーソルを行頭、行末で止まらないようにする
 if has('nvim')                      " ヤンクをクリップボードにコピーする
     set clipboard=unnamed
 else
@@ -93,7 +98,7 @@ set noincsearch " インクリメンタルサーチを行わない
 set hlsearch    " 検索結果をハイライトする
 set ignorecase  " 検索時に文字の大小を区別しない
 set smartcase   " 検索時に大文字を含んでいたら大小を区別する
-set nowrapscan  " 検索をファイルの先頭へループしない
+set wrapscan
 set magic       " 正規表現使用時に magic モードにする
 " + }}}
 

@@ -86,9 +86,6 @@ hook_add = '''
 [[plugins]] # https://github.com/itchyny/vim-gitbranch
 repo = 'itchyny/vim-gitbranch'
 
-[[plugins]] # https://github.com/kana/vim-textobj-user
-repo = 'kana/vim-textobj-user'
-
 [[plugins]] # https://github.com/thinca/vim-quickrun
 repo = 'thinca/vim-quickrun'
 

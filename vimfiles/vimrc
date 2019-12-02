@@ -1,3 +1,4 @@
 " Note: Skip initialization when -eval(vim-tiny, vim-small)
-if 0 | endif
+if 0 | finish | endif
+
 execute 'source' fnamemodify(expand('<sfile>'), ':h').'/rc/vimrc'
