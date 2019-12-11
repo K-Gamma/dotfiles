@@ -426,11 +426,12 @@ if [[ -x "/usr/bin/dircolors" ]]; then
             ;;
         linux*)
             if [[ -f "${HOME}/.dircolors" ]]; then
-                eval "$(dircolors -b ${HOME}/.dircolors)" || eval "$(dircolors -b)"
+                eval "$(dircolors -b ${HOME}/.dircolors)"
             fi
             alias ls='ls -F --color=auto'
             alias dir='dir --color=auto'
             alias vdir='vdir --color=auto'
+            alias diff='diff --color=auto'
             alias grep='grep --color=auto'
             alias fgrep='fgrep --color=auto'
             alias egrep='egrep --color=auto'

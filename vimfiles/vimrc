@@ -12,7 +12,7 @@ let s:rc = fnamemodify(expand('<sfile>'), ':h').'/rc'
 function! s:source(file) abort
   let path = s:rc . '/' . a:file
   if filereadable(path)
-    execute 'source' . 'path'
+    execute 'source' . path
   endif
 endfunction
 
