@@ -37,16 +37,14 @@ dircolors, .dircolors
 #==============================================================================
 # (Some font file)
 
-fonts/,  Library/test/
-
-fonts/Ricty-Diminished/Ricty Diminished Bold Oblique for Powerline.ttf, Library/test/Ricty Diminished Bold Oblique for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Bold for Powerline.ttf, Library/test/Ricty Diminished Bold for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Discord Bold Oblique for Powerline.ttf, Ricty Diminished Discord Bold Oblique for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Discord Bold for Powerline.ttf, Ricty Diminished Discord Bold for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Discord Oblique for Powerline.ttf, Ricty Diminished Discord Oblique for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Discord Regular for Powerline.ttf, Ricty Diminished Discord Regular for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Oblique for Powerline.ttf, Ricty Diminished Oblique for Powerline.ttf
-fonts/Ricty-Diminished/Ricty Diminished Regular for Powerline.ttf, Ricty Diminished Regular for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Bold Oblique for Powerline.ttf, Library/Fonts/Ricty Diminished Bold Oblique for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Bold for Powerline.ttf, Library/Fonts/Ricty Diminished Bold for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Discord Bold Oblique for Powerline.ttf, Library/Fonts/Ricty Diminished Discord Bold Oblique for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Discord Bold for Powerline.ttf, Library/Fonts/Ricty Diminished Discord Bold for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Discord Oblique for Powerline.ttf, Library/Fonts/Ricty Diminished Discord Oblique for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Discord Regular for Powerline.ttf, Library/Fonts/Ricty Diminished Discord Regular for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Oblique for Powerline.ttf, Library/Fonts/Ricty Diminished Oblique for Powerline.ttf
+fonts/Ricty-Diminished/Ricty Diminished Regular for Powerline.ttf, Library/Fonts/Ricty Diminished Regular for Powerline.ttf
 
 #===========================================================================}}}
 
