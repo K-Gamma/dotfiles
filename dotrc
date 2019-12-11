@@ -10,44 +10,46 @@ clone_repository='https://github.com/K-Ganma/dotfiles.git'
 
 # Set the directory that the script regard as dotfiles directory.
 dotdir="${HOME}/.dotfiles"
+dotdotdir="${dotdir}/dot"
 
 # Set the path to your dotlink which describes the correspondence relation.
-dotlink="${dotdir}/dotlink"
-linkfiles=("${dotlink}")
+dotlink="${dotdotdir}/dotlink"
 
 # If you want to load additional local setting, add its path to ${linkfiles}.
 # (But it doesn't affect to `dot edit` and `dot add` command, so you should
 # edit these files manually.)
-#dotlinklocal="${HOME}/.config/dot/dotlink.local"
-#linkfiles=("${dotlink}" "${dotlinklocal}")
+dotlinklocal="${HOME}/.config/dot/dotlink.local"
 
 # You can switch the dotlinklocal by its OS type like below:
 
 # (In zsh)
 
-#case ${OSTYPE} in
-#    *linux*)
-#        dotlinklocal="${dotdir}/dotlink.linux"
-#        ;;
-#    *darwin*)
-#        dotlinklocal="${dotdir}/dotlink.mac"
-#        ;;
-#    *cygwin*|*msys*)
-#        dotlinklocal="${dotdir}/dotlink.windows"
-#        ;;
-#esac
-#linkfiles=("${dotlink}" "${dotlinklocal}")
+case ${OSTYPE} in
+    *linux*)
+        dotlinkos="${dotdotdir}/dotlink.linux"
+        ;;
+    *darwin*)
+        dotlinkos="${dotdotdir}/dotlink.mac"
+        ;;
+    *cygwin*|*msys*)
+        dotlinkos="${dotdotdir}/dotlink.windows"
+        ;;
+esac
 
 # (In bash)
 
 #if [ "$(uname)" == 'Darwin' ]; then
-#  dotlinklocal="${dotdir}/dotlink.linux"
+#  dotlinklocal="${dotdotdir}/dotlink.linux"
 #elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
-#  dotlinklocal="${dotdir}/dotlink.mac"
+#  dotlinklocal="${dotdotdir}/dotlink.mac"
 #elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
-#  dotlinklocal="${dotdir}/dotlink.windows"
+#  dotlinklocal="${dotdotdir}/dotlink.windows"
 #fi
-#linkfiles=("${dotlink}" "${dotlinklocal}")
+
+# Add the dropbox link
+dotlinkdropbox="${dotdotdir}/dotlink.dropbox"
+
+linkfiles=("${dotlink}" "${dotlinklocal}" "${dotlinkos}" "${dotlinkdropbox}")
 
 #===========================================================================}}}
 # Options                                                                   {{{
@@ -71,7 +73,7 @@ linkfiles=("${dotlink}")
 #diffcmd="colordiff -u"
 
 # Command to edit two files with diff highlights.
-#edit2filecmd='vimdiff'
+edit2filecmd='vimdiff'
 
 # Set your favorite editor.
 # (setting priority: this option > $EDITOR (default) > xdg-open)
