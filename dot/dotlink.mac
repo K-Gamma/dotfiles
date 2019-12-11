@@ -1,0 +1,37 @@
+#
+#                       _                _
+#           _|  _ _|_ _|_ o |  _   _   _|_ _  ._   ._ _   _.  _
+#          (_| (_) |_  |  | | (/_ _>    | (_) |    | | | (_| (_
+#          ____________________________________________________
+#
+#
+#==============================================================================
+# bashfiles:                                                               {{{
+#==============================================================================
+
+bashfiles/bash_aliases, .bash_aliases
+bashfiles/bash_logout, .bash_logout
+bashfiles/bash_profile, .bash_profile
+bashfiles/bashrc, .bashrc
+
+#===========================================================================}}}
+# zsh                                                                       {{{
+#==============================================================================
+# Zsh is a shell designed for interactive use, although it is also a
+# powerful scripting language.
+
+zshfiles/zshrc, .zsh/.zshrc
+zshfiles/zshenv, .zsh/.zshenv
+zshfiles/zlogout, .zsh/.zlogout
+zshfiles/zshenv, .zshenv
+
+#===========================================================================}}}
+# dircolors:                                                                {{{
+#==============================================================================
+# dircolors is a file set up dircolor.
+
+dircolors, .dircolors
+
+#===========================================================================}}}
+
+# vim: fdm=marker fdc=3 fdl=0

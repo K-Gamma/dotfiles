@@ -1,0 +1,82 @@
+#
+#                      _                _
+#          _|  _ _|_ _|_ o |  _   _   _|_ _  ._   | o ._
+#         (_| (_) |_  |  | | (/_ _>    | (_) |    | | | | |_| ><
+#         ______________________________________________________
+#
+#
+# This file contains dotfiles linksets.
+# You can comment out by adding "#" at the beginning of the line.
+# And an empty line is ignored by dot.
+#
+# Format:
+# <dotfile>,<linkto>
+#
+# the script automatically add directory information to the file path.
+# So, you should write like below:
+#     .vimrc,.vimrc
+#
+# You can load from outside of the dotfiles directory:
+#     ~/Dropbox/.netrc,.netrc
+#
+# You can easily copy the existing file to the dotfiles repository
+# and add new link list by
+#     dot add [-m "some comment"] original_file dotfiles_path
+# or, just
+#     dot add original_file
+# In the second example, the script automatically completes the second
+# arguments and confirm whether or not to execute that command.
+#
+#===========================================================================}}}
+# Xmodmap:                                                                  {{{
+#==============================================================================
+# xmodmap is a utility for modifying keymaps and pointing button
+# mappings in Xorg.
+
+Xmodmap, .Xmodmap
+
+#===========================================================================}}}
+# bashfiles:                                                               {{{
+#==============================================================================
+
+bashfiles/bash_aliases, .bash_aliases
+bashfiles/bash_logout, .bash_logout
+bashfiles/bash_profile, .bash_profile
+bashfiles/bashrc, .bashrc
+
+#===========================================================================}}}
+# zsh                                                                       {{{
+#==============================================================================
+# Zsh is a shell designed for interactive use, although it is also a
+# powerful scripting language.
+
+zshfiles/zshrc, .zsh/.zshrc
+zshfiles/zshenv, .zsh/.zshenv
+zshfiles/zlogout, .zsh/.zlogout
+zshfiles/zshenv, .zshenv
+
+#===========================================================================}}}
+# fonts:                                                                    {{{
+#==============================================================================
+# (Some font file)
+
+fonts,  .fonts
+
+#===========================================================================}}}
+# autostart:                                                                {{{
+#==============================================================================
+# (Some auto start configuration file)
+
+#config/autostart/gpufnctrl.desktop,         -> local
+config/autostart/xmodmap.desktop,           .config/autostart/xmodmap.desktop
+
+#===========================================================================}}}
+# dircolors:                                                                {{{
+#==============================================================================
+# dircolors is a file set up dircolor.
+
+dircolors, .dircolors
+
+#===========================================================================}}}
+
+# vim: fdm=marker fdc=3 fdl=0
