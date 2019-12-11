@@ -419,24 +419,27 @@ alias man=' man'
 alias sudo='sudo '
 
 # Enable color support of ls and also add handy aliases
-if [[ -x "/usr/bin/dircolors" ]]; then
+if [[ -f "${HOME}/.dircolors" ]]; then
     case "${OSTYPE}" in
         darwin*)
-            alias ls='ls -GF'
+            eval "$(gdircolors -b ${HOME}/.dircolors)"
+            alias ls='gls -F --color=auto'
+            alias dir='gdir --color=auto'
+            alias vdir='gvdir --color=auto'
+            alias diff='gdiff --color=auto'
             ;;
         linux*)
-            if [[ -f "${HOME}/.dircolors" ]]; then
-                eval "$(dircolors -b ${HOME}/.dircolors)"
-            fi
+            eval "$(dircolors -b ${HOME}/.dircolors)"
+
             alias ls='ls -F --color=auto'
             alias dir='dir --color=auto'
             alias vdir='vdir --color=auto'
             alias diff='diff --color=auto'
-            alias grep='grep --color=auto'
-            alias fgrep='fgrep --color=auto'
-            alias egrep='egrep --color=auto'
             ;;
     esac
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
