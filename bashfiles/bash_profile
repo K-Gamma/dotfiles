@@ -4,33 +4,38 @@
 
 # Set up the environment variables. {{{
 # Language
-export LANG=ja_JP.UTF-8
+export LANG='ja_JP.UTF-8'
 
 # PATH
-export PATH=/usr/local/bin:/usr/local/sbin:${PATH}
+export PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
 
 # TERM
-export TERM=xterm-256color
+export TERM='xterm-256color'
 
 # Default dircolors
-export LSCOLORS=gxfxcxdxbxegedabagacad
+export LSCOLORS='gxfxcxdxbxegedabagacad'
 
 # XDG Base Directory Specification
-export XDG_CONFIG_HOME=~/.config
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CACHE_HOME="${HOME}/.cache"
 
 # Pager
-export PAGER="less -cm"
+export PAGER='less -cm'
 
 # Editor
-export EDITOR=vim
+if type nvim &> "/dev/null"; then
+  export EDITOR='nvim'
+else
+  export EDITOR='vim'
+fi
 
 # Less
 export LESS='-r'
-export LESSCHARSET=utf-8
-export JLESSCHARSET=utf-8
+export LESSCHARSET='utf-8'
+export JLESSCHARSET='utf-8'
 # Make less more friendly for non-text input files, see lesspipe(1)
-if [[ -x /usr/bin/lesspipe ]]; then
-    eval "$(SHELL=/bin/sh lesspipe)"
+if [[ -x "/usr/bin/lesspipe" ]]; then
+  eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
 # + History {{{
@@ -42,7 +47,7 @@ export HISTFILESIZE=100000
 
 # Don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-export HISTCONTROL=ignoreboth
+export HISTCONTROL='ignoreboth'
 
 # Time add to history.
 HISTTIMEFORMAT='%Y/%m/%d(%a) %T %z  '
@@ -50,20 +55,32 @@ HISTTIMEFORMAT='%Y/%m/%d(%a) %T %z  '
 
 # + for GCC {{{
 # Add include path and library path.
-export CPATH=/usr/local/include:${CPATH}
-export LIBRARY_PATH=/usr/local/lib:${LIBRARY_PATH}
+export CPATH="${CPATH}:/usr/local/include"
+export LIBRARY_PATH="${LIBRARY_PATH}:/usr/local/lib"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
 
 # Colored GCC warnings and errors.
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 # + }}}
 
+# + for ssh0/dot {{{
+if [[ -f "${HOME}/.config/dot" ]]; then
+  export DOT_REPO="https://github.com/K-Ganma/dotfiles.git"
+  export DOT_DIR="${HOME}/.dotfiles"
+  fpath=(${HOME}/.config/dot ${fpath})
+  source ${HOME}/.config/dot/dot.sh
+fi
+# + }}}
+
+# local {{{
+
 # + for Java {{{
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 # }}}
 
 # + for Go {{{
-export GOROOT=/usr/local
-export PATH=${GOROOT}/bin:${PATH}
+export GOROOT="/usr/local"
+export PATH="${PATH}:${GOROOT}/bin"
 # + }}}
 
 # + for Python {{{
@@ -72,51 +89,50 @@ export PYTHON_LIBRARYS="/usr/lib/x86_64-linux-gnu/libpython2.7.so"
 # + }}}
 
 # + for TeX Live {{{
-export PATH=/usr/local/texlive/2018/bin/x86_64-linux:${PATH}
-export INFOPATH=/usr/local/texlive/2018/texmf-dist/doc/info:${INFOPATH}
-export MANPATH=/usr/local/texlive/2018/texmf-dist/doc/man${MANPATH}
+export PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-linux"
+export INFOPATH="${INFOPATH}:/usr/local/texlive/2018/texmf-dist/doc/info"
+export MANPATH="${MANPATH}:/usr/local/texlive/2018/texmf-dist/doc/man"
 # + }}}
 
 # + for virtualenvwrapper {{{
-if [[ -f /usr/local/bin/virtualenvwrapper.sh ]]; then
-    export WORKON_HOME=${HOME}/.virtualenvs
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-    source /usr/local/bin/virtualenvwrapper.sh
+if [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
+  export WORKON_HOME="${HOME}/.virtualenvs"
+  export VIRTUALENVWRAPPER_PYTHON="/usr/bin/python3"
+  source /usr/local/bin/virtualenvwrapper.sh
 fi
 # + }}}
 
 # + for CUDA and cuDNN {{{
-export CUDA_HOME=/usr/local/cuda
-export PATH=${CUDA_HOME}/bin:${PATH}
-export LD_LIBRARY_PATH=${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}
-export CPATH=${CUDA_HOME}/samples/common/inc:${CUDA_HOME}/include:${CPATH}
+export CUDA_HOME="/usr/local/cuda"
+export PATH="${PATH}:${CUDA_HOME}/bin"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CUDA_HOME}/lib64"
+export CPATH="${CPATH}:${CUDA_HOME}/samples/common/inc:${CUDA_HOME}/include"
 # + }}}
 
 ## + for Caffe {{{
-#export CAFFE_ROOT=${HOME}/caffe
-#export PYTHONPATH=${CAFFE_ROOT}/python:${PYTHONPATH}
-#export CPATH=${PYENV_ROOT}/versions/2.7.14/include/python2.7:${CPATH}
+#export CAFFE_ROOT="${HOME}/caffe"
+#export PYTHONPATH="${PYTHONPATH}:${CAFFE_ROOT}/python"
+#export CPATH="${CPATH}:${PYENV_ROOT}/versions/2.7.14/include/python2.7"
 ## + }}}
 
 # + for Ruby {{{
 # for rbenv
-export PATH="${HOME}/.rbenv/bin:${PATH}"
+export PATH="${PATH}:${HOME}/.rbenv/bin"
 eval "$(rbenv init -)"
 # for ruby-build
-export PATH="${HOME}/.rbenv/plugins/ruby-build/bin:${PATH}"
+export PATH="${PATH}:${HOME}/.rbenv/plugins/ruby-build/bin"
 # + }}}
 
-# + for ssh0/dot {{{
-if [[ -f ${HOME}/.config/dot ]]; then
-    export DOT_REPO="https://github.com/K-Ganma/dotfiles.git"
-    export DOT_DIR="${HOME}/.dotfiles"
-    fpath=(${HOME}/.config/dot ${fpath})
-    source ${HOME}/.config/dot/dot.sh
+# + for Rust {{{
+export PATH="${PATH}:$HOME/.cargo/bin"
 # + }}}
 
 # + for My command {{{
-export PATH="/opt/:${PATH}"
+export PATH="${PATH}:/opt/"
 # + }}}
+
+# }}}
+
 # }}}
 
 # Set up the shopt. {{{
@@ -133,11 +149,9 @@ shopt -s expand_aliases
 # }}}
 
 # Gain the aliases etc. {{{
-if [[ -f ~/.bashrc ]]; then
-    . ~/.bashrc
+if [[ -f "${HOME}/.bashrc" ]]; then
+  . "${HOME}/.bashrc"
 fi
 # }}}
 
 # vim: ft=sh fdm=marker fdc=3 fdl=0
-
-export PATH="$HOME/.cargo/bin:$PATH"

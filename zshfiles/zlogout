@@ -5,7 +5,7 @@ ssh-agent -k
 # when leaving the console clear the screen to increase privacy
 
 if [ "$SHLVL" = 1 ]; then
-    [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+  [ -x "/usr/bin/clear_console" ] && "/usr/bin/clear_console" -q
 fi
 
 # vim: ft=sh fdm=marker fdc=3 fdl=0
