@@ -5,7 +5,7 @@
 
 # Compile '.zshrc' to speed up loading. {{{
 if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ $(readlink "${ZDOTDIR}/.zshrc") -nt "${ZDOTDIR}/.zshrc.zwc" ]]; then
-    zcompile "${ZDOTDIR}/.zshrc.zwc" "${ZDOTDIR}/.zshrc"
+  zcompile "${ZDOTDIR}/.zshrc.zwc" "${ZDOTDIR}/.zshrc"
 fi
 #}}}
 
@@ -15,8 +15,8 @@ fi
 autoload -Uz colors && colors
 autoload -Uz is-at-least
 if is-at-least 4.3.10; then
-    autoload -Uz vcs_info
-    autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+  autoload -Uz vcs_info
+  autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 fi
 
 # completion
@@ -24,7 +24,7 @@ autoload -U compinit; compinit -C
 
 # Can execute man with the Esc-h
 if (( ${+aliases[run-help]} )); then
-    unalias run-help
+  unalias run-help
 fi
 autoload -Uz run-help
 autoload -Uz run-help-git
@@ -220,16 +220,16 @@ typeset -U path PATH
 # ++ Prompt Settings {{{
 # +++ PROMPT Setting {{{
 function triangle-mark {
-    echo '\ue0b0 '
-    return 0
+  echo '\ue0b0 '
+  return 0
 }
 #function env-name {
 #    local PYTHON_ENV_NAME=" "
 #    if [[ -z "${VIRTUAL_ENV}" ]]; then
-#        PYTHON_ENV_NAME=${VIRTUAL_ENV}
-#        PYTHON_ENV_NAME=${PYTHON_ENV_NAME##*/}
+#        PYTHON_ENV_NAME="${VIRTUAL_ENV}"
+#        PYTHON_ENV_NAME="${PYTHON_ENV_NAME##*/}"
 #    fi
-#    echo ${PYTHON_ENV_NAME}
+#    echo "${PYTHON_ENV_NAME}"
 #}
 #PROMPT="%K{025}%F{254}$(env-name)%K{254}%F{025}$(triangle-mark)%K{254}%F{025} %n@%m %K{238}%F{254}$(triangle-mark)%K{238}%F{007} %c %k%F{238}$(triangle-mark)%f"
 PROMPT="%K{254}%F{025} %n@%m %K{238}%F{254}$(triangle-mark)%K{238}%F{007} %c %k%F{238}$(triangle-mark)%f"
@@ -240,74 +240,74 @@ SPROMPT="%F{red}correct: %R -> %r [nyae]? %f"
 
 # +++ RPROMPT Setting {{{
 function branch-mark {
-    echo '\ue0a0 '
-    return 0
+  echo '\ue0a0 '
+  return 0
 }
 if is-at-least 4.3.10; then
-    # ++++ Use vcs_info {{{
-    zstyle ':vcs_info:*' enable git
-    zstyle ':vcs_info:*' formats "%F{green}%c%u$(branch-mark)[%b]%f"
-    if is-at-least 4.3.10; then
-        zstyle ':vcs_info:git:*' check-for-changes true
-        zstyle ':vcs_info:git:*' stagedstr "%F{yellow}"
-        zstyle ':vcs_info:git:*' unstagedstr "%F{red}"
-        zstyle ':vcs_info:git:*' actionformats '%F{magenta}[%b|%a]%f'
-    fi
-    precmd() { vcs_info }
-    RPROMPT='${vcs_info_msg_0_}'
-    # ++++ }}}
+  # ++++ Use vcs_info {{{
+  zstyle ':vcs_info:*' enable git
+  zstyle ':vcs_info:*' formats "%F{green}%c%u$(branch-mark)[%b]%f"
+  if is-at-least 4.3.10; then
+    zstyle ':vcs_info:git:*' check-for-changes true
+    zstyle ':vcs_info:git:*' stagedstr "%F{yellow}"
+    zstyle ':vcs_info:git:*' unstagedstr "%F{red}"
+    zstyle ':vcs_info:git:*' actionformats '%F{magenta}[%b|%a]%f'
+  fi
+  precmd() { vcs_info }
+  RPROMPT='${vcs_info_msg_0_}'
+  # ++++ }}}
 else
-    # ++++ Don't use vcs_info {{{
-    function get-branch-status {
-        local res color
-        output=$(git status --short 2> /dev/null)
-        if [[ -z "${output}" ]]; then
-            res=':' # status Clean
-            color='%F{green}'
-        elif [[ ${output} =~ "[\n]?\?\? " ]]; then
-            res='?:' # Untracked
-            color='%F{yellow}'
-        elif [[ ${output} =~ "[\n]? M " ]]; then
-            res='M:' # Modified
-            color='%F{red}'
-        else
-            res='A:' # Added to commit
-            color='%F{cyan}'
-        fi
-        echo ${color}
-        return 0
-    }
-    function get-branch-name {
-        echo $(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-        return 0
-    }
-    function branch-status-check {
-        if [[ "${PWD}" =~ '/\.git(/.*)?$' ]]; then
-            return 0
-        fi
-        local branchname=$(get-branch-name)
-        if [[ -z "${branchname}" ]]; then
-            return 0
-        fi
-        echo "$(get-branch-status)$(branch-mark)[${branchname}]%f"
-        return 0
-    }
-    RPROMPT='$(branch-status-check)'
-    # ++++ }}}
+  # ++++ Don't use vcs_info {{{
+  function get-branch-status {
+    local res color
+    output=$(git status --short 2> "/dev/null")
+    if [[ -z "${output}" ]]; then
+      res=':' # status Clean
+      color='%F{green}'
+    elif [[ "${output}" =~ "[\n]?\?\? " ]]; then
+      res='?:' # Untracked
+      color='%F{yellow}'
+    elif [[ "${output}" =~ "[\n]? M " ]]; then
+      res='M:' # Modified
+      color='%F{red}'
+    else
+      res='A:' # Added to commit
+      color='%F{cyan}'
+    fi
+    echo "${color}"
+    return 0
+  }
+  function get-branch-name {
+    echo $(git rev-parse --abbrev-ref HEAD 2> "/dev/null")
+    return 0
+  }
+  function branch-status-check {
+    if [[ "${PWD}" =~ '/\.git(/.*)?$' ]]; then
+      return 0
+    fi
+    local branchname=$(get-branch-name)
+    if [[ -z "${branchname}" ]]; then
+      return 0
+    fi
+    echo "$(get-branch-status)$(branch-mark)[${branchname}]%f"
+    return 0
+  }
+  RPROMPT='$(branch-status-check)'
+  # ++++ }}}
 fi
 # +++ }}}
 # ++ }}}
 
 # ++ 'cdr' settings (Required before 'zplug load') {{{
 if [[ ! -d "${XDG_CACHE_HOME:-${HOME}/.cache}/shell" ]]; then
-    mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/shell"
+  mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/shell"
 fi
 if is-at-least 4.3.10; then
-    add-zsh-hook chpwd chpwd_recent_dirs
-    zstyle ':chpwd:*' recent-dirs-max 500
-    zstyle ':chpwd:*' recent-dirs-default true
-    zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/chpwd-recent-dirs"
-    zstyle ':chpwd:*' recent-dirs-pushd true
+  add-zsh-hook chpwd chpwd_recent_dirs
+  zstyle ':chpwd:*' recent-dirs-max 500
+  zstyle ':chpwd:*' recent-dirs-default true
+  zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/chpwd-recent-dirs"
+  zstyle ':chpwd:*' recent-dirs-pushd true
 fi
 # ++ }}}
 
@@ -337,7 +337,7 @@ zstyle ':completion:*' completer _complete _ignored _prefix
 
 # 補完候補に着色
 if [[ -n "${LS_COLORS}" ]]; then
-    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 
 # カレントディレクトリを非表示
@@ -346,15 +346,15 @@ zstyle ':completion:*:cd:*' ignore-parents parent pwd
 # オブジェクトファイルとか中間ファイルとか非表示
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
 
-# sudo でも補完の対象
+  # sudo でも補完の対象
 zstyle ':completion:*:sudo:*' command-path \
-    "/usr/local/sbin" \
-    "/usr/local/bin"  \
-    "/usr/sbin"       \
-    "/usr/bin"        \
-    "/sbin"           \
-    "/bin"            \
-    "/usr/X11R6/bin"
+  "/usr/local/sbin" \
+  "/usr/local/bin"  \
+  "/usr/sbin"       \
+  "/usr/bin"        \
+  "/sbin"           \
+  "/bin"            \
+  "/usr/X11R6/bin"
 
 # 補完候補をキャッシュ
 zstyle ':completion:*' use-cache true #yes?
@@ -394,20 +394,20 @@ alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
 alias -s {mp3,frac}=audacious
 alias -s {html,htm,md}=firefox
 function extract() {
-    case $1 in
-        *.tar.gz|*.tgz) tar xzvf $1;;
-        *.tar.xz) tar Jxvf $1;;
-        *.zip) unzip $1;;
-        *.lzh) lha e $1;;
-        *.tar.bz2|*.tbz) tar xjvf $1;;
-        *.tar.Z) tar zxvf $1;;
-        *.gz) gzip -d $1;;
-        *.bz2) bzip2 -dc $1;;
-        *.Z) uncompress $1;;
-        *.tar) tar xvf $1;;
-        *.arj) unarj $1;;
-    esac
-    return 0
+  case $1 in
+    *.tar.gz|*.tgz) tar xzvf $1;;
+    *.tar.xz) tar Jxvf $1;;
+    *.zip) unzip $1;;
+    *.lzh) lha e $1;;
+    *.tar.bz2|*.tbz) tar xjvf $1;;
+    *.tar.Z) tar zxvf $1;;
+    *.gz) gzip -d $1;;
+    *.bz2) bzip2 -dc $1;;
+    *.Z) uncompress $1;;
+    *.tar) tar xvf $1;;
+    *.arj) unarj $1;;
+  esac
+  return 0
 }
 alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=extract
 
@@ -420,26 +420,26 @@ alias sudo='sudo '
 
 # Enable color support of ls and also add handy aliases
 if [[ -f "${HOME}/.dircolors" ]]; then
-    case "${OSTYPE}" in
-        darwin*)
-            eval "$(gdircolors -b ${HOME}/.dircolors)"
-            alias ls='gls -F --color=auto'
-            alias dir='gdir --color=auto'
-            alias vdir='gvdir --color=auto'
-            alias diff='gdiff --color=auto'
-            ;;
-        linux*)
-            eval "$(dircolors -b ${HOME}/.dircolors)"
+  case "${OSTYPE}" in
+    darwin*)
+      eval "$(gdircolors -b ${HOME}/.dircolors)"
+      alias ls='gls -F --color=auto'
+      alias dir='gdir --color=auto'
+      alias vdir='gvdir --color=auto'
+      alias diff='gdiff --color=auto'
+      ;;
+    linux*)
+      eval "$(dircolors -b ${HOME}/.dircolors)"
 
-            alias ls='ls -F --color=auto'
-            alias dir='dir --color=auto'
-            alias vdir='vdir --color=auto'
-            alias diff='diff --color=auto'
-            ;;
-    esac
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+      alias ls='ls -F --color=auto'
+      alias dir='dir --color=auto'
+      alias vdir='vdir --color=auto'
+      alias diff='diff --color=auto'
+      ;;
+  esac
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
@@ -456,12 +456,12 @@ alias tf='tree -f'
 # rm aliases
 alias rm='echo "notice: Please use the \`trash-put\`" && rm -i -v'
 alias del='rm -rf'
-if type trash-put &> /dev/null; then
-    alias tp='trash-put'
-    alias te='trash-empty'
-    alias tl='trash-list'
-    alias tr='trash-restore'
-    alias td='trash-rm'
+if type trash-put &> "/dev/null"; then
+  alias tp='trash-put'
+  alias te='trash-empty'
+  alias tl='trash-list'
+  alias tr='trash-restore'
+  alias td='trash-rm'
 fi
 
 # other aliases
@@ -471,7 +471,11 @@ alias ps='ps --sort=start_time'
 alias apv='appletviewer'
 alias x='exit'
 alias g='git'
-alias ov='/usr/local/bin/vim'  # original vim
+if [[ -f "/usr/local/bin/vim" ]]; then
+  alias ov="/usr/local/bin/vim"  # own vim
+elif type trash-put &> "/dev/null"; then
+  alias ov="/usr/bin/vim"  # original vim
+fi
 alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
@@ -487,7 +491,7 @@ alias gdrive_u='fusermount -u ${HOME}/google-drive'
 alias gdrive_r='rm -rf "${HOME}/.gdfuse/default/cache"'
 
 # cputmp alias
-alias cputmp='echo $(echo $(cat /sys/class/thermal/thermal_zone0/temp) / 1000 | bc) °C'
+alias cputmp='echo $(echo $(cat "/sys/class/thermal/thermal_zone0/temp") / 1000 | bc) °C'
 
 # gputmp alias
 alias gputmp='echo $(nvidia-settings -tq "[gpu:0]/GPUCoreTemp") °C'
@@ -508,16 +512,16 @@ alias update='sh -c "apt update && apt -y upgrade && apt -y autoremove"'
 # + Named Directories {{{
 function name_dir()
 {
-    local dir=$1
-    local name=$2
+  local dir=$1
+  local name=$2
 
-    if [[ -d "${dir}" ]]; then
-        hash -d ${name}=${dir}
+  if [[ -d "${dir}" ]]; then
+    hash -d ${name}=${dir}
     return 0
-    else
-        return 1
-    fi
-    return 0
+  else
+    return 1
+  fi
+  return 0
 }
 
 name_dir "${HOME}/.dotfiles/" dotfiles
@@ -536,8 +540,8 @@ bindkey -e
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
 if is-at-least 4.3.10; then
-    bindkey '^R' history-incremental-pattern-search-backward
-    bindkey '^S' history-incremental-pattern-search-forward
+  bindkey '^R' history-incremental-pattern-search-backward
+  bindkey '^S' history-incremental-pattern-search-forward
 fi
 # + }}}
 
@@ -551,8 +555,8 @@ fi
 # + Plugin Install {{{
 # Install zplug/zplug
 if [[ ! -f "${ZPLUG_HOME}/init.zsh" ]]; then
-    mkdir -p ${ZPLUG_HOME}
-    git clone 'https://github.com/zplug/zplug' "${ZPLUG_HOME}"
+  mkdir -p "${ZPLUG_HOME}"
+  git clone 'https://github.com/zplug/zplug' "${ZPLUG_HOME}"
 fi
 source "${ZPLUG_HOME}/init.zsh"
 
@@ -575,10 +579,10 @@ zplug 'Tarrasch/zsh-autoenv'
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
-    echo "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+  echo 'Install? [y/N]: '
+  if read -q; then
+    echo; zplug install
+  fi
 fi
 
 # Source plugins and add commands to ${PATH}
@@ -600,45 +604,45 @@ zplug load
 
 # ++ joel-porquet/zsh-dircolors-solarized {{{
 if zplug check 'joel-porquet/zsh-dircolors-solarized';then
-    setupsolarized dircolors.ansi-light
+  setupsolarized dircolors.ansi-light
 fi
 # ++ }}}
 
 # ++ junegunn/fzf-bin {{{
 if zplug check 'junegunn/fzf-bin';then
-    export FZF_DEFAULT_COMMAND=''
-    export FZF_DEFAULT_OPTS='--height 50% --ansi --border --exact --extended --exit-0 --inline-info --multi --reverse --select-1'
+  export FZF_DEFAULT_COMMAND=''
+  export FZF_DEFAULT_OPTS='--height 50% --ansi --border --exact --extended --exit-0 --inline-info --multi --reverse --select-1'
 fi
 # +++ fv - fuzzy open with vim from anywhere {{{
 fv() {
-    local file
-    
-    file="$(fzf)"
-    if [[ -n "${file}" ]]; then
-        vim "${file}"
-    fi
+  local file
+
+  file="$(fzf)"
+  if [[ -n "${file}" ]]; then
+    vim "${file}"
+  fi
 }
 # +++ }}}
 
 # +++ vg - fuzzy grep open via ag {{{
 vg() {
-    local file
+  local file
 
-    file="$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
+  file="$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
 
-    if [[ -n "${file}" ]]; then
-        vim "${file}"
-    fi
+  if [[ -n "${file}" ]]; then
+    vim "${file}"
+  fi
 }
 # +++ }}}
 
 # +++ fd - cd to selected directory {{{
 fd() {
-    local dir
-    dir=$(find ${1:-.} -path '*/\.*' -prune \
-        -o -type d -print 2> /dev/null | fzf +m) &&
-        cd "${dir}"
-    }
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+    -o -type d -print 2> "/dev/null" | fzf +m) &&
+    cd "${dir}"
+}
 # +++ }}}
 
 # +++ Git {{{
@@ -646,8 +650,8 @@ fd() {
 fbr() {
   local branches branch
   branches=$(git branch -vv) &&
-  branch=$(echo "${branches}" | fzf +m) &&
-  git checkout $(echo "${branch}" | awk '{print $1}' | sed "s/.* //")
+    branch=$(echo "${branches}" | fzf +m) &&
+    git checkout $(echo "${branch}" | awk '{print $1}' | sed "s/.* //")
 }
 # ++++ }}}
 
@@ -655,29 +659,31 @@ fbr() {
 fbrm() {
   local branches branch
   branches=$(git branch --all | grep -v HEAD) &&
-  branch=$(echo "${branches}" |
-           fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
-  git checkout $(echo "${branch}" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+    branch=$(echo "${branches}" |
+    fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
+    git checkout $(echo "${branch}" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 # ++++ }}}
 
 # ++++ flog - git commit browser {{{
 fshow() {
   git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
-                (grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-                {}
-FZF-EOF"
+    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+    fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+    --bind "ctrl-m:execute:
+  (grep -o '[a-f0-9]\{7\}' | head -1 |
+    xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+  {}
+  FZF-EOF"
 }
 # ++++ }}}
 # +++ }}}
 # ++ }}}
 
 # ++ junegunn/fzf {{{
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [[ -f ${HOME}/.fzf.zsh ]]; then
+  source ${HOME}/.fzf.zsh
+fi
 # ++ }}}
 
 # ++ mollifier/anyframe
@@ -686,26 +692,26 @@ FZF-EOF"
 
 # ++ ssh0/dot {{{
 if zplug check 'ssh0/dot';then
-    export DOT_REPO='https://github.com/K-Ganma/dotfiles.git'
-    export DOT_DIR="${HOME}/.dotfiles"
+  export DOT_REPO='https://github.com/K-Ganma/dotfiles.git'
+  export DOT_DIR="${HOME}/.dotfiles"
 fi
 # ++ }}}
 
 # ++ supercrabtree/k {{{
 if zplug check 'supercrabtree/k';then
-    source "${ZPLUG_REPOS}/supercrabtree/k/k.sh"
+  source "${ZPLUG_REPOS}/supercrabtree/k/k.sh"
 fi
 # ++ }}}
 
 # ++ zsh-users/zsh-autosuggestions {{{
 if zplug check 'zsh-users/zsh-autosuggestions';then
-    source "${ZPLUG_REPOS}/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  source "${ZPLUG_REPOS}/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 # }}}
 
 # ++ zsh-users/zsh-completions {{{
 if [[ -d "${ZPLUG_REPOS}/zsh-users/zsh-completions/src/" ]] ; then
-    export fpath=("${ZPLUG_REPOS}/zsh-users/zsh-completions/src/" ${fpath})
+  export fpath=("${ZPLUG_REPOS}/zsh-users/zsh-completions/src/" ${fpath})
 fi
 # ++ }}}
 
@@ -715,7 +721,7 @@ fi
 # }}}
 
 ## Profiling zsh shell scripts
-#if (which zprof > /dev/null 2>&1) ;then
+#if (which zprof > "/dev/null" 2>&1) ;then
 #  zprof
 #fi
 
