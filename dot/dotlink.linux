@@ -63,6 +63,13 @@ zshfiles/zshenv, .zshenv
 fonts,  .fonts
 
 #===========================================================================}}}
+# vivid:                                                                {{{
+#==============================================================================
+# (Some auto start configuration file)
+
+config/vivid/themes/tokyo-night.yml,           .config/vivid/themes/tokyo-night.yml
+
+#===========================================================================}}}
 # autostart:                                                                {{{
 #==============================================================================
 # (Some auto start configuration file)
