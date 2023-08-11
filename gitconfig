@@ -11,7 +11,8 @@
 [url "https://"]
 	insteadOf = git://
 [credential]
-	helper = /usr/share/doc/git/contrib/credential/netrc/git-credential-netrc
+	helper = /usr/local/bin/git-credential-manager
+	credentialStore = gpg
 [merge]
 	ff = false
 	tool = vimdiff
