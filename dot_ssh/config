@@ -1,0 +1,24 @@
+# https://man.openbsd.org/ssh_config
+Host *
+    # ssh-agent に鍵情報を保存
+    AddKeysToAgent yes
+    # ssh-agent への接続をリモートマシンから転送
+    ForwardAgent yes
+    # X11を転送
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    # ホスト鍵を known_hosts へ自動的に追加
+    StrictHostKeyChecking no
+    # パスワード認証を無効化
+    PasswordAuthentication no
+    # キーボードインタラクティブ認証を無効化
+    KbdInteractiveAuthentication no
+    # 1分でタイムアウト
+    ServerAliveInterval 60
+    # OpenSSH 8.8 以降、SHA-1 ハッシュ アルゴリズムを使用した RSA 署名がデフォルトでは無効になるため有効化
+    HostkeyAlgorithms +ssh-rsa
+	IdentityFile ~/.ssh/id_ed25519
+
+Host github github.com
+	HostName github.com
+	User git
