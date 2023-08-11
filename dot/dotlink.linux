@@ -67,7 +67,6 @@ fonts,  .fonts
 #==============================================================================
 # (Some auto start configuration file)
 
-#config/autostart/gpufnctrl.desktop,         -> local
 config/autostart/xmodmap.desktop,           .config/autostart/xmodmap.desktop
 
 #===========================================================================}}}
