@@ -65,7 +65,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 # + for ssh0/dot {{{
 if [[ -f "${HOME}/.config/dot" ]]; then
-  export DOT_REPO="https://github.com/K-Ganma/dotfiles.git"
+  export DOT_REPO="https://github.com/K-Gamma/dotfiles.git"
   export DOT_DIR="${HOME}/.dotfiles"
   fpath=(${HOME}/.config/dot ${fpath})
   source ${HOME}/.config/dot/dot.sh
@@ -144,7 +144,7 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # If set, aliases are expanded as described below under Aliases,
-# Aliases. This option is enabled by default for interactive shells. 
+# Aliases. This option is enabled by default for interactive shells.
 shopt -s expand_aliases
 # }}}
 

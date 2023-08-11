@@ -577,7 +577,7 @@ zinit lucid light-mode for \
 # + Plugins that be loaded "immediately" {{{
 # Dotfiles manager
 #zinit lucid light-mode for ssh0/dot
-#export DOT_REPO='https://github.com/K-Ganma/dotfiles.git';
+#export DOT_REPO='https://github.com/K-Gamma/dotfiles.git';
 #export DOT_DIR='${HOME}/.dotfiles'
 # => change to install by "manually"
 
@@ -621,7 +621,7 @@ _gen_fzf_default_opts() {
   # Comment and uncomment below for the light theme.
 
   # Solarized Dark color scheme for fzf
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS 
+  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS
     --color fg:-1,bg:-1,hl:$blue,fg+:$base2,bg+:$base02,hl+:$blue
     --color info:$yellow,prompt:$yellow,pointer:$base3,marker:$base3,spinner:$yellow
   "
