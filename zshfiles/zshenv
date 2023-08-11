@@ -31,13 +31,26 @@ export PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
 # TERM
 export TERM='xterm-256color'
 
-# Default dircolors
-export LSCOLORS='gxfxcxdxbxegedabagacad'
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-
 # XDG Base Directory Specification
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
+
+# Default dircolors
+case ${OSTYPE} in
+  *linux*)
+    LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+    if type vivid &> "/dev/null" && [[ -f "${XDG_CONFIG_HOME}/vivid/themes/tokyo-night.yml" ]]; then
+      LS_COLORS="$(vivid generate tokyo-night)"
+    fi
+    export ${LS_COLORS}
+    ;;
+  *darwin*)
+    export LSCOLORS='gxfxcxdxbxegedabagacad'
+    ;;
+  *cygwin*|*msys*)
+    ;;
+esac
+
 
 # Pager
 export PAGER='less -cm'
@@ -91,7 +104,7 @@ fi
 # Defaults to ~/.zplug.
 export ZPLUG_HOME="${ZDOTDIR}/.zplug"
 
-# zplug will used the firest element in this list as 
+# zplug will used the firest element in this list as
 # the interactive filter.
 # Defaults to fzf-tmux:fzf:peco:percol:zaw
 #export ZPLUG_FILTER='fzf-tmux:fzf:peco:percol:zaw'
