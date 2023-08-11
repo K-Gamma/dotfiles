@@ -185,15 +185,6 @@ hook_add = '''
           \ })
   endif
 
-  " LaTeX
-  if  executable('texlab')
-    autocmd User lsp_setup call lsp#register_server({
-          \ 'name': 'texlab',   
-          \ 'cmd': {server_info->['texlab']},
-          \ 'whitelist': ['bib','tex'],
-          \ })
-  endif
-
   " Highlight
   let g:lsp_highlight_references_enabled = 1
 

@@ -57,12 +57,5 @@ vimfiles,   .vim
 vimfiles/init.vim,  .config/nvim/init.vim
 
 #===========================================================================}}}
-# latexmk                                                                   {{{
-#==============================================================================
-# Latexmk completely automates the process of generating a LaTeX document.
-
-latexmkrc, .latexmkrc
-
-#===========================================================================}}}
 
 # vim: fdm=marker fdc=3 fdl=0

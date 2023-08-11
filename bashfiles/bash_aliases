@@ -63,11 +63,6 @@ alias cputmp='cat /sys/class/thermal/thermal_zone0/temp | echo $(cat) / 1000  | 
 # gputmp alias
 alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "{print \$4}" | tr -d . | echo $(cat)°C'
 
-# latexmk aliases
-alias lmk='latexmk'
-alias lmkp='latexmk -pv'
-alias lmkc='latexmk -c'
-
 # apt update & upgrade & autoremove alias
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 

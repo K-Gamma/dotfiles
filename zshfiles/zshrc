@@ -496,11 +496,6 @@ alias cputmp='echo $(echo $(cat "/sys/class/thermal/thermal_zone0/temp") / 1000 
 # gputmp alias
 alias gputmp='echo $(nvidia-settings -tq "[gpu:0]/GPUCoreTemp") °C'
 
-# latexmk aliases
-alias lmk='latexmk'
-alias lmkp='latexmk -pv'
-alias lmkc='latexmk -c'
-
 # python
 alias pip='pip3'
 alias python='python3'
