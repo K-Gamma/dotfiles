@@ -13,20 +13,7 @@ export PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
 export TERM='xterm-256color'
 
 # Default dircolors
-case ${OSTYPE} in
-  *linux*)
-    LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-    if type vivid &> "/dev/null" && [[ -f "${XDG_CONFIG_HOME}/vivid/themes/tokyo-night.yml" ]]; then
-      LS_COLORS="$(vivid generate tokyo-night)"
-    fi
-    export ${LS_COLORS}
-    ;;
-  *darwin*)
-    export LSCOLORS='gxfxcxdxbxegedabagacad'
-    ;;
-  *cygwin*|*msys*)
-    ;;
-esac
+export LSCOLORS='gxfxcxdxbxegedabagacad'
 
 # XDG Base Directory Specification
 export XDG_CONFIG_HOME="${HOME}/.config"
