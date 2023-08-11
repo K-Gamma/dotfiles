@@ -419,15 +419,18 @@ alias man=' man'
 alias sudo='sudo '
 
 # Enable color support of ls and also add handy aliases
-if [[ -x /usr/bin/dircolors ]]; then
+if [[ -f "${HOME}/.dircolors" ]]; then
   case "${OSTYPE}" in
     darwin*)
+      eval "$(gdircolors -b ${HOME}/.dircolors)"
       alias ls='gls -F --color=auto'
       alias dir='gdir --color=auto'
       alias vdir='gvdir --color=auto'
       alias diff='gdiff --color=auto'
       ;;
     linux*)
+      eval "$(dircolors -b ${HOME}/.dircolors)"
+
       alias ls='ls -F --color=auto'
       alias dir='dir --color=auto'
       alias vdir='vdir --color=auto'
@@ -572,6 +575,11 @@ zinit lucid light-mode for \
 #export DOT_REPO='https://github.com/K-Gamma/dotfiles.git';
 #export DOT_DIR='${HOME}/.dotfiles'
 # => change to install by "manually"
+
+# dircolors settings
+zinit lucid light-mode for \
+    atload"setupsolarized dircolors.ansi-light" \
+        joel-porquet/zsh-dircolors-solarized
 
 # + }}}
 
