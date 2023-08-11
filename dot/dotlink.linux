@@ -77,12 +77,5 @@ config/vivid/themes/tokyo-night.yml,           .config/vivid/themes/tokyo-night.
 config/autostart/xmodmap.desktop,           .config/autostart/xmodmap.desktop
 
 #===========================================================================}}}
-# dircolors:                                                                {{{
-#==============================================================================
-# dircolors is a file set up dircolor.
-
-dircolors, .dircolors
-
-#===========================================================================}}}
 
 # vim: fdm=marker fdc=3 fdl=0
