@@ -299,14 +299,14 @@ fi
 # ++ }}}
 
 # ++ 'cdr' settings (Required before 'zplug load') {{{
-if [[ ! -d "${XDG_CACHE_HOME:-${HOME}/.cache}/shell" ]]; then
-  mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/shell"
+if [[ ! -d "${XDG_CACHE_HOME:-${HOME}/.cache}/zsh" ]]; then
+  mkdir -p "${XDG_CACHE_HOME:-${HOME}/.cache}/zsh"
 fi
 if is-at-least 4.3.10; then
   add-zsh-hook chpwd chpwd_recent_dirs
   zstyle ':chpwd:*' recent-dirs-max 500
   zstyle ':chpwd:*' recent-dirs-default true
-  zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/chpwd-recent-dirs"
+  zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/chpwd-recent-dirs"
   zstyle ':chpwd:*' recent-dirs-pushd true
 fi
 # ++ }}}
@@ -358,7 +358,7 @@ zstyle ':completion:*:sudo:*' command-path \
 
 # 補完候補をキャッシュ
 zstyle ':completion:*' use-cache true #yes?
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-${HOME}/.cache}/shell/completion-cache-dirs"
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-${HOME}/.cache}/zsh/zcompcache"
 
 # 詳細情報を非表示
 zstyle ':completion:*' verbose no
