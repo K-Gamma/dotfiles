@@ -1,3 +1,5 @@
+Include ~/.ssh/config.d/*.conf
+
 # https://man.openbsd.org/ssh_config
 Host *
     # ssh-agent に鍵情報を保存
@@ -17,8 +19,3 @@ Host *
     ServerAliveInterval 60
     # OpenSSH 8.8 以降、SHA-1 ハッシュ アルゴリズムを使用した RSA 署名がデフォルトでは無効になるため有効化
     HostkeyAlgorithms +ssh-rsa
-	IdentityFile ~/.ssh/id_ed25519
-
-Host github github.com
-	HostName github.com
-	User git
