@@ -97,12 +97,6 @@ export PYTHON_INCLUDE_DIRS="/usr/include/python2.7"
 export PYTHON_LIBRARYS="/usr/lib/x86_64-linux-gnu/libpython2.7.so"
 # + }}}
 
-# + for TeX Live {{{
-export PATH="${PATH}:/usr/local/texlive/2018/bin/x86_64-linux"
-export INFOPATH="${INFOPATH}:/usr/local/texlive/2018/texmf-dist/doc/info"
-export MANPATH="${MANPATH}:/usr/local/texlive/2018/texmf-dist/doc/man"
-# + }}}
-
 # + for virtualenvwrapper {{{
 if [[ -f "/usr/local/bin/virtualenvwrapper.sh" ]]; then
   export WORKON_HOME="${HOME}/.virtualenvs"
