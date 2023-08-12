@@ -25,15 +25,28 @@ unsetopt global_rcs
 # Language
 export LANG='ja_JP.UTF-8'
 
+# XDG Base Directory Specification: https://specifications.freedesktop.org/basedir-spec/latest/
+export XDG_DATA_HOME="${HOME}/.local/share"
+export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_STATE_HOME="${HOME}/.local/state"
+export XDG_CACHE_HOME="${HOME}/.cache"
+export XDG_BIN_HOME="${HOME}/.local/bin" # Not officially in the specification
+
+# xdg-user-dirs-update
+export XDG_DESKTOP_DIR="${HOME}/Desktop"
+export XDG_DOWNLOAD_DIR="${HOME}/Downloads"
+export XDG_TEMPLATES_DIR="${HOME}/Templates"
+export XDG_PUBLICSHARE_DIR="${HOME}/Public"
+export XDG_DOCUMENTS_DIR="${HOME}/Documents"
+export XDG_MUSIC_DIR="${HOME}/Music"
+export XDG_PICTURES_DIR="${HOME}/Pictures"
+export XDG_VIDEOS_DIR="${HOME}/Videos"
+
 # PATH
-export PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
+export PATH="${PATH}:${XDG_BIN_HOME}"
 
 # TERM
 export TERM='xterm-256color'
-
-# XDG Base Directory Specification
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_CACHE_HOME="${HOME}/.cache"
 
 # Default dircolors
 case ${OSTYPE} in
@@ -69,7 +82,7 @@ export JLESSCHARSET='utf-8'
 
 # + Zsh {{{
 # Specify the directory to put the Zsh files.
-export ZDOTDIR="${HOME}/.zsh"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
 # Set of characters to be treated as a pattern during spelling correction.
 export CORRECT_IGNORE='_*'
@@ -85,7 +98,10 @@ export LISTMAX=0
 
 # ++ History {{{
 # Specify the file to save history.
-export HISTFILE="${ZDOTDIR}/.zsh_history"
+if [[ ! -d "${XDG_STATE_HOME}/zsh" ]]; then
+  mkdir -p "${XDG_STATE_HOME}/zsh"
+fi
+export HISTFILE="${XDG_STATE_HOME}/zsh/history"
 
 # Set the number of history stored in memory.
 export HISTSIZE=1000
@@ -102,7 +118,7 @@ fi
 # ++ zplug/zplug {{{
 # zplug will store/load packages in this directory.
 # Defaults to ~/.zplug.
-export ZPLUG_HOME="${ZDOTDIR}/.zplug"
+export ZPLUG_HOME="${XDG_CONFIG_HOME}/zplug"
 
 # zplug will used the firest element in this list as
 # the interactive filter.
