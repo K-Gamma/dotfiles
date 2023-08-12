@@ -120,10 +120,13 @@ export CPATH="${CPATH}:${CUDA_HOME}/samples/common/inc:${CUDA_HOME}/include"
 
 # + for Ruby {{{
 # for rbenv
-export PATH="${PATH}:${HOME}/.rbenv/bin"
-eval "$(rbenv init -)"
-# for ruby-build
-export PATH="${PATH}:${HOME}/.rbenv/plugins/ruby-build/bin"
+if [[ -d "${HOME}/.rbenv" ]]; then
+  export RBENV_ROOT="${HOME}/.rbenv"
+  export PATH="${PATH}:${RBENV_ROOT}/bin"
+  eval "$(rbenv init -)"
+  # for ruby-build
+  export PATH="${PATH}:${RBENV_ROOT}/plugins/ruby-build/bin"
+fi
 # + }}}
 
 # + for Rust {{{
