@@ -570,12 +570,6 @@ zinit lucid light-mode for \
 # + }}}
 
 # + Plugins that be loaded "immediately" {{{
-# Dotfiles manager
-#zinit lucid light-mode for ssh0/dot
-#export DOT_REPO='https://github.com/K-Gamma/dotfiles.git';
-#export DOT_DIR='${HOME}/.dotfiles'
-# => change to install by "manually"
-
 # dircolors settings
 zinit lucid light-mode for \
     atload"setupsolarized dircolors.ansi-light" \
