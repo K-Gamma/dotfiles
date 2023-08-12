@@ -471,6 +471,7 @@ alias ps='ps --sort=start_time'
 alias apv='appletviewer'
 alias x='exit'
 alias g='git'
+alias gn='git --no-pager'
 if [[ -f "/usr/local/bin/vim" ]]; then
   alias ov="/usr/local/bin/vim"  # own vim
 elif type trash-put &> "/dev/null"; then
