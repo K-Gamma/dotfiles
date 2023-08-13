@@ -1,4 +1,7 @@
 # https://git-scm.com/docs/git-config#_configuration_file
+[advice]
+	statusHints = false
+
 [core]
 	quotepath = false # 日本語コミットの文字コード化を防ぐ
 	editor = vim
