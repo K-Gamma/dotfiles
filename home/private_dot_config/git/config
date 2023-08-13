@@ -15,6 +15,7 @@
 	credentialStore = gpg
 
 [diff]
+	algorithm = histogram
 	colorMoved = dimmed-zebra
 	guitool = vscode-diff
 
