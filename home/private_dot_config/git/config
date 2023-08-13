@@ -3,6 +3,9 @@
 	statusHints = false
 
 [core]
+{{- if eq .chezmoi.os "darwin"}}
+	precomposeUnicode = true
+{{- end}}
 	quotepath = false # 日本語コミットの文字コード化を防ぐ
 	editor = nvim
 	pager = less -cm
