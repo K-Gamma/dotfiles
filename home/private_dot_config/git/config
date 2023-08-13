@@ -32,7 +32,7 @@
 
 [merge]
 	ff = false
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 	tool = vimdiff
 	guitool = vscode-merge
 
