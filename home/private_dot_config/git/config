@@ -4,10 +4,6 @@
 	editor = vim
 	pager = less -cm
 
-[color]
-	ui = true
-	diff = true
-
 [credential]
 	helper = /usr/local/bin/git-credential-manager
 	credentialStore = gpg
@@ -17,9 +13,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-
-[gui]
-	encoding = utf-8 # 文字コード設定
 
 [diff]
 	guitool = vscode-diff
@@ -42,9 +35,6 @@
 [mergetool]
 	guiDefault = auto
 	prompt = false
-
-[receive]
-	denyNonFastforwards = false # 強制pushを許可
 
 [pull]
 	ff = only
