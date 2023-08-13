@@ -8,7 +8,7 @@
 {{- end}}
 	quotepath = false
 	editor = nvim
-	pager = less -cm
+	pager = delta
 
 [credential]
 	helper = /usr/local/bin/git-credential-manager
@@ -21,6 +21,7 @@
 	required = true
 
 [diff]
+	colorMoved = dimmed-zebra
 	guitool = vscode-diff
 
 [difftool "vscode-diff"]
@@ -28,6 +29,9 @@
 
 [difftool]
 	guiDefault = auto
+
+[interactive]
+	diffFilter = delta --color-only
 
 [merge]
 	ff = false
@@ -54,6 +58,7 @@
 [include]
 	path = config.d/user.ini
 	path = config.d/aliases.ini
+	path = config.d/delta.ini
 
 # Please add the settings you want to overwrite.
 [include]
