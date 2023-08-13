@@ -21,12 +21,26 @@
 [gui]
 	encoding = utf-8 # 文字コード設定
 
+[diff]
+	guitool = vscode-diff
+
+[difftool "vscode-diff"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+
+[difftool]
+	guiDefault = auto
+
 [merge]
 	ff = false
 	conflictstyle = diff3
 	tool = vimdiff
+	guitool = vscode-merge
+
+[mergetool "vscode-merge"]
+	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 
 [mergetool]
+	guiDefault = auto
 	prompt = false
 
 [receive]
