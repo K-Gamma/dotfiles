@@ -4,7 +4,7 @@
 
 [core]
 	quotepath = false # 日本語コミットの文字コード化を防ぐ
-	editor = vim
+	editor = nvim
 	pager = less -cm
 
 [credential]
