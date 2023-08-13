@@ -35,8 +35,11 @@
 [pull]
 	ff = only
 
-[url "https://"]
-	insteadOf = git://
+[url "https://github.com/"]
+	insteadOf = http://github.com/
+	insteadOf = git@github.com:
+	insteadOf = git://github.com/
+	insteadOf = gh://
 
 [include]
 	path = config.d/user.ini
