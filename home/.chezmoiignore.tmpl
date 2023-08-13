@@ -1,17 +1,20 @@
-{{ if eq .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "darwin" }}
 # macOS
 
-{{ else if eq .chezmoi.os "linux" }}
-{{   if eq .chezmoi.osRelease.id "debian" }}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   if eq .chezmoi.osRelease.id "debian" }}
 # Debian
 
-{{   else if eq .chezmoi.osRelease.id "fedora" }}
+{{-   else if eq .chezmoi.osRelease.id "fedora" }}
 # Fedora
 
-{{   end }}
-{{ else if eq .chezmoi.os "windows" }}
+{{-   else if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+# WSL
+
+{{-   end -}}
+{{- else if eq .chezmoi.os "windows" }}
 # Windows
 .Xmodmap
 .config/autostart/xmodmap.desktop
 
-{{ end }}
+{{- end }}
