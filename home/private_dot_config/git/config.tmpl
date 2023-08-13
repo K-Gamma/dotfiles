@@ -10,9 +10,13 @@
 	editor = nvim
 	pager = delta
 
-[credential]
-	helper = /usr/local/bin/git-credential-manager
-	credentialStore = gpg
+{{- $ghPath := lookPath "gh" }}
+{{- if $ghPath}}
+[credential "https://github.com"]
+	helper = !{{ $ghPath }} auth git-credential
+[credential "https://gist.github.com"]
+	helper = !{{ $ghPath }} auth git-credential
+{{- end }}
 
 [diff]
 	algorithm = histogram
