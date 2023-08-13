@@ -14,12 +14,6 @@
 	helper = /usr/local/bin/git-credential-manager
 	credentialStore = gpg
 
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-
 [diff]
 	colorMoved = dimmed-zebra
 	guitool = vscode-diff
@@ -29,6 +23,13 @@
 
 [difftool]
 	guiDefault = auto
+
+# Added by `git lfs install`
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 
 [interactive]
 	diffFilter = delta --color-only
