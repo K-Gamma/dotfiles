@@ -1,4 +1,4 @@
-# https://git-scm.com/docs/git-config#_configuration
+# https://git-scm.com/docs/git-config#_configuration_file
 [alias]
 	al = config --get-regexp alias.* # エイリアス一覧を確認
 	# add
