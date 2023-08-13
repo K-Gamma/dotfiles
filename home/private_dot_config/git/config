@@ -1,3 +1,4 @@
+# https://git-scm.com/docs/git-config#_configuration
 [user]
 	name = K-Gamma
 	email = ganma.kato@gmail.com
