@@ -1,31 +1,4 @@
 # https://git-scm.com/docs/git-config#_configuration
-[user]
-	name = K-Gamma
-	email = ganma.kato@gmail.com
-[color]
-	ui = true
-	diff = true
-[core]
-	pager = less -cm
-	quotepath = false
-	editor = vim
-[url "https://"]
-	insteadOf = git://
-[credential]
-	helper = /usr/local/bin/git-credential-manager
-	credentialStore = gpg
-[merge]
-	ff = false
-	tool = vimdiff
-	conflictstyle = diff3
-[pull]
-	ff = only
-[gui]
-	encoding = utf-8 # 文字コード設定
-[receive]
-	denyNonFastforwards = false # 強制pushを許可
-[core]
-	quotepath = false # 日本語コミットの文字コード化を防ぐ
 [alias]
 	al = config --get-regexp alias.* # エイリアス一覧を確認
 	# add
@@ -74,10 +47,46 @@
 	lga = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	# archive
 	ac = !git archive HEAD > `git symbolic-ref --short HEAD`.tar.gz
+
+[core]
+	quotepath = false # 日本語コミットの文字コード化を防ぐ
+	editor = vim
+	pager = less -cm
+
+[color]
+	ui = true
+	diff = true
+
+[credential]
+	helper = /usr/local/bin/git-credential-manager
+	credentialStore = gpg
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
+[gui]
+	encoding = utf-8 # 文字コード設定
+
+[merge]
+	ff = false
+	conflictstyle = diff3
+	tool = vimdiff
+
 [mergetool]
 	prompt = false
+
+[receive]
+	denyNonFastforwards = false # 強制pushを許可
+
+[pull]
+	ff = only
+
+[url "https://"]
+	insteadOf = git://
+
+[user]
+	name = K-Gamma
+	email = ganma.kato@gmail.com
