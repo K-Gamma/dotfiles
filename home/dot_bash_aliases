@@ -67,5 +67,9 @@ alias gputmp='nvidia-settings -q "[gpu:0]/GPUCoreTemp" | grep Attribute  | awk "
 # apt update & upgrade & autoremove alias
 alias sudo_update='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 
+# for VSCode - insider
+if type code-insiders &>/dev/null; then
+  alias code=code-insiders
+fi
 
 # vim: ft=sh fdm=marker fdc=3 fdl=0

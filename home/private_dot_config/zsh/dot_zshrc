@@ -503,6 +503,11 @@ alias python='python3'
 
 # apt update & upgrade & autoremove alias
 alias update='sh -c "apt update && apt -y upgrade && apt -y autoremove"'
+
+# for VSCode - insider
+if type code-insiders &>/dev/null; then
+  alias code=code-insiders
+fi
 # + }}}
 
 # + Named Directories {{{
