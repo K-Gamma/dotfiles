@@ -84,7 +84,7 @@ shopt -s xpg_echo
 #echo "%{[38;5;045m%}%n@%m${reset}:%{[38;5;250m%}%~${reset}\$ "
 ## +++ PROMPT Setting {{{
 #function left-prompt {
-#    local first='025m%}'        # Text color of the user and host name 
+#    local first='025m%}'        # Text color of the user and host name
 #    local first_b='254m%}'      # Background color of the user and host name
 #    local second='007m%}'       # Text color of the current directory
 #    local second_b='238m%}'     # Background color of the current directory
