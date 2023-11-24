@@ -165,4 +165,9 @@ if [ -f "${HOME}/.fzf.bash" ]; then
   source "${HOME}/.fzf.bash"
 fi
 
+# source the local rc
+if [[ -f "${HOME}/.bashrc.local" ]]; then
+  source "${HOME}/.bashrc.local"
+fi
+
 # vim: fdm=marker fdc=3 fdl=0
