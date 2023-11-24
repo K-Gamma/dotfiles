@@ -160,6 +160,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-[ -f ${HOME}/.fzf.bash ] && source ${HOME}/.fzf.bash
+# for fzf
+if [ -f "${HOME}/.fzf.bash" ]; then
+  source "${HOME}/.fzf.bash"
+fi
 
 # vim: fdm=marker fdc=3 fdl=0
