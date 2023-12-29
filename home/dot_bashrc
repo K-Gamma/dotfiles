@@ -176,6 +176,12 @@ if [ -f "${HOME}/.fzf.bash" ]; then
   source "${HOME}/.fzf.bash"
 fi
 
+# activate rtx
+if type rtx &>/dev/null; then
+  eval "$(rtx activate bash)"
+  export RTX_CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/rtx"
+fi
+
 # source the local rc
 if [[ -f "${HOME}/.bashrc.local" ]]; then
   source "${HOME}/.bashrc.local"
