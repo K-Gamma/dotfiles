@@ -19,6 +19,12 @@ if is-at-least 4.3.10; then
   autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 fi
 
+# for brew
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
 # completion
 autoload -U compinit; compinit -C
 

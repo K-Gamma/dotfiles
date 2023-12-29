@@ -137,6 +137,10 @@ export PATH="${PATH}:$HOME/.cargo/bin"
 export PATH="${PATH}:/opt/"
 # + }}}
 
+# + for Homebrew {{{
+if [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 # }}}
 
 # }}}
