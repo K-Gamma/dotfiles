@@ -721,6 +721,15 @@ zinit wait lucid light-mode for \
 # + }}}
 # }}}
 
+# Applications Settings {{{
+# + activate rtx {{{
+if type rtx &>/dev/null; then
+  eval "$(rtx activate zsh)"
+  export RTX_CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/rtx"
+fi
+# + }}}
+# }}}
+
 ## Profiling zsh shell scripts
 #if (which zprof > "/dev/null" 2>&1) ;then
 #  zprof
