@@ -36,7 +36,7 @@ export LSCOLORS='gxfxcxdxbxegedabagacad'
 export PAGER='less -cm'
 
 # Editor
-if type nvim &> "/dev/null"; then
+if type nvim &>"/dev/null"; then
   export EDITOR='nvim'
 else
   export EDITOR='vim'
