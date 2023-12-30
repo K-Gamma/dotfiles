@@ -590,8 +590,7 @@ zinit lucid light-mode for \
 # Fuzzy Finder and Plugins that use it
 zinit wait lucid pack"bgn-binary" for fzf  # https://github.com/Zsh-Packages/fzf
 zinit wait lucid light-mode for \
-    b4b4r07/enhancd \
-    mollifier/anyframe  # https://qiita.com/mollifier/items/81b18c012d7841ab33c3
+    b4b4r07/enhancd
 # ++ Option Settings {{{
 export ENHANCD_FILTER='fzf'
 export FZF_DEFAULT_OPTS='--multi --height=50% --layout=reverse --border --info=inline --prompt="$ " --pointer="> " --marker="*" --exit-0 --select-1'
