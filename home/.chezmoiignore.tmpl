@@ -1,18 +1,18 @@
-{{- if eq .chezmoi.os "darwin" }}
-# macOS
+{{- if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+{{ end }}
 
-{{- else if eq .chezmoi.os "linux" -}}
-{{-   if eq .chezmoi.osRelease.id "debian" }}
-# Debian
+{{- if ne .chezmoi.os "linux" }}
+{{-   if ne .chezmoi.osRelease.id "debian" }}
+.chezmoiscripts/linux/debian/**
+{{-   end }}
+{{-   if ne .chezmoi.osRelease.id "fedora" }}
+.chezmoiscripts/linux/fedora/**
+{{-   end }}
+{{-   if not (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+{{-   end }}
+{{- end }}
 
-{{-   else if eq .chezmoi.osRelease.id "fedora" }}
-# Fedora
-
-{{-   else if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-# WSL
-
-{{-   end -}}
-{{- else if eq .chezmoi.os "windows" }}
-# Windows
-
+{{- if ne .chezmoi.os "windows" }}
+.chezmoiscripts/windows/**
 {{- end }}
