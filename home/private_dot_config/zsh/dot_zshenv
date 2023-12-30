@@ -55,7 +55,7 @@ case ${OSTYPE} in
   if type vivid &>"/dev/null" && [[ -f "${XDG_CONFIG_HOME}/vivid/themes/tokyo-night.yml" ]]; then
     LS_COLORS="$(vivid generate tokyo-night)"
   fi
-  export ${LS_COLORS}
+  export LS_COLORS
   ;;
 *darwin*)
   export LSCOLORS='gxfxcxdxbxegedabagacad'
