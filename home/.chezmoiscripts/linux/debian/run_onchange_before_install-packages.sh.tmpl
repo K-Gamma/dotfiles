@@ -54,8 +54,12 @@ echo "deb [signed-by=/etc/apt/keyrings/rtx-archive-keyring.asc arch={{ .chezmoi.
 {{ $sudo }}apt-get update
 {{ $sudo }}apt-get install -y {{ $packages | join " " }}
 
-{{ if and (lookPath "snap") (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
-{{   range $snaps }}
+{{- if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
+echo -e "\033[33mWARNING: Omit "snap instal".  Please install \"{{ $snaps | join "\", \"" }}\" Manually\033[0m"
+{{- else }}
+{{-   if lookPath "snap" }}
+{{-     range $snaps }}
 ( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install {{ . }}
-{{   end }}
-{{ end }}
+{{-     end }}
+{{-   end}}
+{{- end }}
