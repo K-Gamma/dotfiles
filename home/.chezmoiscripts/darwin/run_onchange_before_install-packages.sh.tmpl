@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $brews := list
+     "bat"
+     "bitwarden-cli"
+     "bottom"
+     "duf"
+     "dust"
+     "eza"
+     "fd"
+     "fzf"
+     "genact"
+     "gh"
+     "git"
+     "git-delta"
+     "git-lfs"
+     "gnu-units"
+     "gnupg"
+     "gping"
+     "jq"
+     "navi"
+     "pastel"
+     "pinentry-mac"
+     "ripgrep"
+     "rtx"
+     "shellcheck"
+     "tmux"
+     "vivid"
+     "wget"
+     "xsv"
+     "zoxide"
+     "zstd" -}}
+{{ $casks := list
+     "alt-tab"
+     "hammerspoon"
+     "iterm2"
+     "karabiner-elements"
+     "visual-studio-code" -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
