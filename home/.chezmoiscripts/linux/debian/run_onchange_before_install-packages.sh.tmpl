@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $packages := list
+     "bat"
+     "duf"
+     "build-essential"
+     "eza"
+     "fd-find"
+     "fzf"
+     "gh"
+     "git"
+     "git-lfs"
+     "gping"
+     "jq"
+     "ripgrep"
+     "rtx"
+     "shellcheck"
+     "zoxide"
+     "zsh"
+     "zstd" -}}
+{{ $snaps := list
+     "bw"
+     "dust" -}}
+
+{{ $sudo := "sudo " -}}
+{{ if eq .chezmoi.username "root" -}}
+{{   $sudo = "" -}}
+{{ end -}}
+
+{{ $sudo }}install -dm 755 /etc/apt/keyrings
+
+# for code
+{{ $sudo }}curl -fsSL https://packages.microsoft.com/keys/microsoft.asc -o /etc/apt/keyrings/microsoft.asc
+echo "deb [signed-by=/etc/apt/keyrings/microsoft.asc arch={{ .chezmoi.arch }}] https://packages.microsoft.com/repos/code stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/vscode.list
+
+# for eza
+{{ $sudo }}curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/deb.asc -o /etc/apt/keyrings/gierens.asc
+echo "deb [signed-by=/etc/apt/keyrings/gierens.asc arch={{ .chezmoi.arch }}] http://deb.gierens.de stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/gierens.list
+
+# for gh
+{{ $sudo }}curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg -o /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg arch={{ .chezmoi.arch }}] https://cli.github.com/packages stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/github-cli.list
+
+# for gping
+{{ $sudo }}curl -fsSL https://azlux.fr/repo.gpg.key -o /etc/apt/keyrings/azlux.asc
+echo "deb [signed-by=/etc/apt/keyrings/azlux.asc arch={{ .chezmoi.arch }}] https://packages.azlux.fr/debian/ bookworm main" | {{ $sudo}}tee /etc/apt/sources.list.d/azlux.list
+
+# for rtx
+{{ $sudo }}curl -fsSL https://rtx.jdx.dev/gpg-key.pub -o /etc/apt/keyrings/rtx-archive-keyring.asc
+echo "deb [signed-by=/etc/apt/keyrings/rtx-archive-keyring.asc arch={{ .chezmoi.arch }}] https://rtx.jdx.dev/deb stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/rtx.list
+
+{{ $sudo }}apt-get update
+{{ $sudo }}apt-get install -y {{ $packages | join " " }}
+
+{{ if and (lookPath "snap") (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
+{{   range $snaps }}
+( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install {{ . }}
+{{   end }}
+{{ end }}
