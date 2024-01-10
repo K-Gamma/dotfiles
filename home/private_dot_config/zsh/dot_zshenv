@@ -96,7 +96,7 @@ export LISTMAX=0
 
 # ++ History {{{
 # Specify the file to save history.
-export HISTFILE="${XDG_STATE_HOME}/zsh/history"
+export HISTFILE="${XDG_STATE_HOME}/zsh/.zsh_history"
 
 # Set the number of history stored in memory.
 export HISTSIZE=1000
