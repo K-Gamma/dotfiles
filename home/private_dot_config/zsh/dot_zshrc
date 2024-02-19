@@ -158,9 +158,6 @@ setopt clobber
 # Try to correct the spelling of commands.
 setopt correct
 
-# Try to correct the spelling of all arguments in a line.
-setopt correct_all
-
 # Don't use 'C-q' and 'C-s'.
 setopt no_flow_control
 
