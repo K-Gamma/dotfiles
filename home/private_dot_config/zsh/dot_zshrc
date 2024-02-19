@@ -689,6 +689,12 @@ fi
 # + }}}
 # }}}
 
+# Local Settings {{{
+if [[ -f "${ZDOTDIR}/.zshrc.local" ]]; then
+  source "${ZDOTDIR}/.zshrc.local"
+fi
+# }}}
+
 ## Profiling zsh shell scripts
 #if (which zprof > "/dev/null" 2>&1) ;then
 #  zprof
