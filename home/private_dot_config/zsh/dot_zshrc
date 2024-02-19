@@ -681,10 +681,10 @@ zinit wait lucid light-mode for \
 # }}}
 
 # Applications Settings {{{
-# + activate rtx {{{
-if type rtx &>/dev/null; then
-  eval "$(rtx activate zsh)"
-  export RTX_CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/rtx"
+# + activate mise {{{
+if type mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+  export MISE_CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/mise"
 fi
 # + }}}
 # }}}
