@@ -51,7 +51,17 @@ export XDG_PICTURES_DIR="${HOME}/Pictures"
 export XDG_VIDEOS_DIR="${HOME}/Videos"
 
 # PATH
-export PATH="${PATH}:${XDG_BIN_HOME}"
+path=(
+  /usr/local/bin(N-/)
+  /usr/local/sbin(N-/)
+  ${XDG_BIN_HOME}(N-/)
+  ${path}
+)
+
+manpath=(
+  /usr/local/share/man(N-/)
+  ${manpath}
+)
 
 # TERM
 export TERM='xterm-256color'

@@ -220,7 +220,7 @@ setopt zle
 typeset -ga debian_missing_features
 
 # Avoid duplication of ${PATH}
-typeset -U path PATH
+typeset -U path cdpath fpath manpath
 # + }}}
 
 # TODO: adjustment
