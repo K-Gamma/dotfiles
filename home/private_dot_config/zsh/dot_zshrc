@@ -9,6 +9,11 @@ if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ $(readlink "${ZDOTDIR}/.zshrc") -nt 
 fi
 #}}}
 
+# in ~/.zshenv, executed `unsetopt global_rcs` and ignored /etc/zshrc
+if [ -r /etc/zshrc ]; then
+  source /etc/zshrc
+fi
+
 # Build-in Function Settings {{{
 # TODO: adjustment
 # + Autoload {{{
