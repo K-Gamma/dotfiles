@@ -151,22 +151,6 @@ if [[ ${UID} == 0 ]]; then
   export SAVEHIST=0
 fi
 # ++ }}}
-
-# ++ zplug/zplug {{{
-# zplug will store/load packages in this directory.
-# Defaults to ~/.zplug.
-export ZPLUG_HOME="${XDG_CONFIG_HOME}/zplug"
-
-# zplug will used the firest element in this list as
-# the interactive filter.
-# Defaults to fzf-tmux:fzf:peco:percol:zaw
-#export ZPLUG_FILTER='fzf-tmux:fzf:peco:percol:zaw'
-
-# You can set sudo password for zplug's hook-build tag.
-# However, this variable should not be managed in dotfiles and so on.
-# Defaults to ''.
-#export ZPLUG_SUDO_PASSWORD=''
-# ++ }}}
 # + }}}
 
 # + for GCC {{{
