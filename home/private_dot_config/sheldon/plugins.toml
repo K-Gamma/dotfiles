@@ -29,6 +29,7 @@ github = "zsh-users/zsh-completions"
 # https://github.com/zsh-users/zsh-autosuggestions
 [plugins.zsh-autosuggestions]
 apply = ["source"]
+branch = "develop"
 github = "zsh-users/zsh-autosuggestions"
 
 # https://github.com/junegunn/fzf-git.sh
