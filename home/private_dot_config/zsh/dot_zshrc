@@ -512,63 +512,6 @@ fi
 
 # TODO: addition
 # + Functions {{{
-# ++ fzf's Functions {{{
-# +++ fv - fuzzy open with vim from anywhere {{{
-fv() {
-  local file
-
-  file="$(fzf)"
-  if [[ -n "${file}" ]]; then
-    vim "${file}"
-  fi
-}
-# +++ }}}
-
-# +++ vg - fuzzy grep open via ag {{{
-vg() {
-  local file
-
-  # ag - https://github.com/ggreer/the_silver_searcher
-  file="$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
-
-  if [[ -n "${file}" ]]; then
-    vim "${file}"
-  fi
-}
-# +++ }}}
-
-# +++ fbr - checkout git branch {{{
-fbr() {
-  local branches branch
-  branches=$(git branch -vv) &&
-    branch=$(echo "${branches}" | fzf +m) &&
-    git checkout $(echo "${branch}" | awk '{print $1}' | sed "s/.* //")
-}
-# +++ }}}
-
-# +++ fbrm - checkout git branch (including remote branches) {{{
-fbrm() {
-  local branches branch
-  branches=$(git branch --all | grep -v HEAD) &&
-    branch=$(echo "${branches}" |
-    fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
-    git checkout $(echo "${branch}" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-}
-# +++ }}}
-
-# +++ flog - git commit browser {{{
-fshow() {
-  git log --graph --color=always \
-    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-    fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-    --bind "ctrl-m:execute:
-  (grep -o '[a-f0-9]\{7\}' | head -1 |
-    xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-  {}
-  FZF-EOF"
-}
-# +++ }}}
-# ++ }}}
 # + }}}
 # }}}
 
@@ -593,6 +536,55 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 fi
+
+# ++ fzf's Functions {{{
+# +++ fv - fuzzy open with vim from anywhere {{{
+fv() {
+  local file
+
+  file="$(fzf)"
+  if [[ -n "${file}" ]]; then
+    vim "${file}"
+  fi
+}
+# +++ }}}
+
+# +++ vg - fuzzy grep open via rg {{{
+vg() {
+  local file
+
+  # ripgrep - https://github.com/BurntSushi/ripgrep
+  file="$(rg --no-heading --line-number $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
+
+  if [[ -n "${file}" ]]; then
+    eval vim ${file}
+  fi
+}
+# +++ }}}
+
+# https://github.com/junegunn/fzf/wiki/Examples#git
+# +++ fbr - checkout git branch {{{
+fbr() {
+  local branches branch
+  branches=$(git --no-pager branch -vv) &&
+    branch=$(echo "$branches" | fzf +m) &&
+    git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+# +++ }}}
+
+# +++ flog - git commit browser {{{
+fshow() {
+  git log --graph --color=always \
+    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+    fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+    --bind "ctrl-m:execute:
+  (grep -o '[a-f0-9]\{7\}' | head -1 |
+    xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+  {}
+  FZF-EOF"
+}
+# +++ }}}
+# ++ }}}
 # + }}}
 # + activate mise {{{
 if type mise &>/dev/null; then
