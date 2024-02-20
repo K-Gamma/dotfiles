@@ -49,3 +49,6 @@ github = "zsh-users/zsh-syntax-highlighting"
 [plugins.powerlevel10k]
 apply = ["defer"]
 github = "romkatv/powerlevel10k"
+
+[plugins.compinit]
+inline = 'autoload -Uz compinit && zsh-defer compinit'

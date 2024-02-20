@@ -169,6 +169,16 @@ if [[ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
 fi
 # + }}}
 
+# for Zsh Completion {{{
+if [[ ! -d "${ZDOTDIR}/completions" ]]; then
+  mkdir -p ${ZDOTDIR}/completions
+fi
+fpath=(
+  ${ZDOTDIR}/completions
+  ${fpath}
+)
+# }}}
+
 # Road some local environment variables.
 if [[ -f "${ZDOTDIR}/.zshenv.local" ]]; then
   source "${ZDOTDIR}/.zshenv.local"
