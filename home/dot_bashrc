@@ -172,8 +172,8 @@ if type brew &>/dev/null; then
 fi
 
 # for fzf
-if [ -f "${HOME}/.fzf.bash" ]; then
-  source "${HOME}/.fzf.bash"
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
 fi
 
 # activate rtx
