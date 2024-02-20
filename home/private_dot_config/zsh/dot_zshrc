@@ -427,16 +427,13 @@ alias man=' man'
 alias sudo='sudo '
 
 # Enable color support of ls and also add handy aliases
-if [[ -f "${HOME}/.dircolors" ]]; then
-  eval "$(dircolors -b ${HOME}/.dircolors)"
-  alias ls='ls -F --color=auto'
-  alias dir='dir --color=auto'
-  alias vdir='vdir --color=auto'
-  alias diff='diff --color=auto'
-  alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
-fi
+alias ls='ls -F --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # some more ls aliases
 alias l='ls -CF'
@@ -563,16 +560,6 @@ vg() {
 }
 # +++ }}}
 
-# +++ fd - cd to selected directory {{{
-#fd() {
-#  local dir
-#  dir=$(find ${1:-.} -path '*/\.*' -prune \
-#    -o -type d -print 2> "/dev/null" | fzf +m) &&
-#    cd "${dir}"
-#}
-# => b4b4r07/enhancd
-# +++ }}}
-
 # +++ fbr - checkout git branch {{{
 fbr() {
   local branches branch
@@ -609,58 +596,7 @@ fshow() {
 # }}}
 
 # Plugin Settings {{{
-# + Plugin Manager {{{
-## Added by Zinit's installer
-ZINIT_HOME="${XDG_DATA_HOME}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
-
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit lucid light-mode for \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-readurl \
-    zdharma-continuum/zinit-annex-bin-gem-node
-
-# + }}}
-
-# + Plugins that be loaded "immediately" {{{
-# dircolors settings
-zinit lucid light-mode for \
-    atload"setupsolarized dircolors.ansi-light" \
-        joel-porquet/zsh-dircolors-solarized
-
-# + }}}
-
-# + Plugins that be loaded "after the prompt is displayed" {{{
-# Fuzzy Finder and Plugins that use it
-zinit wait lucid light-mode for \
-    b4b4r07/enhancd
-# ++ Option Settings {{{
-export ENHANCD_FILTER='fzf'
-# ++ }}}
-
-# Emoji
-zinit wait lucid light-mode for \
-    as"program" mrowa44/emojify \
-    b4b4r07/emoji-cli
-
-# ls with git status info
-zinit wait lucid light-mode for supercrabtree/k
-
-# https://github.com/zdharma/fast-syntax-highlighting#zinit
-zinit wait lucid light-mode for \
-    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-        zdharma/fast-syntax-highlighting \
-    blockf \
-        zsh-users/zsh-completions \
-    atload"!_zsh_autosuggest_start" \
-        zsh-users/zsh-autosuggestions
-# + }}}
+eval "$(sheldon source)"
 # }}}
 
 # Applications Settings {{{
