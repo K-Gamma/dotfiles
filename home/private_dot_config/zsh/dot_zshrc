@@ -452,7 +452,9 @@ fi
 # other aliases
 alias df='df -h'
 alias du='du -hs'
-alias ps='ps --sort=start_time'
+if [[ "$(uname)" == "Linux" ]]; then
+  alias ps='ps --sort=start_time'
+fi
 alias x='exit'
 alias g='git'
 compdef g=git
