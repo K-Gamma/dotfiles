@@ -12,42 +12,39 @@
 
 shell = "zsh"
 
-# Completions
-# https://github.com/zsh-users/zsh-completions
-[plugins.zsh-completions]
-github = "zsh-users/zsh-completions"
-
-# for Deferred loading
-# https://github.com/romkatv/zsh-defer
-[plugins.zsh-defer]
-github = "romkatv/zsh-defer"
+# Default apply defer
+apply = ["defer"]
 [templates]
 defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
+# https://github.com/romkatv/zsh-defer
+[plugins.zsh-defer]
+apply = ["source"] # Non-deferred plugins
+github = "romkatv/zsh-defer"
+
+# https://github.com/zsh-users/zsh-completions
+[plugins.zsh-completions]
+apply = ["source"]
+github = "zsh-users/zsh-completions"
 
 # https://github.com/zsh-users/zsh-autosuggestions
 [plugins.zsh-autosuggestions]
-apply = ["defer"]
+apply = ["source"]
 github = "zsh-users/zsh-autosuggestions"
-use = ["{{ name }}.zsh"]
 
 # https://github.com/junegunn/fzf-git.sh
 [plugins.fzf-git]
-apply = ["defer"]
 github = "junegunn/fzf-git.sh"
 
 # https://github.com/Aloxaf/fzf-tab
 [plugins.fzf-tab]
-apply = ["defer"]
 github = "Aloxaf/fzf-tab"
 
 # https://github.com/zsh-users/zsh-syntax-highlighting
 [plugins.zsh-syntax-highlighting]
-apply = ["defer"]
 github = "zsh-users/zsh-syntax-highlighting"
 
 # https://github.com/romkatv/powerlevel10k
 [plugins.powerlevel10k]
-apply = ["defer"]
 github = "romkatv/powerlevel10k"
 
 [plugins.compinit]
