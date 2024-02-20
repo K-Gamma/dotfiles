@@ -394,6 +394,7 @@ alias -g @h='| head'
 alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| cat'
+alias -g @f='| fzf'
 
 # suffix
 alias -s py=python
