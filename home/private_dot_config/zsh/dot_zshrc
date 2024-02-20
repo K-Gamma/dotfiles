@@ -472,9 +472,6 @@ alias v='nvim'
 alias n='nvim'
 alias clip='xsel --clipboard --input'
 alias relogin='exec ${SHELL} -l'
-if type bat &>/dev/null; then
-  alias cat='bat'
-fi
 # + }}}
 
 # + Named Directories {{{
