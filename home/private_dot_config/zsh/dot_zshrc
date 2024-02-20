@@ -579,15 +579,21 @@ eval "$(sheldon source)"
 
 # Applications Settings {{{
 # + fzf {{{
-export FZF_DEFAULT_OPTS='--multi --height=50% --layout=reverse --border --info=inline --prompt="$ " --pointer="> " --marker="*" --exit-0 --select-1'
+export FZF_DEFAULT_OPTS='
+--multi --height=50% --layout=reverse --border --info=inline
+--prompt="> " --pointer="◆" --marker="* " --exit-0 --select-1
+'
 
 # fzf color scheme
-export FZF_DEFAULT_OPTS="
-  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
-  --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff
-  --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
-  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
-"
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=fg:#c0caf5,fg+:#a9b1d6,bg:#1a1b26,bg+:#15161e
+  --color=hl:#7aa2f7,hl+:#5fd7ff,info:#bb9af7,marker:#e0af68
+  --color=prompt:#c0caf5,spinner:#9ece6a,pointer:#f7768e,header:#bb9af7
+  --color=border:#414868,label:#c0caf5,query:#7aa2f7
+'
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+fi
 # + }}}
 # + activate mise {{{
 if type mise &>/dev/null; then
