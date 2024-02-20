@@ -538,55 +538,6 @@ fi
 
 # TODO: addition
 # + Functions {{{
-
-# + }}}
-# }}}
-
-# Plugin Settings {{{
-# + Plugin Manager {{{
-## Added by Zinit's installer
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
-
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit lucid light-mode for \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-readurl \
-    zdharma-continuum/zinit-annex-bin-gem-node
-
-# + }}}
-
-# + Plugins that be loaded "immediately" {{{
-# dircolors settings
-zinit lucid light-mode for \
-    atload"setupsolarized dircolors.ansi-light" \
-        joel-porquet/zsh-dircolors-solarized
-
-# + }}}
-
-# + Plugins that be loaded "after the prompt is displayed" {{{
-# Fuzzy Finder and Plugins that use it
-zinit wait lucid pack"bgn-binary" for fzf  # https://github.com/Zsh-Packages/fzf
-zinit wait lucid light-mode for \
-    b4b4r07/enhancd
-# ++ Option Settings {{{
-export ENHANCD_FILTER='fzf'
-export FZF_DEFAULT_OPTS='--multi --height=50% --layout=reverse --border --info=inline --prompt="$ " --pointer="> " --marker="*" --exit-0 --select-1'
-
-# fzf color scheme
-export FZF_DEFAULT_OPTS="
-  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
-  --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff
-  --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
-  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
-"
-# ++ }}}
 # ++ fzf's Functions {{{
 # +++ fv - fuzzy open with vim from anywhere {{{
 fv() {
@@ -654,6 +605,44 @@ fshow() {
 }
 # +++ }}}
 # ++ }}}
+# + }}}
+# }}}
+
+# Plugin Settings {{{
+# + Plugin Manager {{{
+## Added by Zinit's installer
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit lucid light-mode for \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-readurl \
+    zdharma-continuum/zinit-annex-bin-gem-node
+
+# + }}}
+
+# + Plugins that be loaded "immediately" {{{
+# dircolors settings
+zinit lucid light-mode for \
+    atload"setupsolarized dircolors.ansi-light" \
+        joel-porquet/zsh-dircolors-solarized
+
+# + }}}
+
+# + Plugins that be loaded "after the prompt is displayed" {{{
+# Fuzzy Finder and Plugins that use it
+zinit wait lucid light-mode for \
+    b4b4r07/enhancd
+# ++ Option Settings {{{
+export ENHANCD_FILTER='fzf'
+# ++ }}}
 
 # Emoji
 zinit wait lucid light-mode for \
@@ -675,6 +664,17 @@ zinit wait lucid light-mode for \
 # }}}
 
 # Applications Settings {{{
+# + fzf {{{
+export FZF_DEFAULT_OPTS='--multi --height=50% --layout=reverse --border --info=inline --prompt="$ " --pointer="> " --marker="*" --exit-0 --select-1'
+
+# fzf color scheme
+export FZF_DEFAULT_OPTS="
+  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
+  --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff
+  --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
+  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
+"
+# + }}}
 # + activate mise {{{
 if type mise &>/dev/null; then
   eval "$(mise activate zsh)"
