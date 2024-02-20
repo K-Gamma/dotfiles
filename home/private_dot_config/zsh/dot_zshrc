@@ -453,7 +453,6 @@ fi
 alias df='df -h'
 alias du='du -hs'
 alias ps='ps --sort=start_time'
-alias apv='appletviewer'
 alias x='exit'
 alias g='git'
 compdef g=git
@@ -471,33 +470,8 @@ alias v='nvim'
 alias n='nvim'
 alias clip='xsel --clipboard --input'
 alias relogin='exec ${SHELL} -l'
-alias color256='for c in {000..255}; do echo -n "\e[38;5;${c}m ${c}" ; [[ $((${c}%16)) -eq 15 ]] && echo;done;echo'
-alias color256bg='for c in {000..255}; do echo -en " \e[48;5;${c}m${c}\e[0m" ; [[ $((${c}%16)) -eq 15 ]] && echo;done;echo'
 if type bat &>/dev/null; then
   alias cat='bat'
-fi
-
-# GoogleDrive aliases
-alias gdrive_m='google-drive-ocamlfuse ${HOME}/google-drive'
-alias gdrive_u='fusermount -u ${HOME}/google-drive'
-alias gdrive_r='rm -rf "${HOME}/.gdfuse/default/cache"'
-
-# cputmp alias
-alias cputmp='echo $(echo $(cat "/sys/class/thermal/thermal_zone0/temp") / 1000 | bc) °C'
-
-# gputmp alias
-alias gputmp='echo $(nvidia-settings -tq "[gpu:0]/GPUCoreTemp") °C'
-
-# python
-alias pip='pip3'
-alias python='python3'
-
-# apt update & upgrade & autoremove alias
-alias update='sh -c "apt update && apt -y upgrade && apt -y autoremove"'
-
-# for VSCode - insider
-if type code-insiders &>/dev/null; then
-  alias code=code-insiders
 fi
 # + }}}
 
