@@ -29,6 +29,11 @@ github = "romkatv/zsh-defer"
 apply = ["source"]
 github = "zsh-users/zsh-completions"
 
+# https://github.com/romkatv/powerlevel10k
+[plugins.powerlevel10k]
+apply = ["source"]
+github = "romkatv/powerlevel10k"
+
 # === Defferd ===
 
 # https://github.com/zsh-users/zsh-autosuggestions
@@ -50,10 +55,6 @@ github = "Aloxaf/fzf-tab"
 # https://github.com/zsh-users/zsh-syntax-highlighting
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
-
-# https://github.com/romkatv/powerlevel10k
-[plugins.powerlevel10k]
-github = "romkatv/powerlevel10k"
 
 # https://github.com/MichaelAquilina/zsh-you-should-use
 [plugins.zsh-you-should-use]
