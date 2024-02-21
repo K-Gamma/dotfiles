@@ -1,0 +1,17 @@
+#!/bin/bash
+
+all_branches=$(git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads refs/remotes)
+local_branches=$(git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads)
+branches=""
+for branch in ${all_branches}; do
+    if [[ "${branch}" == origin/* ]] && ! echo "${local_branches}" | grep -qx "${branch#origin/}"; then
+        # Remote and Non-Local
+        branches+="${branch}"$'\n'
+    elif [[ "${branch}" != origin/* ]]; then
+        # Local
+        branches+="${branch}"$'\n'
+    fi
+done
+
+branch=$(echo "${branches%$'\n'}" | fzf --no-multi)
+echo "${branch#origin/}"
