@@ -442,7 +442,7 @@ eval "$(sheldon source)"
 # Applications Settings {{{
 # + fzf {{{
 export FZF_DEFAULT_OPTS='
---multi --height=50% --layout=reverse --border --info=inline
+--multi --layout=reverse --border --info=inline
 --prompt="> " --pointer="◆" --marker="* " --exit-0 --select-1
 '
 
