@@ -12,6 +12,7 @@ aliases:
     o: open
     co: pr checkout
     cof: branch
+    swf: branch
     br: branch
     review: pr list --web --search user-review-requested:@me
     todo: issue list --web --assignee @me
