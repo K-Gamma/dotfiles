@@ -1,0 +1,7 @@
+{{- if eq .chezmoi.os "darwin" }}
+#!/bin/bash
+
+if type brew &>/dev/null && [[ ! -d $(brew --prefix)/opt/fzf/install ]]; then
+    $(brew --prefix)/opt/fzf/install --xdg --key-bindings --completion --no-update-rc
+fi
+{{ end }}
