@@ -178,6 +178,13 @@ fpath=(
 )
 # }}}
 
+# for mise {{{
+path=(
+  ${XDG_DATA_HOME}/mise/shims
+  ${path}
+)
+# }}}
+
 # Road some local environment variables.
 if [[ -f "${ZDOTDIR}/.zshenv.local" ]]; then
   source "${ZDOTDIR}/.zshenv.local"
