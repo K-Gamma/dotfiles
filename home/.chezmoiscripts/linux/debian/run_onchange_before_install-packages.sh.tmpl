@@ -15,7 +15,7 @@ set -eufo pipefail
      "gping"
      "jq"
      "ripgrep"
-     "rtx"
+     "mise"
      "shellcheck"
      "zoxide"
      "zsh"
@@ -47,9 +47,9 @@ echo "deb [signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg arch={{ .ch
 {{ $sudo }}curl -fsSL https://azlux.fr/repo.gpg.key -o /etc/apt/keyrings/azlux.asc
 echo "deb [signed-by=/etc/apt/keyrings/azlux.asc arch={{ .chezmoi.arch }}] https://packages.azlux.fr/debian/ bookworm main" | {{ $sudo}}tee /etc/apt/sources.list.d/azlux.list
 
-# for rtx
-{{ $sudo }}curl -fsSL https://rtx.jdx.dev/gpg-key.pub -o /etc/apt/keyrings/rtx-archive-keyring.asc
-echo "deb [signed-by=/etc/apt/keyrings/rtx-archive-keyring.asc arch={{ .chezmoi.arch }}] https://rtx.jdx.dev/deb stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/rtx.list
+# for mise
+{{ $sudo }}curl -fsSL https://mise.jdx.dev/gpg-key.pub -o /etc/apt/keyrings/mise-archive-keyring.asc
+echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc arch={{ .chezmoi.arch }}] https://mise.jdx.dev/deb stable main" | {{ $sudo }}tee /etc/apt/sources.list.d/mise.list
 
 {{ $sudo }}apt-get update
 {{ $sudo }}apt-get install -y {{ $packages | join " " }}
