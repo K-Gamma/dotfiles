@@ -1,4 +1,4 @@
-{{- if eq .chezmoi.os "darwin" }}
+{{ if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
 if type brew &>/dev/null && [[ ! -d $(brew --prefix)/opt/fzf/install ]]; then
