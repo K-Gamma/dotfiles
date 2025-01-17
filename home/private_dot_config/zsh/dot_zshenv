@@ -83,6 +83,7 @@ if [[ ${OSTYPE} == darwin* ]]; then
     /opt/homebrew/opt/gnu-tar/libexec/gnubin(N-/)
     /opt/homebrew/opt/grep/libexec/gnubin(N-/)
     /opt/homebrew/opt/unzip/bin(N-/)
+    /opt/homebrew/opt/python@3/libexec/bin(N-/)
     $path
   )
   manpath=(
