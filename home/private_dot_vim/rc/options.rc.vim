@@ -3,7 +3,7 @@
 " + ファイル {{{
 set hidden
 set autoread
-set browsedir=buffer
+" set browsedir=buffer
 
 set nowritebackup
 set nobackup
