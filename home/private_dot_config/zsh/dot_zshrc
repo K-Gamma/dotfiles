@@ -315,6 +315,7 @@ alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| cat'
 alias -g @f='| fzf'
+alias -g @clip='| clip'
 
 # suffix
 alias -s py=python
@@ -390,7 +391,11 @@ alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 alias n='nvim'
-alias clip='xsel --clipboard --input'
+if [[ ${OSTYPE} == darwin* ]]; then
+  alias clip='pbcopy'
+else
+  alias clip='xsel --clipboard --input'
+fi
 alias relogin='exec ${SHELL} -l'
 # + }}}
 
