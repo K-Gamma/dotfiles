@@ -3,12 +3,6 @@
 # -ctions, options, key bindings, etc:
 # See /usr/share/zsh/help
 
-# Compile '.zshrc' to speed up loading. {{{
-if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ $(readlink "${ZDOTDIR}/.zshrc") -nt "${ZDOTDIR}/.zshrc.zwc" ]]; then
-  zcompile "${ZDOTDIR}/.zshrc.zwc" "${ZDOTDIR}/.zshrc"
-fi
-#}}}
-
 # in ~/.zshenv, executed `unsetopt global_rcs` and ignored /etc/zshrc
 if [ -r /etc/zshrc ]; then
   source /etc/zshrc
@@ -20,6 +14,12 @@ fi
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+# Compile '.zshrc' to speed up loading. {{{
+if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ $(readlink "${ZDOTDIR}/.zshrc") -nt "${ZDOTDIR}/.zshrc.zwc" ]]; then
+  zcompile "${ZDOTDIR}/.zshrc.zwc" "${ZDOTDIR}/.zshrc"
+fi
+#}}}
 
 # Build-in Function Settings {{{
 # TODO: adjustment
