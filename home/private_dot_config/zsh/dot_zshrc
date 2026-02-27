@@ -452,12 +452,30 @@ export FZF_DEFAULT_OPTS='
 '
 
 # fzf color scheme
-export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
-  --color=fg:#c0caf5,fg+:#a9b1d6,bg:#1a1b26,bg+:#15161e
-  --color=hl:#7aa2f7,hl+:#5fd7ff,info:#bb9af7,marker:#e0af68
-  --color=prompt:#c0caf5,spinner:#9ece6a,pointer:#f7768e,header:#bb9af7
-  --color=border:#414868,label:#c0caf5,query:#7aa2f7
-'
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+  --highlight-line \
+  --info=inline-right \
+  --ansi \
+  --layout=reverse \
+  --border=none \
+  --color=bg+:#b7c1e3 \
+  --color=bg:#d0d5e3 \
+  --color=border:#4094a3 \
+  --color=fg:#3760bf \
+  --color=gutter:#d0d5e3 \
+  --color=header:#b15c00 \
+  --color=hl+:#188092 \
+  --color=hl:#188092 \
+  --color=info:#8990b3 \
+  --color=marker:#d20065 \
+  --color=pointer:#d20065 \
+  --color=prompt:#188092 \
+  --color=query:#3760bf:regular \
+  --color=scrollbar:#4094a3 \
+  --color=separator:#b15c00 \
+  --color=spinner:#d20065 \
+"
+
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 fi
