@@ -4,6 +4,8 @@ return {
     priority = 1000,
     lazy = false,
     opts = {
+      animate = {},
+      scroll = {},
       picker = {},
       explorer = {},
       terminal = {},
