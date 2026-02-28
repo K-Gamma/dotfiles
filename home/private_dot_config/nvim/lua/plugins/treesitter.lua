@@ -6,8 +6,17 @@ return {
     branch = 'main',
     config = function()
       local parsers = {
-        'bash', 'c', 'diff', 'html', 'lua', 'luadoc',
-        'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc',
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
       }
       require('nvim-treesitter').install(parsers)
 
@@ -17,10 +26,8 @@ return {
           local language = vim.treesitter.language.get_lang(filetype)
           if not language then return end
           if not vim.treesitter.language.add(language) then
-            local ts = require('nvim-treesitter')
-            if vim.tbl_contains(ts.get_available(), language) then
-              ts.install { language }
-            end
+            local ts = require 'nvim-treesitter'
+            if vim.tbl_contains(ts.get_available(), language) then ts.install { language } end
             return
           end
           vim.treesitter.start(buf, language)
