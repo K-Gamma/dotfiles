@@ -97,14 +97,18 @@ return {
         },
       }
 
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { 'stylua' })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
+      -- カスタム設定を上書き
       for name, server in pairs(servers) do
         vim.lsp.config(name, server)
-        vim.lsp.enable(name)
       end
+
+      -- LSP サーバーのインストール + 自動有効化（automatic_enable = true がデフォルト）
+      require('mason-lspconfig').setup {
+        ensure_installed = vim.tbl_keys(servers),
+      }
+
+      -- 非 LSP ツール（フォーマッタ等）のインストール
+      require('mason-tool-installer').setup { ensure_installed = { 'stylua' } }
     end,
   },
 
