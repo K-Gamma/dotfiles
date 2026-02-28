@@ -15,9 +15,9 @@ map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- 保存/終了
-map('n', '<Space>w', '<cmd>w<CR>',  { desc = 'Save' })
+map('n', '<Space>w', '<cmd>w<CR>', { desc = 'Save' })
 map('n', '<Space>W', '<cmd>wa<CR>', { desc = 'Save all' })
-map('n', '<Space>q', '<cmd>q<CR>',  { desc = 'Quit' })
+map('n', '<Space>q', '<cmd>q<CR>', { desc = 'Quit' })
 
 -- 表示行移動
 map('n', 'j', 'gj')
@@ -42,9 +42,7 @@ map('i', '<C-h>', '<BS>')
 map('i', '<M-b>', '<S-Left>')
 map('c', '<C-n>', '<Down>')
 map('c', '<C-p>', '<Up>')
-map('c', '%%', function()
-  return vim.fn.getcmdtype() == ':' and vim.fn.expand('%:h') .. '/' or '%%'
-end, { expr = true })
+map('c', '%%', function() return vim.fn.getcmdtype() == ':' and vim.fn.expand '%:h' .. '/' or '%%' end, { expr = true })
 
 -- Emacs-like bindings (terminal)
 map('t', '<C-a>', '<Home>')

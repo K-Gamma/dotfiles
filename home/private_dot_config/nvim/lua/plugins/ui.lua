@@ -32,8 +32,8 @@ return {
         local map = function(mode, keys, func, desc) vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = 'Git: ' .. desc }) end
 
         -- hunk navigation
-        map('n', ']h', function() gs.nav_hunk('next') end, 'Next Hunk')
-        map('n', '[h', function() gs.nav_hunk('prev') end, 'Prev Hunk')
+        map('n', ']h', function() gs.nav_hunk 'next' end, 'Next Hunk')
+        map('n', '[h', function() gs.nav_hunk 'prev' end, 'Prev Hunk')
 
         -- hunk 操作
         map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk, 'Stage Hunk')
@@ -56,7 +56,7 @@ return {
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>g', group = '[G]it' },
-        { 'gr',        group = 'LSP Actions', mode = { 'n' } },
+        { 'gr', group = 'LSP Actions', mode = { 'n' } },
       },
     },
   },
