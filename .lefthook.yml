@@ -1,0 +1,7 @@
+pre-commit:
+  commands:
+    stylua:
+      root: "home/private_dot_config/nvim"
+      glob: "home/private_dot_config/nvim/**/*.lua"
+      run: stylua --config-path .stylua.toml {staged_files}
+      stage_fixed: true
