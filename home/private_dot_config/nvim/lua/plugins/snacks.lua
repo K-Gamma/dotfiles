@@ -8,6 +8,7 @@ return {
       explorer = {},
       terminal = {},
       dashboard = {},
+      indent = {},
     },
     keys = {
       -- picker
