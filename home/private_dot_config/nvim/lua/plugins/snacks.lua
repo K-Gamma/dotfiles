@@ -7,6 +7,7 @@ return {
       picker = {},
       explorer = {},
       terminal = {},
+      dashboard = {},
     },
     keys = {
       -- picker
