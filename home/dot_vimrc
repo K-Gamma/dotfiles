@@ -1,0 +1,161 @@
+if 0 | finish | endif
+
+scriptencoding utf-8
+language message C
+
+" Mapleader
+let g:mapleader = ','
+let g:maplocalleader = 'm'
+nnoremap m <Nop>
+nnoremap , <Nop>
+
+filetype plugin indent on
+syntax enable
+
+" エンコーディング
+if has('vim_starting') && &encoding !=# 'utf-8'
+  set encoding=utf-8
+endif
+let &fileencodings = join(['ucs-bom', 'iso-2022-jp-3', 'utf-8', 'euc-jp', 'cp932'])
+set fileformat=unix
+set fileformats=unix,dos,mac
+
+" ターミナル
+if !has('gui_running')
+  set t_Co=256
+  if exists('+termguicolors')
+    set termguicolors
+  endif
+endif
+
+"---------------------------------------------------------------------------
+" ファイル
+
+set hidden autoread
+set nowritebackup nobackup noswapfile
+set backupdir-=. directory-=.
+
+"---------------------------------------------------------------------------
+" 表示
+
+set display=lastline
+set number relativenumber
+set modeline modelines=1
+set list listchars=tab:»-,trail:.,extends:»,precedes:«,nbsp:%
+set breakindent wrap
+set whichwrap=b,s,h,l,<,>,[,]
+set cursorline
+
+augroup MyAutoCmd
+  autocmd!
+  autocmd WinLeave    * set nocursorline
+  autocmd WinEnter,BufRead * set cursorline
+augroup END
+
+highlight clear CursorLine
+highlight CursorLine ctermbg=black guibg=black
+
+"---------------------------------------------------------------------------
+" 入力
+
+set smarttab expandtab
+set tabstop=4 shiftwidth=0 softtabstop=-1
+set backspace=indent,eol,start
+set clipboard=unnamed,autoselect
+set showmatch matchtime=1
+set completeopt=menuone pumheight=10
+set wildmenu wildmode=longest:full,full
+set history=1000
+
+if has('mouse')
+  set mouse=a
+  if has('mouse_sgr')
+    set ttymouse=sgr
+  elseif v:version > 703 || v:version is 703 && has('patch632')
+    set ttymouse=sgr
+  else
+    set ttymouse=xterm2
+  endif
+endif
+
+"---------------------------------------------------------------------------
+" 検索
+
+set noincsearch hlsearch ignorecase smartcase wrapscan magic
+
+"---------------------------------------------------------------------------
+" ステータスライン
+
+set laststatus=2 showcmd ruler
+
+"---------------------------------------------------------------------------
+" キーマッピング
+
+noremap : ;
+noremap ; :
+
+nnoremap <space>w  :<c-u>w<cr>
+nnoremap <Space>W  :<C-u>wa<CR>
+nnoremap <Space>q  :<C-u>q<CR>
+
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+nnoremap <Down> gj
+nnoremap <Up>   gk
+
+nnoremap Y y$
+nnoremap <silent> == gg=G''
+
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+
+nnoremap <C-p> :<C-u>bp<CR>
+nnoremap <C-n> :<C-u>bn<CR>
+
+nnoremap <S-h> g^
+vnoremap <S-h> g^
+nnoremap <S-l> g$
+vnoremap <S-l> g$
+
+nnoremap + <C-a>
+nnoremap - <C-x>
+
+nnoremap <silent> <ESC><ESC> :<C-u>noh<CR>
+
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+nnoremap Q  <Nop>
+
+inoremap <C-f> <right>
+inoremap <C-b> <left>
+inoremap <C-d> <Del>
+imap     <C-h> <BS>
+
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <C-o> <C-\>e(getcmdtype() == '/' <Bar><Bar> getcmdtype() == '?') ? '\<' . getcmdline() . '\>' : getcmdline()<CR>
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+tnoremap <ESC> <C-\><C-n>
+
+noremap! <C-a> <Home>
+tnoremap <C-a> <Home>
+noremap! <C-b> <Left>
+tnoremap <C-b> <Left>
+noremap! <C-d> <Del>
+tnoremap <C-d> <Del>
+noremap! <C-e> <End>
+tnoremap <C-e> <End>
+noremap! <C-f> <Right>
+tnoremap <C-f> <Right>
+inoremap <M-b> <S-Left>
+tnoremap <M-b> <S-Left>
+noremap! <M-f> <S-Right>
+tnoremap <M-f> <S-Right>
+cnoremap <C-n> <Down>
+tnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
+tnoremap <C-p> <Up>
