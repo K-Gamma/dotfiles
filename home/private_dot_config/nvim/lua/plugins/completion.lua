@@ -1,5 +1,13 @@
 return {
   {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    opts = {
+      check_ts = true,
+    },
+  },
+
+  {
     'saghen/blink.cmp',
     event = 'VimEnter',
     version = '1.*',
