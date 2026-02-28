@@ -82,7 +82,7 @@ let g:loaded_vimballPlugin     = 1
 "---------------------------------------------------------------------------
 " Load dein.
 if $SUDO_USER !=# ''
-  colorscheme iceberg
+  colorscheme default
   finish
 endif
 let g:dein#base_path = g:cache_home . '/dein'

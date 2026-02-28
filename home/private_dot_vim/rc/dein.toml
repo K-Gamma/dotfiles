@@ -44,12 +44,13 @@ repo = 'alvan/vim-closetag'
 [[plugins]] # https://github.com/airblade/vim-gitgutter
 repo = 'airblade/vim-gitgutter'
 
-[[plugins]] # https://github.com/cocopon/iceberg.vim
-repo = 'cocopon/iceberg.vim'
+[[plugins]] # https://github.com/folke/tokyonight.nvim
+repo = 'folke/tokyonight.nvim'
+rtp = 'extras/vim'
 merged = 0
 hook_add = '''
-  set background=dark
-  autocmd MyAutoCmd VimEnter * nested colorscheme iceberg
+  set background=light
+  autocmd MyAutoCmd VimEnter * nested colorscheme tokyonight-day
 '''
 
 [[plugins]] # https://github.com/gko/vim-coloresque
@@ -60,7 +61,7 @@ repo = 'itchyny/lightline.vim'
 hook_add = '''
     " Please look a default -> :help lightline
     let g:lightline = {
-    \   'colorscheme': 'wombat',
+    \   'colorscheme': 'tokyonight',
     \   'active': {
     \       'left': [
     \           [ 'mode', 'paste' ],
