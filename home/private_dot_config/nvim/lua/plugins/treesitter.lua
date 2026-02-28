@@ -16,9 +16,11 @@ return {
           local buf, filetype = args.buf, args.match
           local language = vim.treesitter.language.get_lang(filetype)
           if not language then return end
-          -- パーサー未インストールなら自動インストール（プロジェクト固有言語に対応）
           if not vim.treesitter.language.add(language) then
-            require('nvim-treesitter').install { language }
+            local ts = require('nvim-treesitter')
+            if vim.tbl_contains(ts.get_available(), language) then
+              ts.install { language }
+            end
             return
           end
           vim.treesitter.start(buf, language)
