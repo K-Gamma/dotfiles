@@ -22,7 +22,7 @@ return {
         -- hunk 操作
         map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk, 'Stage Hunk')
         map({ 'n', 'v' }, '<leader>hr', gs.reset_hunk, 'Reset Hunk')
-        map('n', '<leader>hu', gs.undo_stage_hunk, 'Undo Stage Hunk')
+        map('n', '<leader>hu', gs.stage_hunk, 'Undo Stage Hunk')
         map('n', '<leader>hp', gs.preview_hunk, 'Preview Hunk')
         map('n', '<leader>hb', function() gs.blame_line { full = true } end, 'Blame Line')
       end,
