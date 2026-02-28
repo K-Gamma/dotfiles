@@ -31,16 +31,12 @@ return {
           map('gra', vim.lsp.buf.code_action,  '[G]oto Code [A]ction', { 'n', 'x' })
           map('grD', vim.lsp.buf.declaration,  '[G]oto [D]eclaration')
 
-          -- telescope が使えれば telescope picker を、なければ LSP デフォルトを使う
-          local ok, builtin = pcall(require, 'telescope.builtin')
-          if ok then
-            map('grr', builtin.lsp_references,                '[G]oto [R]eferences')
-            map('gri', builtin.lsp_implementations,           '[G]oto [I]mplementation')
-            map('grd', builtin.lsp_definitions,               '[G]oto [D]efinition')
-            map('gO',  builtin.lsp_document_symbols,          'Open Document Symbols')
-            map('gW',  builtin.lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-            map('grt', builtin.lsp_type_definitions,          '[G]oto [T]ype Definition')
-          end
+          map('grr', function() Snacks.picker.lsp_references() end,        '[G]oto [R]eferences')
+          map('gri', function() Snacks.picker.lsp_implementations() end,   '[G]oto [I]mplementation')
+          map('grd', function() Snacks.picker.lsp_definitions() end,       '[G]oto [D]efinition')
+          map('gO',  function() Snacks.picker.lsp_symbols() end,           'Open Document Symbols')
+          map('gW',  function() Snacks.picker.lsp_workspace_symbols() end, 'Open Workspace Symbols')
+          map('grt', function() Snacks.picker.lsp_type_definitions() end,  '[G]oto [T]ype Definition')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client:supports_method('textDocument/documentHighlight', event.buf) then
