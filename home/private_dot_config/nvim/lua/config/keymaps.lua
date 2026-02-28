@@ -1,0 +1,69 @@
+local map = vim.keymap.set
+
+-- ハイライト消去
+map('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Diagnostics 設定
+vim.diagnostic.config {
+  update_in_insert = false,
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  virtual_text = true,
+  virtual_lines = false,
+  jump = { float = true },
+}
+
+map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- ターミナルモード終了
+map('t', '<Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- ウィンドウ移動
+map('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+map('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- 保存/終了
+map('n', '<Space>w', '<cmd>w<CR>',  { desc = 'Save' })
+map('n', '<Space>W', '<cmd>wa<CR>', { desc = 'Save all' })
+map('n', '<Space>q', '<cmd>q<CR>',  { desc = 'Quit' })
+
+-- 表示行移動
+map('n', 'j', 'gj')
+map('n', 'k', 'gk')
+map('n', '<Down>', 'gj')
+map('n', '<Up>', 'gk')
+
+-- 無効化
+map('n', 'ZZ', '<Nop>')
+map('n', 'ZQ', '<Nop>')
+map('n', 'Q', '<Nop>')
+
+-- Emacs-like bindings (insert + command)
+local ic = { 'i', 'c' }
+map(ic, '<C-a>', '<Home>')
+map(ic, '<C-b>', '<Left>')
+map(ic, '<C-d>', '<Del>')
+map(ic, '<C-e>', '<End>')
+map(ic, '<C-f>', '<Right>')
+map(ic, '<M-f>', '<S-Right>')
+map('i', '<C-h>', '<BS>')
+map('i', '<M-b>', '<S-Left>')
+map('c', '<C-n>', '<Down>')
+map('c', '<C-p>', '<Up>')
+map('c', '%%', function()
+  return vim.fn.getcmdtype() == ':' and vim.fn.expand('%:h') .. '/' or '%%'
+end, { expr = true })
+
+-- Emacs-like bindings (terminal)
+map('t', '<C-a>', '<Home>')
+map('t', '<C-b>', '<Left>')
+map('t', '<C-d>', '<Del>')
+map('t', '<C-e>', '<End>')
+map('t', '<C-f>', '<Right>')
+map('t', '<M-b>', '<S-Left>')
+map('t', '<M-f>', '<S-Right>')
+map('t', '<C-n>', '<Down>')
+map('t', '<C-p>', '<Up>')
