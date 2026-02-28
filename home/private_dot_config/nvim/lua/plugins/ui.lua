@@ -1,4 +1,11 @@
 return {
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'MunifTanjim/nui.nvim' },
+    opts = {},
+  },
+
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
   { 'brenoprata10/nvim-highlight-colors', opts = {} },
