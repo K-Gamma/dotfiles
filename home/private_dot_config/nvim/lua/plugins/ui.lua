@@ -1,6 +1,8 @@
 return {
   { 'NMAC427/guess-indent.nvim', opts = {} },
 
+  { 'brenoprata10/nvim-highlight-colors', opts = {} },
+
   {
     'lewis6991/gitsigns.nvim',
     opts = {
