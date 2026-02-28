@@ -30,5 +30,8 @@ opt.incsearch = false
 opt.wrapscan = true
 opt.magic = true
 
+-- エンコーディング
+opt.fileencodings = { 'ucs-bom', 'iso-2022-jp-3', 'utf-8', 'euc-jp', 'cp932' }
+
 -- ターミナル
 opt.termguicolors = true
