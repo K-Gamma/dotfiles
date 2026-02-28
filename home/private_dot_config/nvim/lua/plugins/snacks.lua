@@ -6,6 +6,7 @@ return {
     opts = {
       picker = {},
       explorer = {},
+      terminal = {},
     },
     keys = {
       -- picker
@@ -26,6 +27,9 @@ return {
 
       -- explorer
       { '<leader>e', function() Snacks.explorer() end, desc = 'File [E]xplorer' },
+
+      -- terminal
+      { '<leader>tt', function() Snacks.terminal() end, desc = '[T]oggle [T]erminal', mode = { 'n', 't' } },
     },
   },
 }
