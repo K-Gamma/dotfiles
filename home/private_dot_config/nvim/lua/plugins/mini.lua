@@ -5,6 +5,9 @@ return {
       -- テキストオブジェクトの拡張 (va), yinq, ci' etc.)
       require('mini.ai').setup { n_lines = 500 }
 
+      -- テーブル・コードの整列 (ga, gA)
+      require('mini.align').setup()
+
       -- 括弧・クォートの追加/削除/変更 (saiw), sd', sr)' etc.)
       require('mini.surround').setup()
 
