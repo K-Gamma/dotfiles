@@ -1,5 +1,12 @@
 return {
   {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'LspAttach',
+    priority = 1000,
+    opts = {},
+  },
+
+  {
     'folke/noice.nvim',
     event = 'VeryLazy',
     dependencies = { 'MunifTanjim/nui.nvim' },

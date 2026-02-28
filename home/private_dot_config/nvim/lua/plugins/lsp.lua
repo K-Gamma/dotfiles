@@ -14,7 +14,7 @@ return {
         severity_sort = true,
         float = { border = 'rounded', source = 'if_many' },
         underline = { severity = { min = vim.diagnostic.severity.WARN } },
-        virtual_text = true,
+        virtual_text = false,
         virtual_lines = false,
         jump = { float = true },
       }
