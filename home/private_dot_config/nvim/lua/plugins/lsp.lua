@@ -125,12 +125,11 @@ return {
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
+        -- バッファローカル → グローバルの順で autoformat 設定を確認
+        if vim.b[bufnr].autoformat == false or (vim.b[bufnr].autoformat == nil and vim.g.autoformat == false) then return nil end
         local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return { timeout_ms = 500, lsp_format = 'fallback' }
-        end
+        if disable_filetypes[vim.bo[bufnr].filetype] then return nil end
+        return { timeout_ms = 500, lsp_format = 'fallback' }
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
