@@ -3,7 +3,14 @@ return {
     'nvim-mini/mini.nvim',
     config = function()
       -- テキストオブジェクトの拡張 (va), yinq, ci' etc.)
-      require('mini.ai').setup { n_lines = 500 }
+      local ai = require 'mini.ai'
+      ai.setup {
+        n_lines = 500,
+        custom_textobjects = {
+          f = ai.gen_spec.treesitter { a = '@function.outer', i = '@function.inner' },
+          c = ai.gen_spec.treesitter { a = '@class.outer', i = '@class.inner' },
+        },
+      }
 
       -- テーブル・コードの整列 (ga, gA)
       require('mini.align').setup()
