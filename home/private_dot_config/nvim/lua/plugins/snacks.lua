@@ -11,6 +11,7 @@ return {
       terminal = {},
       dashboard = {},
       indent = {},
+      toggle = {},
     },
     keys = {
       -- picker
@@ -35,6 +36,9 @@ return {
       -- terminal
       { '<C-/>', function() Snacks.terminal() end, desc = 'Toggle Terminal', mode = { 'n', 't' } },
       { '<C-_>', function() Snacks.terminal() end, desc = 'which_key_ignore', mode = { 'n', 't' } },
+
+      -- window
+      { '<C-w>m', function() Snacks.toggle.zoom() end, desc = 'Toggle Zoom' },
     },
   },
 }

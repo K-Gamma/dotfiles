@@ -14,6 +14,20 @@ map('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- ウィンドウ分割
+map('n', '<leader>-', '<cmd>split<CR>', { desc = 'Split window below' })
+map('n', '<leader>|', '<cmd>vsplit<CR>', { desc = 'Split window right' })
+
+-- ウィンドウサイズ調整
+map('n', '<C-Up>', '<cmd>resize +2<CR>', { desc = 'Increase window height' })
+map('n', '<C-Down>', '<cmd>resize -2<CR>', { desc = 'Decrease window height' })
+map('n', '<C-Left>', '<cmd>vertical resize -2<CR>', { desc = 'Decrease window width' })
+map('n', '<C-Right>', '<cmd>vertical resize +2<CR>', { desc = 'Increase window width' })
+
+-- タブ操作
+map('n', '<leader><tab><tab>', '<cmd>tabnew<CR>', { desc = 'New Tab' })
+map('n', '<leader><tab>d', '<cmd>tabclose<CR>', { desc = 'Close Tab' })
+
 -- 保存/終了
 map('n', '<Space>w', '<cmd>w<CR>', { desc = 'Save' })
 map('n', '<Space>W', '<cmd>wa<CR>', { desc = 'Save all' })
