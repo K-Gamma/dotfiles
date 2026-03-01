@@ -38,6 +38,33 @@ return {
 
       -- window
       { '<C-w>m', function() Snacks.toggle.zoom() end, desc = 'ズーム切替' },
+
+      -- autoformat
+      {
+        '<leader>tf',
+        function()
+          Snacks.toggle({
+            name = '自動フォーマット (グローバル)',
+            get = function() return vim.g.autoformat ~= false end,
+            set = function(state) vim.g.autoformat = state end,
+          }):toggle()
+        end,
+        desc = '自動フォーマット切替 (グローバル) ([F]ormat)',
+      },
+      {
+        '<leader>tF',
+        function()
+          Snacks.toggle({
+            name = '自動フォーマット (バッファ)',
+            get = function()
+              if vim.b.autoformat == nil then return vim.g.autoformat ~= false end
+              return vim.b.autoformat
+            end,
+            set = function(state) vim.b.autoformat = state end,
+          }):toggle()
+        end,
+        desc = '自動フォーマット切替 (バッファ) ([F]ormat)',
+      },
     },
   },
 }
