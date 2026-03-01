@@ -1,6 +1,15 @@
 pre-commit:
   commands:
+    chezmoi-apply-nvim:
+      priority: 1
+      glob: "home/private_dot_config/nvim/**/*.lua"
+      run: chezmoi apply --no-tty ~/.config/nvim
+    nvim-startup:
+      priority: 2
+      glob: "home/private_dot_config/nvim/**/*.lua"
+      run: TERM=dumb nvim --headless +qa </dev/null >/dev/null 2>&1
     stylua:
+      priority: 3
       root: "home/private_dot_config/nvim"
       glob: "home/private_dot_config/nvim/**/*.lua"
       run: stylua --config-path .stylua.toml {staged_files}
