@@ -8,7 +8,25 @@ return {
       picker = {},
       explorer = {},
       terminal = {},
-      dashboard = {},
+      dashboard = {
+        preset = {
+          keys = {
+            { icon = ' ', key = 'f', desc = 'ファイルを探す    [F]ind', action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = ' ', key = 'n', desc = '新規ファイル      [N]ew', action = ':ene | startinsert' },
+            { icon = ' ', key = 'g', desc = 'テキストを探す    [G]rep', action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = ' ', key = 'r', desc = '最近のファイル    [R]ecent', action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            {
+              icon = ' ',
+              key = 'c',
+              desc = '設定              [C]onfig',
+              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+            },
+            { icon = ' ', key = 's', desc = 'セッションを復元  [S]ession', section = 'session' },
+            { icon = '󰒲 ', key = 'L', desc = 'プラグイン管理    [L]azy.nvim', action = ':Lazy', enabled = package.loaded.lazy ~= nil },
+            { icon = ' ', key = 'q', desc = '終了              [Q]uit', action = ':qa' },
+          },
+        },
+      },
       indent = {},
       toggle = {},
     },
