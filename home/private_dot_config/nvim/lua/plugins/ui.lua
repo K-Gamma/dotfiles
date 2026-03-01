@@ -13,10 +13,16 @@ return {
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff' },
-        lualine_c = { { 'filename', path = 1 } },
+        lualine_c = {},
         lualine_x = { 'diagnostics', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
+      },
+      winbar = {
+        lualine_c = { { 'filename', path = 1 } },
+      },
+      inactive_winbar = {
+        lualine_c = { { 'filename', path = 1 } },
       },
     },
   },
