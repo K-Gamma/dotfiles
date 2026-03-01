@@ -80,7 +80,11 @@ return {
         local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
         if not lang then return end
         local ok, query = pcall(vim.treesitter.query.get, lang, 'textobjects')
-        if not ok or not query then return end
+        if not ok then
+          vim.notify(tostring(query), vim.log.levels.ERROR)
+          return
+        end
+        if not query then return end
 
         for method, keymaps in pairs(moves) do
           for key, query in pairs(keymaps) do
