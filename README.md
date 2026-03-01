@@ -5,7 +5,7 @@ My dotfiles managed by [chezmoi](https://github.com/twpayne/chezmoi).
 You'll need to install the following software.
 - git (Required)
   - [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/install.md) (If you want to do it with 'https')
-- [bitwarden-cli](https://bitwarden.com/ja-JP/help/cli/#download-and-install) (Required)
+- [bitwarden-cli](https://bitwarden.com/download/#command-line-interface) (Required)
 
 ## Installation
 After installing chezmoi in `.local/bin`, clone this repository to `.local/share` and do `chezmoi init && chezmoi apply`.
