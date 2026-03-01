@@ -75,6 +75,7 @@ return {
       local function attach(buf)
         local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
         if not lang then return end
+        if not vim.treesitter.language.add(lang) then return end
         local ok, query = pcall(vim.treesitter.query.get, lang, 'textobjects')
         if not ok then
           vim.notify(tostring(query), vim.log.levels.ERROR)
