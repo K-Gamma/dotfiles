@@ -5,7 +5,6 @@ return {
     lazy = false,
     opts = {
       animate = {},
-      scroll = {},
       picker = {},
       explorer = {},
       terminal = {},
