@@ -33,7 +33,8 @@ return {
       { '<leader>e', function() Snacks.explorer() end, desc = 'File [E]xplorer' },
 
       -- terminal
-      { '<leader>tt', function() Snacks.terminal() end, desc = '[T]oggle [T]erminal', mode = { 'n', 't' } },
+      { '<C-/>', function() Snacks.terminal() end, desc = 'Toggle Terminal', mode = { 'n', 't' } },
+      { '<C-_>', function() Snacks.terminal() end, desc = 'which_key_ignore', mode = { 'n', 't' } },
     },
   },
 }
