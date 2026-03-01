@@ -27,16 +27,16 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-          map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('grn', vim.lsp.buf.rename, '名前変更 ([R]e[n]ame)')
+          map('gra', vim.lsp.buf.code_action, 'コードアクション ([A]ction)', { 'n', 'x' })
+          map('grD', vim.lsp.buf.declaration, '宣言へ移動 ([D]eclaration)')
 
-          map('grr', function() Snacks.picker.lsp_references() end, '[G]oto [R]eferences')
-          map('gri', function() Snacks.picker.lsp_implementations() end, '[G]oto [I]mplementation')
-          map('grd', function() Snacks.picker.lsp_definitions() end, '[G]oto [D]efinition')
-          map('gO', function() Snacks.picker.lsp_symbols() end, 'Open Document Symbols')
-          map('gW', function() Snacks.picker.lsp_workspace_symbols() end, 'Open Workspace Symbols')
-          map('grt', function() Snacks.picker.lsp_type_definitions() end, '[G]oto [T]ype Definition')
+          map('grr', function() Snacks.picker.lsp_references() end, '参照一覧 ([R]eferences)')
+          map('gri', function() Snacks.picker.lsp_implementations() end, '実装へ移動 ([I]mplementation)')
+          map('grd', function() Snacks.picker.lsp_definitions() end, '定義へ移動 ([D]efinition)')
+          map('gO', function() Snacks.picker.lsp_symbols() end, 'ドキュメントシンボル')
+          map('gW', function() Snacks.picker.lsp_workspace_symbols() end, 'ワークスペースシンボル ([W]orkspace)')
+          map('grt', function() Snacks.picker.lsp_type_definitions() end, '型定義へ移動 ([T]ype)')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client:supports_method('textDocument/documentHighlight', event.buf) then
@@ -61,7 +61,11 @@ return {
           end
 
           if client and client:supports_method('textDocument/inlayHint', event.buf) then
-            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+            map(
+              '<leader>th',
+              function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end,
+              'インレイヒント切替 ([T]oggle [H]ints)'
+            )
           end
         end,
       })
@@ -115,7 +119,7 @@ return {
         '<leader>f',
         function() require('conform').format { async = true, lsp_format = 'fallback' } end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = 'フォーマット ([F]ormat)',
       },
     },
     opts = {

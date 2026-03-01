@@ -14,30 +14,30 @@ return {
     },
     keys = {
       -- picker
-      { '<leader>sh', function() Snacks.picker.help() end, desc = '[S]earch [H]elp' },
-      { '<leader>sk', function() Snacks.picker.keymaps() end, desc = '[S]earch [K]eymaps' },
-      { '<leader>sf', function() Snacks.picker.files() end, desc = '[S]earch [F]iles' },
-      { '<leader>ss', function() Snacks.picker.pickers() end, desc = '[S]earch [S]elect Picker' },
-      { '<leader>sw', function() Snacks.picker.grep_word() end, desc = '[S]earch current [W]ord', mode = { 'n', 'v' } },
-      { '<leader>sg', function() Snacks.picker.grep() end, desc = '[S]earch by [G]rep' },
-      { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = '[S]earch [D]iagnostics' },
-      { '<leader>sr', function() Snacks.picker.resume() end, desc = '[S]earch [R]esume' },
-      { '<leader>s.', function() Snacks.picker.recent() end, desc = '[S]earch Recent Files' },
-      { '<leader>sc', function() Snacks.picker.commands() end, desc = '[S]earch [C]ommands' },
-      { '<leader><leader>', function() Snacks.picker.buffers() end, desc = '[ ] Find existing buffers' },
-      { '<leader>/', function() Snacks.picker.lines() end, desc = '[/] Search in current buffer' },
-      { '<leader>s/', function() Snacks.picker.grep { buf = true } end, desc = '[S]earch [/] in Open Files' },
-      { '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, desc = '[S]earch [N]eovim files' },
+      { '<leader>sh', function() Snacks.picker.help() end, desc = 'ヘルプ検索 ([H]elp)' },
+      { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'キーマップ検索 ([K]eymaps)' },
+      { '<leader>sf', function() Snacks.picker.files() end, desc = 'ファイル検索 ([F]iles)' },
+      { '<leader>ss', function() Snacks.picker.pickers() end, desc = 'Picker 一覧 ([S]elect)' },
+      { '<leader>sw', function() Snacks.picker.grep_word() end, desc = 'カーソル下の単語を検索 ([W]ord)', mode = { 'n', 'v' } },
+      { '<leader>sg', function() Snacks.picker.grep() end, desc = 'Grep 検索 ([G]rep)' },
+      { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = '診断検索 ([D]iagnostics)' },
+      { '<leader>sr', function() Snacks.picker.resume() end, desc = '前回の検索を再開 ([R]esume)' },
+      { '<leader>s.', function() Snacks.picker.recent() end, desc = '最近のファイル' },
+      { '<leader>sc', function() Snacks.picker.commands() end, desc = 'コマンド検索 ([C]ommands)' },
+      { '<leader><leader>', function() Snacks.picker.buffers() end, desc = 'バッファ一覧' },
+      { '<leader>/', function() Snacks.picker.lines() end, desc = 'バッファ内検索' },
+      { '<leader>s/', function() Snacks.picker.grep { buf = true } end, desc = '開いているファイル内を検索' },
+      { '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, desc = 'Neovim 設定ファイル検索 ([N]eovim)' },
 
       -- explorer
-      { '<leader>e', function() Snacks.explorer() end, desc = 'File [E]xplorer' },
+      { '<leader>e', function() Snacks.explorer() end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
 
       -- terminal
-      { '<C-/>', function() Snacks.terminal() end, desc = 'Toggle Terminal', mode = { 'n', 't' } },
+      { '<C-/>', function() Snacks.terminal() end, desc = 'ターミナル切替', mode = { 'n', 't' } },
       { '<C-_>', function() Snacks.terminal() end, desc = 'which_key_ignore', mode = { 'n', 't' } },
 
       -- window
-      { '<C-w>m', function() Snacks.toggle.zoom() end, desc = 'Toggle Zoom' },
+      { '<C-w>m', function() Snacks.toggle.zoom() end, desc = 'ズーム切替' },
     },
   },
 }
