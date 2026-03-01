@@ -1,7 +1,6 @@
 return {
   {
     'stevearc/oil.nvim',
-    dependencies = { { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font } },
     lazy = false,
     keys = {
       { '-', function() require('oil').open() end, desc = '親ディレクトリを開く' },
