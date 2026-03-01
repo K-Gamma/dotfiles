@@ -4,7 +4,7 @@ return {
     dependencies = { { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font } },
     lazy = false,
     keys = {
-      { '-', function() require('oil').open() end, desc = 'Open parent directory (oil)' },
+      { '-', function() require('oil').open() end, desc = '親ディレクトリを開く' },
     },
     opts = {
       default_file_explorer = false,

@@ -14,16 +14,16 @@ return {
       },
     },
     keys = {
-      { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
-      { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
-      { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
-      { ']b', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
-      { '[B', '<cmd>BufferLineMovePrev<cr>', desc = 'Move buffer prev' },
-      { ']B', '<cmd>BufferLineMoveNext<cr>', desc = 'Move buffer next' },
-      { '<leader>bp', '<Cmd>BufferLineTogglePin<CR>', desc = 'Toggle Pin' },
-      { '<leader>bP', '<Cmd>BufferLineGroupClose ungrouped<CR>', desc = 'Delete Non-Pinned Buffers' },
-      { '<leader>br', '<Cmd>BufferLineCloseRight<CR>', desc = 'Delete Buffers to the Right' },
-      { '<leader>bl', '<Cmd>BufferLineCloseLeft<CR>', desc = 'Delete Buffers to the Left' },
+      { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = '前のバッファ' },
+      { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = '次のバッファ' },
+      { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = '前のバッファ' },
+      { ']b', '<cmd>BufferLineCycleNext<cr>', desc = '次のバッファ' },
+      { '[B', '<cmd>BufferLineMovePrev<cr>', desc = '前に移動' },
+      { ']B', '<cmd>BufferLineMoveNext<cr>', desc = '後に移動' },
+      { '<leader>bp', '<Cmd>BufferLineTogglePin<CR>', desc = 'ピン留め切替 ([P]in)' },
+      { '<leader>bP', '<Cmd>BufferLineGroupClose ungrouped<CR>', desc = 'ピン留め以外を閉じる ([P]inned)' },
+      { '<leader>br', '<Cmd>BufferLineCloseRight<CR>', desc = '右のバッファを閉じる ([R]ight)' },
+      { '<leader>bl', '<Cmd>BufferLineCloseLeft<CR>', desc = '左のバッファを閉じる ([L]eft)' },
     },
   },
 
@@ -59,16 +59,16 @@ return {
         local gs = require 'gitsigns'
         local map = function(mode, keys, func, desc) vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = 'Git: ' .. desc }) end
 
-        -- hunk navigation
-        map('n', ']h', function() gs.nav_hunk 'next' end, 'Next Hunk')
-        map('n', '[h', function() gs.nav_hunk 'prev' end, 'Prev Hunk')
+        -- hunk ナビゲーション
+        map('n', ']h', function() gs.nav_hunk 'next' end, '次の hunk')
+        map('n', '[h', function() gs.nav_hunk 'prev' end, '前の hunk')
 
         -- hunk 操作
-        map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk, 'Stage Hunk')
-        map({ 'n', 'v' }, '<leader>hr', gs.reset_hunk, 'Reset Hunk')
-        map('n', '<leader>hu', gs.stage_hunk, 'Undo Stage Hunk')
-        map('n', '<leader>hp', gs.preview_hunk, 'Preview Hunk')
-        map('n', '<leader>hb', function() gs.blame_line { full = true } end, 'Blame Line')
+        map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk, 'hunk をステージ ([S]tage)')
+        map({ 'n', 'v' }, '<leader>hr', gs.reset_hunk, 'hunk をリセット ([R]eset)')
+        map('n', '<leader>hu', gs.stage_hunk, 'ステージ取消 ([U]ndo)')
+        map('n', '<leader>hp', gs.preview_hunk, 'hunk をプレビュー ([P]review)')
+        map('n', '<leader>hb', function() gs.blame_line { full = true } end, 'blame 表示 ([B]lame)')
       end,
     },
   },
@@ -80,13 +80,13 @@ return {
       delay = 0,
       icons = { mappings = vim.g.have_nerd_font },
       spec = {
-        { '<leader>b', group = '[B]uffer' },
-        { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>b', group = 'バッファ ([B]uffer)' },
+        { '<leader>s', group = '検索 ([S]earch)', mode = { 'n', 'v' } },
+        { '<leader>t', group = '切替 ([T]oggle)' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
         { '<leader>g', group = '[G]it' },
-        { '<leader>q', group = '[Q]uit/Session' },
-        { 'gr', group = 'LSP Actions', mode = { 'n' } },
+        { '<leader>q', group = 'セッション ([Q]uit)' },
+        { 'gr', group = 'LSP 操作', mode = { 'n' } },
       },
     },
   },
