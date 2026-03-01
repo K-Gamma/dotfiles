@@ -2,6 +2,10 @@ return {
   {
     'nvim-mini/mini.nvim',
     config = function()
+      -- アイコン (nvim-web-devicons の代替)
+      require('mini.icons').setup()
+      MiniIcons.mock_nvim_web_devicons()
+
       -- テキストオブジェクトの拡張 (va), yinq, ci' etc.)
       local ai = require 'mini.ai'
       ai.setup {
