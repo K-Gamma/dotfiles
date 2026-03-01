@@ -37,11 +37,7 @@ return {
           local buf, filetype = args.buf, args.match
           local language = vim.treesitter.language.get_lang(filetype)
           if not language then return end
-          if not vim.treesitter.language.add(language) then
-            local ts = require 'nvim-treesitter'
-            if vim.tbl_contains(ts.get_available(), language) then ts.install { language } end
-            return
-          end
+          if not vim.treesitter.language.add(language) then return end
           vim.treesitter.start(buf, language)
           vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
