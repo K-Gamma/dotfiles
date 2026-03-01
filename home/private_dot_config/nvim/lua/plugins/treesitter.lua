@@ -24,6 +24,7 @@ return {
         'query',
         'vim',
         'vimdoc',
+        'yaml',
       }
       require('nvim-treesitter').install(parsers)
 
@@ -67,7 +68,9 @@ return {
 
       local function attach(buf)
         local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
-        if not lang or not vim.treesitter.query.get(lang, 'textobjects') then return end
+        if not lang then return end
+        local ok, query = pcall(vim.treesitter.query.get, lang, 'textobjects')
+        if not ok or not query then return end
 
         for method, keymaps in pairs(moves) do
           for key, query in pairs(keymaps) do
