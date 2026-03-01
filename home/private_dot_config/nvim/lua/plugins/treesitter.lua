@@ -15,13 +15,17 @@ return {
       local parsers = {
         'bash',
         'c',
+        'css',
         'diff',
         'html',
+        'javascript',
         'lua',
         'luadoc',
         'markdown',
         'markdown_inline',
         'query',
+        'tsx',
+        'typescript',
         'vim',
         'vimdoc',
         'yaml',
@@ -43,6 +47,12 @@ return {
         end,
       })
     end,
+  },
+
+  {
+    'windwp/nvim-ts-autotag',
+    event = 'VeryLazy',
+    opts = {},
   },
 
   {
