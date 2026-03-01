@@ -30,7 +30,7 @@ return {
       { '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, desc = 'Neovim 設定ファイル検索 ([N]eovim)' },
 
       -- explorer
-      { '<leader>e', function() Snacks.explorer() end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
+      { '<leader>e', function() Snacks.explorer { cwd = vim.fs.root(0, '.git') } end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
 
       -- terminal
       { '<C-/>', function() Snacks.terminal() end, desc = 'ターミナル切替', mode = { 'n', 't' } },
