@@ -57,7 +57,7 @@ return {
       },
       on_attach = function(bufnr)
         local gs = require 'gitsigns'
-        local map = function(mode, keys, func, desc) vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = 'Git: ' .. desc }) end
+        local map = require('util.keymap').buf_map(bufnr, 'Git')
 
         -- hunk ナビゲーション
         map('n', ']h', function() gs.nav_hunk 'next' end, '次の hunk')
