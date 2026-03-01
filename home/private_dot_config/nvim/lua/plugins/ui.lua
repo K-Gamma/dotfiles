@@ -1,5 +1,33 @@
 return {
   {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VeryLazy',
+    opts = {
+      options = {
+        diagnostics = 'nvim_lsp',
+        always_show_bufferline = false,
+        offsets = {
+          { filetype = 'snacks_layout_box' },
+        },
+      },
+    },
+    keys = {
+      { '<S-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
+      { '<S-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+      { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = 'Prev Buffer' },
+      { ']b', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+      { '[B', '<cmd>BufferLineMovePrev<cr>', desc = 'Move buffer prev' },
+      { ']B', '<cmd>BufferLineMoveNext<cr>', desc = 'Move buffer next' },
+      { '<leader>bp', '<Cmd>BufferLineTogglePin<CR>', desc = 'Toggle Pin' },
+      { '<leader>bP', '<Cmd>BufferLineGroupClose ungrouped<CR>', desc = 'Delete Non-Pinned Buffers' },
+      { '<leader>br', '<Cmd>BufferLineCloseRight<CR>', desc = 'Delete Buffers to the Right' },
+      { '<leader>bl', '<Cmd>BufferLineCloseLeft<CR>', desc = 'Delete Buffers to the Left' },
+    },
+  },
+
+  {
     'rachartier/tiny-inline-diagnostic.nvim',
     event = 'LspAttach',
     priority = 1000,
@@ -52,6 +80,7 @@ return {
       delay = 0,
       icons = { mappings = vim.g.have_nerd_font },
       spec = {
+        { '<leader>b', group = '[B]uffer' },
         { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
