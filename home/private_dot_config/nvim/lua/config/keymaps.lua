@@ -124,10 +124,9 @@ map('n', '<leader><tab>[', '<cmd>tabprevious<CR>', { desc = '前のタブ' })
 -- ターミナルモード終了
 map('t', '<Esc>', '<C-\\><C-n>', { desc = 'ターミナルモード終了' })
 
--- 保存 / 終了
-map('n', '<Space>w', '<cmd>w<CR>', { desc = '保存' })
-map('n', '<Space>W', '<cmd>wa<CR>', { desc = 'すべて保存' })
-map('n', '<Space>q', '<cmd>q<CR>', { desc = '終了' })
+-- 保存
+map('n', '<leader>w', '<cmd>w<CR>', { desc = '保存' })
+map('n', '<leader>W', '<cmd>wa<CR>', { desc = 'すべて保存' })
 
 -- 誤操作防止（ZZ / ZQ / Q を無効化）
 map('n', 'ZZ', '<Nop>')
