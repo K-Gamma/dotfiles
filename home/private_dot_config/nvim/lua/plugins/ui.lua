@@ -105,6 +105,10 @@ return {
     event = 'VimEnter',
     opts = {
       delay = 0,
+      triggers = {
+        { '<auto>', mode = 'nxso' },
+        { 's', mode = { 'n', 'x' } },
+      },
       icons = { mappings = vim.g.have_nerd_font },
       spec = {
         { '<leader>b', group = 'バッファ ([B]uffer)' },
@@ -114,6 +118,14 @@ return {
         { '<leader>g', group = '[G]it' },
         { '<leader>q', group = 'セッション ([Q]uit)' },
         { 'gr', group = 'LSP 操作', mode = { 'n' } },
+        { 's', group = '囲み操作 ([S]urround)' },
+        { 'sa', desc = '囲みを追加 ([A]dd)', mode = { 'n', 'v' } },
+        { 'sd', desc = '囲みを削除 ([D]elete)' },
+        { 'sr', desc = '囲みを変更 ([R]eplace)' },
+        { 'sf', desc = '囲みを右検索 ([F]ind →)' },
+        { 'sF', desc = '囲みを左検索 ([F]ind ←)' },
+        { 'sh', desc = '囲みをハイライト ([H]ighlight)' },
+        { 'sn', desc = '検索行数を更新 ([N]_lines)' },
       },
     },
   },
