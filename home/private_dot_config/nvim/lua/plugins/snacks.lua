@@ -47,6 +47,13 @@ return {
       { '<leader>s/', function() Snacks.picker.grep { buf = true } end, desc = '開いているファイル内を検索' },
       { '<leader>sn', function() Snacks.picker.files { cwd = vim.fn.stdpath 'config' } end, desc = 'Neovim 設定ファイル検索 ([N]eovim)' },
 
+      -- git picker
+      { '<leader>gf', function() Snacks.picker.git_status() end, desc = '変更ファイル一覧 ([F]iles)' },
+      { '<leader>gb', function() Snacks.picker.git_branches() end, desc = 'ブランチ一覧 ([B]ranches)' },
+      { '<leader>gh', function() Snacks.picker.git_log() end, desc = 'コミットログ ([H]ashes)' },
+      { '<leader>gH', function() Snacks.picker.git_log_file() end, desc = 'ファイル履歴 ([H]istory)' },
+      { '<leader>gs', function() Snacks.picker.git_stash() end, desc = 'スタッシュ一覧 ([S]tash)' },
+
       -- explorer
       { '<leader>e', function() Snacks.explorer { cwd = vim.fs.root(0, '.git') } end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
 
