@@ -5,8 +5,15 @@ return {
     lazy = false,
     opts = {
       animate = {},
-      picker = {},
-      explorer = {},
+      picker = {
+        sources = {
+          files = { hidden = true },
+          grep = { hidden = true },
+        },
+      },
+      explorer = {
+        hidden = true,
+      },
       terminal = {},
       dashboard = {
         preset = {
