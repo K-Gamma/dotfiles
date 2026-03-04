@@ -1,3 +1,0 @@
-[submodule "home/private_dot_config/bat/themes/tokyonight.nvim"]
-	path = home/private_dot_config/bat/themes/tokyonight.nvim
-	url = https://github.com/folke/tokyonight.nvim
