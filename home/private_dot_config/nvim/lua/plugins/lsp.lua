@@ -24,13 +24,14 @@ return {
         callback = function(event)
           local map = require('util.keymap').buf_map(event.buf, 'LSP')
 
+          map('n', 'K', vim.lsp.buf.hover, 'ホバー情報')
           map('n', 'grn', vim.lsp.buf.rename, '名前変更 ([R]e[n]ame)')
           map({ 'n', 'x' }, 'gra', vim.lsp.buf.code_action, 'コードアクション ([A]ction)')
           map('n', 'grD', vim.lsp.buf.declaration, '宣言へ移動 ([D]eclaration)')
 
           map('n', 'grr', function() Snacks.picker.lsp_references() end, '参照一覧 ([R]eferences)')
           map('n', 'gri', function() Snacks.picker.lsp_implementations() end, '実装へ移動 ([I]mplementation)')
-          map('n', 'grd', function() Snacks.picker.lsp_definitions() end, '定義へ移動 ([D]efinition)')
+          map('n', 'gd', function() Snacks.picker.lsp_definitions() end, '定義へ移動 ([D]efinition)')
           map('n', 'gO', function() Snacks.picker.lsp_symbols() end, 'ドキュメントシンボル')
           map('n', 'gW', function() Snacks.picker.lsp_workspace_symbols() end, 'ワークスペースシンボル ([W]orkspace)')
           map('n', 'grt', function() Snacks.picker.lsp_type_definitions() end, '型定義へ移動 ([T]ype)')
