@@ -101,4 +101,4 @@ opt.winminwidth = 5
 opt.breakindent = true
 
 -- エンコーディング（日本語ファイルの自動認識）
-opt.fileencodings = { 'ucs-bom', 'iso-2022-jp-3', 'utf-8', 'euc-jp', 'cp932' }
+opt.fileencodings = { 'ucs-bom', 'utf-8', 'iso-2022-jp-3', 'euc-jp', 'cp932' }
