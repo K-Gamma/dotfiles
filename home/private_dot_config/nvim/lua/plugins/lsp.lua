@@ -32,6 +32,7 @@ return {
           map('n', 'grr', function() Snacks.picker.lsp_references() end, '参照一覧 ([R]eferences)')
           map('n', 'gri', function() Snacks.picker.lsp_implementations() end, '実装へ移動 ([I]mplementation)')
           map('n', 'gd', function() Snacks.picker.lsp_definitions() end, '定義へ移動 ([D]efinition)')
+          map('n', '<F12>', function() Snacks.picker.lsp_definitions() end, '定義へ移動')
           map('n', 'gO', function() Snacks.picker.lsp_symbols() end, 'ドキュメントシンボル')
           map('n', 'gW', function() Snacks.picker.lsp_workspace_symbols() end, 'ワークスペースシンボル ([W]orkspace)')
           map('n', 'grt', function() Snacks.picker.lsp_type_definitions() end, '型定義へ移動 ([T]ype)')
