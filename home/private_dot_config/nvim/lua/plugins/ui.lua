@@ -96,6 +96,24 @@ return {
         map('n', '<leader>hu', gs.stage_hunk, 'ステージ取消 ([U]ndo)')
         map('n', '<leader>hp', gs.preview_hunk, 'hunk をプレビュー ([P]review)')
         map('n', '<leader>hb', function() gs.blame_line { full = true } end, 'blame 表示 ([B]lame)')
+        map('n', '<leader>hP', function()
+          local line = vim.fn.line '.'
+          local file = vim.api.nvim_buf_get_name(0)
+          local output = vim.fn.system { 'git', 'blame', '-L', line .. ',' .. line, '--porcelain', '--', file }
+          local hash = output:match '^(%x+)'
+          if not hash or hash:match '^0+$' then
+            vim.notify('コミットされていない行です', vim.log.levels.WARN)
+            return
+          end
+          vim.system({ 'gh', 'api', 'repos/{owner}/{repo}/commits/' .. hash .. '/pulls', '--jq', '.[0].html_url' }, {}, function(result)
+            local url = vim.trim(result.stdout or '')
+            if url == '' or url == 'null' then
+              vim.schedule(function() vim.notify('PR が見つかりませんでした (commit: ' .. hash:sub(1, 7) .. ')', vim.log.levels.WARN) end)
+              return
+            end
+            vim.schedule(function() vim.ui.open(url .. '/changes/' .. hash) end)
+          end)
+        end, 'PR を開く ([P]ull request)')
       end,
     },
   },
