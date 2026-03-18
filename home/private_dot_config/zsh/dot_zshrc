@@ -31,10 +31,6 @@ if is-at-least 4.3.10; then
   autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 fi
 
-# completion (compinit is deferred via sheldon)
-typeset -ga _compdef_queue=()
-function compdef() { _compdef_queue+=("$*") }
-
 # Can execute man with the Esc-h
 if (( ${+aliases[run-help]} )); then
   unalias run-help
@@ -242,6 +238,9 @@ fi
 
 # TODO: English commentary
 # ++ Completion Settings {{{
+# compinit のダンプファイルを1日キャッシュ (リセット: run-compinit --force)
+zstyle ':plugin:ez-compinit' 'use-cache' 'yes'
+
 # 補完侯補をメニューから選択
 # select=2: 補完候補を一覧から選択, 補完候補が2つ以上なければすぐに補完
 zstyle ':completion:*' menu select=2
@@ -379,9 +378,7 @@ if [[ "$(uname)" == "Linux" ]]; then
 fi
 alias x='exit'
 alias g='git'
-compdef g=git
 alias d='docker'
-compdef d=docker
 
 if [[ -f "/usr/local/bin/vim" ]]; then
   alias ov="/usr/local/bin/vim"  # own vim
@@ -442,7 +439,21 @@ fi
 # }}}
 
 # Plugin Settings {{{
-eval "$(sheldon source)"
+export YSU_MODE=ALL
+zsh_plugins=${ZDOTDIR}/.zsh_plugins
+[[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
+if [[ -d /opt/homebrew/opt/antidote/share/antidote ]]; then
+  fpath=(/opt/homebrew/opt/antidote/share/antidote/functions $fpath)
+elif [[ -d ${ZDOTDIR}/.antidote ]]; then
+  fpath=(${ZDOTDIR}/.antidote/functions $fpath)
+fi
+autoload -Uz antidote
+if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+fi
+source ${zsh_plugins}.zsh
+compdef g=git
+compdef d=docker
 # }}}
 
 # Applications Settings {{{
