@@ -63,3 +63,9 @@ echo -e "\033[33mWARNING: Omit "snap instal".  Please install \"{{ $snaps | join
 {{-     end }}
 {{-   end}}
 {{- end }}
+
+# antidote (zsh plugin manager)
+ANTIDOTE_DIR="${ZDOTDIR:-$HOME/.config/zsh}/.antidote"
+if [[ ! -d "$ANTIDOTE_DIR" ]]; then
+  git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_DIR"
+fi
