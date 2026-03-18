@@ -530,11 +530,8 @@ fshow() {
 # +++ }}}
 # ++ }}}
 # + }}}
-# + activate mise {{{
-if type mise &>/dev/null; then
-  eval "$(mise activate zsh --shims)"
-  export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
-fi
+# + mise {{{
+export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
 # + }}}
 # }}}
 
