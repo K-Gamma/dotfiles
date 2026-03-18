@@ -34,7 +34,16 @@ github = "zsh-users/zsh-completions"
 apply = ["source"]
 github = "romkatv/powerlevel10k"
 
-# === Defferd ===
+# === Deferred ===
+
+[plugins.compinit]
+inline = """zsh-defer -c '
+  unfunction compdef
+  autoload -Uz compinit && compinit -C
+  for _def in "${_compdef_queue[@]}"; do compdef $_def; done
+  unset _compdef_queue _def
+'
+"""
 
 # https://github.com/zsh-users/zsh-autosuggestions
 [plugins.zsh-autosuggestions]
@@ -60,6 +69,3 @@ github = "zsh-users/zsh-syntax-highlighting"
 [plugins.zsh-you-should-use]
 github = "MichaelAquilina/zsh-you-should-use"
 hooks.pre = "export YSU_MODE=ALL"
-
-[plugins.compinit]
-inline = 'autoload -Uz compinit && zsh-defer compinit'

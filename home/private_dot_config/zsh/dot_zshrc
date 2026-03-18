@@ -31,8 +31,9 @@ if is-at-least 4.3.10; then
   autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 fi
 
-# completion
-autoload -Uz compinit && compinit
+# completion (compinit is deferred via sheldon)
+typeset -ga _compdef_queue=()
+function compdef() { _compdef_queue+=("$*") }
 
 # Can execute man with the Esc-h
 if (( ${+aliases[run-help]} )); then
