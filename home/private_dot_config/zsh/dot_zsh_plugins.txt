@@ -11,5 +11,6 @@ mattmc3/ez-compinit
 zsh-users/zsh-autosuggestions kind:defer branch:develop
 junegunn/fzf-git.sh kind:defer
 Aloxaf/fzf-tab kind:defer
+olets/zsh-abbr kind:defer
+olets/zsh-autosuggestions-abbreviations-strategy kind:defer
 zsh-users/zsh-syntax-highlighting kind:defer
-MichaelAquilina/zsh-you-should-use kind:defer
