@@ -28,7 +28,7 @@ autoload -Uz colors && colors
 autoload -Uz is-at-least
 if is-at-least 4.3.10; then
   autoload -Uz vcs_info
-  autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+  autoload -Uz add-zsh-hook
 fi
 
 # Can execute man with the Esc-h
@@ -223,18 +223,9 @@ typeset -U path cdpath fpath manpath
 
 # TODO: adjustment
 # + Zstyle (The zsh/zutil Module Settings) {{{
-# ++ 'cdr' settings (Required before 'zplug load') {{{
 if [[ ! -d "${XDG_CACHE_HOME}/zsh" ]]; then
   mkdir -p "${XDG_CACHE_HOME}/zsh"
 fi
-if is-at-least 4.3.10; then
-  add-zsh-hook chpwd chpwd_recent_dirs
-  zstyle ':chpwd:*' recent-dirs-max 500
-  zstyle ':chpwd:*' recent-dirs-default true
-  zstyle ':chpwd:*' recent-dirs-file "${XDG_CACHE_HOME}/zsh/chpwd-recent-dirs"
-  zstyle ':chpwd:*' recent-dirs-pushd true
-fi
-# ++ }}}
 
 # TODO: English commentary
 # ++ Completion Settings {{{
@@ -543,6 +534,9 @@ fshow() {
 # + }}}
 # + mise {{{
 export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
+# + }}}
+# + zoxide {{{
+eval "$(zoxide init zsh)"
 # + }}}
 # }}}
 
