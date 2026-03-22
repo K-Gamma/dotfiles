@@ -59,6 +59,35 @@ return {
       { '<leader>gH', function() Snacks.picker.git_log_file() end, desc = 'ファイル履歴 ([H]istory)' },
       { '<leader>gs', function() Snacks.picker.git_stash() end, desc = 'スタッシュ一覧 ([S]tash)' },
 
+      -- yank path
+      {
+        '<leader>yp',
+        function()
+          local p = vim.fn.expand '%:p'
+          vim.fn.setreg('+', p)
+          Snacks.notify(p, { title = 'Copied absolute path' })
+        end,
+        desc = '絶対パスをコピー ([P]ath)',
+      },
+      {
+        '<leader>yf',
+        function()
+          local f = vim.fn.expand '%:t'
+          vim.fn.setreg('+', f)
+          Snacks.notify(f, { title = 'Copied filename' })
+        end,
+        desc = 'ファイル名をコピー ([F]ile)',
+      },
+      {
+        '<leader>yr',
+        function()
+          local r = vim.fn.expand '%:.'
+          vim.fn.setreg('+', r)
+          Snacks.notify(r, { title = 'Copied relative path' })
+        end,
+        desc = '相対パスをコピー ([R]elative)',
+      },
+
       -- explorer
       { '<leader>e', function() Snacks.explorer { cwd = vim.fs.root(0, '.git') } end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
 
