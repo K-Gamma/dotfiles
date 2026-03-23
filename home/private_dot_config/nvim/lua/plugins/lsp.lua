@@ -72,6 +72,7 @@ return {
 
       local servers = {
         ts_ls = {},
+        yamlls = {},
         lua_ls = {
           on_init = function(client)
             if client.workspace_folders then
