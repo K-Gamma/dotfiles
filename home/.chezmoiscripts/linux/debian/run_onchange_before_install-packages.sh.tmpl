@@ -21,11 +21,8 @@ set -eufo pipefail
      "zsh"
      "zstd" -}}
 {{ $snaps := list
-     "bottom"
      "bw"
      "dust" -}}
-{{ $classicSnaps := list
-     "nvim" -}}
 
 {{ $sudo := "sudo " -}}
 {{ if eq .chezmoi.username "root" -}}
@@ -58,14 +55,11 @@ echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc arch={{ .chezmoi
 {{ $sudo }}apt-get install -y {{ $packages | join " " }}
 
 {{- if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
-echo -e "\033[33mWARNING: Omit snap install. Please install {{ $snaps | join ", " }}, {{ $classicSnaps | join ", " }} manually.\033[0m"
+echo -e "\033[33mWARNING: Omit snap install. Please install {{ $snaps | join ", " }} manually.\033[0m"
 {{- else }}
 {{-   if lookPath "snap" }}
 {{-     range $snaps }}
 ( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install {{ . }}
-{{-     end }}
-{{-     range $classicSnaps }}
-( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install --classic {{ . }}
 {{-     end }}
 {{-   end}}
 {{- end }}
