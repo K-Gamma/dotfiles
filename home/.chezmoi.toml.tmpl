@@ -1,0 +1,4 @@
+{{- $useBitwarden := promptBoolOnce . "useBitwarden" "Bitwarden で管理しているシークレットを適用しますか" false -}}
+
+[data]
+    useBitwarden = {{ $useBitwarden }}
