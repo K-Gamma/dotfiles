@@ -1,4 +1,6 @@
 [user]
 	name = K-Gamma
 	email = ganma.kato@gmail.com
+{{- if .useBitwarden }}
 	signingkey = ~/.ssh/signingkey_personal
+{{- end }}

@@ -97,8 +97,11 @@
 [include]
 	path = config.d/local/config.ini
 
+{{- if .useBitwarden }}
+
 [commit]
 	gpgsign = true
 
 [gpg]
 	format = ssh
+{{- end }}
