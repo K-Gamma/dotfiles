@@ -1,0 +1,9 @@
+{{- if lookPath "mise" -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+# {{ include "private_dot_config/mise/config.toml" | sha256sum }}
+
+mise install
+{{- end }}
