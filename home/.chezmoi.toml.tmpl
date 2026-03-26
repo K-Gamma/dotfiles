@@ -2,3 +2,9 @@
 
 [data]
     useBitwarden = {{ $useBitwarden }}
+
+{{- if $useBitwarden }}
+
+[bitwarden]
+    unlock = "auto"
+{{- end }}
