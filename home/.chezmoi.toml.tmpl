@@ -3,6 +3,12 @@
 [data]
     useBitwarden = {{ $useBitwarden }}
 
+[add]
+    secrets = "error"
+
+[diff]
+    pager = "delta"
+
 {{- if $useBitwarden }}
 
 [bitwarden]
