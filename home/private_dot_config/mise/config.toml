@@ -1,0 +1,8 @@
+[tools]
+bun = "latest"
+curlie = "latest"
+delta = "latest"
+pnpm = "latest"
+tmux = "latest"
+vivid = "latest"
+yq = "latest"
