@@ -1,5 +1,12 @@
 .config/nvim/lazy-lock.json
 
+{{- if not .useBitwarden }}
+.ssh/id_ed25519_personal
+.ssh/id_ed25519_personal.pub
+.ssh/signingkey_personal
+.ssh/signingkey_personal.pub
+{{- end }}
+
 {{- if eq .chezmoi.os "darwin" }}
 .chezmoiscripts/linux/**
 .chezmoiscripts/windows/**
