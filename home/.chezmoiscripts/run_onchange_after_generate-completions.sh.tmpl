@@ -1,4 +1,3 @@
-{{- if lookPath "docker" -}}
 #!/bin/bash
 
 set -eufo pipefail
@@ -6,5 +5,18 @@ set -eufo pipefail
 COMPLETIONS_DIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}/completions"
 mkdir -p "$COMPLETIONS_DIR"
 
+{{ if lookPath "bat" -}}
+bat --completion zsh > "$COMPLETIONS_DIR/_bat"
+{{ end -}}
+{{ if lookPath "delta" -}}
+delta --generate-completion zsh > "$COMPLETIONS_DIR/_delta"
+{{ end -}}
+{{ if lookPath "docker" -}}
 docker completion zsh > "$COMPLETIONS_DIR/_docker"
-{{- end }}
+{{ end -}}
+{{ if lookPath "gh" -}}
+gh completion -s zsh > "$COMPLETIONS_DIR/_gh"
+{{ end -}}
+{{ if lookPath "mise" -}}
+mise completions zsh > "$COMPLETIONS_DIR/_mise"
+{{ end -}}
