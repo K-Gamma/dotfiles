@@ -1,0 +1,10 @@
+{{- if lookPath "docker" -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+COMPLETIONS_DIR="${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}/completions"
+mkdir -p "$COMPLETIONS_DIR"
+
+docker completion zsh > "$COMPLETIONS_DIR/_docker"
+{{- end }}
