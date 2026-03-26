@@ -348,7 +348,7 @@ alias ls='eza --group-directories-first -F'
 alias l='eza --group-directories-first -F'
 alias ll='eza --group-directories-first -laF --git'
 alias la='eza --group-directories-first -aF'
-alias t='eza --tree'
+command tmux &> /dev/null && alias t='tmux'
 
 # rm aliases
 alias rm='rm -i -v'
