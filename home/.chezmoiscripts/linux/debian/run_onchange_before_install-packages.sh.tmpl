@@ -60,6 +60,8 @@ echo -e "\033[33mWARNING: Omit snap install. Please install {{ $snaps | join ", 
 {{-     range $snaps }}
 ( snap info {{ . }} | grep -q ^installed: ) || {{ $sudo }}snap install {{ . }}
 {{-     end }}
+{{-   else }}
+{{-     warnf "snap が見つかりません。%s のインストールはスキップされます" ($snaps | join ", ") }}
 {{-   end}}
 {{- end }}
 
