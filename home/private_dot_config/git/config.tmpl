@@ -15,12 +15,17 @@
 
 {{- $ghPath := lookPath "gh" }}
 {{- if $ghPath}}
+{{-   if not (exec "gh" "auth" "status") }}
+{{-     warnf "gh が未認証です。'gh auth login' を実行してください" }}
+{{-   end }}
 [credential "https://github.com"]
 	helper =
 	helper = !{{ $ghPath }} auth git-credential
 [credential "https://gist.github.com"]
 	helper =
 	helper = !{{ $ghPath }} auth git-credential
+{{- else }}
+{{- warnf "gh が見つかりません。GitHub credential helper はスキップされます" }}
 {{- end }}
 
 [diff]
