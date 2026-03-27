@@ -471,6 +471,32 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 fi
 
+# Alt-G: git ルート起点で fzf ディレクトリ移動
+fzf-cdg-widget() {
+  setopt localoptions pipefail no_aliases 2> /dev/null
+  local root dir
+  root=$(git rev-parse --show-toplevel 2>/dev/null) || return
+  dir="$(
+    FZF_DEFAULT_COMMAND="fd '' ${(q)root} --type d --hidden --exclude .git" \
+    FZF_DEFAULT_OPTS=$(__fzf_defaults "--reverse --scheme=path" "+m") \
+    FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) < /dev/tty)"
+  if [[ -z "$dir" ]]; then
+    zle redisplay
+    return 0
+  fi
+  zle push-line
+  BUFFER="builtin cd -- ${(q)dir}"
+  zle accept-line
+  local ret=$?
+  unset dir
+  zle reset-prompt
+  return $ret
+}
+zle     -N             fzf-cdg-widget
+bindkey -M emacs '\eg' fzf-cdg-widget
+bindkey -M vicmd '\eg' fzf-cdg-widget
+bindkey -M viins '\eg' fzf-cdg-widget
+
 # + }}}
 # + mise {{{
 export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
