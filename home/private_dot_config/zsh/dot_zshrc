@@ -220,45 +220,44 @@ if [[ ! -d "${XDG_CACHE_HOME}/zsh" ]]; then
   mkdir -p "${XDG_CACHE_HOME}/zsh"
 fi
 
-# TODO: English commentary
 # ++ Completion Settings {{{
-# compinit のダンプファイルを1日キャッシュ (リセット: run-compinit --force)
+# Cache compinit dump file for 1 day (reset: run-compinit --force)
 zstyle ':plugin:ez-compinit' 'use-cache' 'yes'
 
-# 補完侯補をメニューから選択
-# select=2: 補完候補を一覧から選択, 補完候補が2つ以上なければすぐに補完
+# Select completion candidates via menu selection.
+# select=2: start menu selection when 2+ candidates, otherwise complete immediately.
 zstyle ':completion:*' menu select=2
 
-# 補完時に, 文字の大小を区別しない
+# Case-insensitive completion (lowercase matches uppercase).
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# ~/f を /home/usr/foo ではなく ~/foo に補完
+# Keep prefix containing tilde or parameter expansion (e.g. ~/f -> ~/foo, not /home/usr/foo).
 zstyle ':completion:*' keep-prefix
 
 #zstyle ':completion:*' recent-dirs-insert ???
 
-### 補完候補
-### _oldlist 前回の補完結果を再利用する。
-### _complete: 補完する。
-### _match: globを展開しないで候補の一覧から補完する。
-### _history: ヒストリのコマンドも補完候補とする。
-### _ignored: 補完候補にださないと指定したものも補完候補とする。
-### _approximate: 似ている補完候補も補完候補とする。
-### _prefix: カーソル以降を無視してカーソル位置までで補完する。
+### Completers:
+### _oldlist: Reuse the previous completion result.
+### _complete: Generate completions in a context-sensitive manner.
+### _match: Complete using pattern matching without expanding globs.
+### _history: Complete words from the shell's command history.
+### _ignored: Reinstate matches excluded by ignored-patterns.
+### _approximate: Allow completions to undergo corrections.
+### _prefix: Complete with the suffix (everything after cursor) ignored.
 zstyle ':completion:*' completer _complete _ignored _prefix
 
-# 補完候補に着色
+# Colorize completion candidates using LS_COLORS.
 if [[ -n "${LS_COLORS}" ]]; then
   zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fi
 
-# カレントディレクトリを非表示
+# Ignore parent and current working directory from cd completion.
 zstyle ':completion:*:cd:*' ignore-parents parent pwd
 
-# オブジェクトファイルとか中間ファイルとか非表示
+# Exclude object files and intermediate files from completion.
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
 
-  # sudo でも補完の対象
+# Search paths for command completion under sudo.
 zstyle ':completion:*:sudo:*' command-path \
   "/usr/local/sbin" \
   "/usr/local/bin"  \
@@ -268,18 +267,18 @@ zstyle ':completion:*:sudo:*' command-path \
   "/bin"            \
   "/usr/X11R6/bin"
 
-# 補完候補をキャッシュ
+# Enable completion caching.
 zstyle ':completion:*' use-cache true #yes?
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 
-# 詳細情報を非表示
+# Disable verbose completion listings.
 zstyle ':completion:*' verbose no
 
-# 補完フォーマット
+# Format string displayed above completion matches.
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 zstyle ':completion:*' group-name ''
 
-# セパレータ
+# Separator between completion string and description.
 zstyle ':completion:*' list-separator '-->'
 # ++ }}}
 # + }}}
@@ -418,7 +417,7 @@ fi
 
 # TODO: addition
 # + Functions {{{
-# git ルートに cd
+# cd to git root
 cdg() { cd "$(git rev-parse --show-toplevel)" }
 
 # + }}}
@@ -476,7 +475,7 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 fi
 
-# Alt-G: git ルート起点で fzf ディレクトリ移動
+# Alt-G: fzf directory navigation from git root
 fzf-cdg-widget() {
   setopt localoptions pipefail no_aliases 2> /dev/null
   local root dir
