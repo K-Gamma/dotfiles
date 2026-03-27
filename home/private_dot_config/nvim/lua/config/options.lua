@@ -1,7 +1,20 @@
 local opt = vim.opt
 
--- クリップボードの同期（SSH 接続時は OSC 52 の自動統合を妨げないよう無効化）
-opt.clipboard = vim.env.SSH_CONNECTION and '' or 'unnamedplus'
+-- クリップボードの同期（SSH 接続時は OSC 52 経由でローカルに転送）
+if vim.env.SSH_CONNECTION then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+  }
+end
+opt.clipboard = 'unnamedplus'
 
 -- 変更バッファを閉じる前に保存確認
 opt.confirm = true
