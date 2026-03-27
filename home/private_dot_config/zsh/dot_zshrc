@@ -394,10 +394,14 @@ name_dir "${HOME}/.vim/" .vim
 unfunction name_dir
 # + }}}
 
-# TODO: addition
 # + Keybind {{{
 # Emacs like keybind
 bindkey -e
+
+# Edit command line in $EDITOR with Ctrl-X Ctrl-E
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
 
 # History search
 bindkey '^P' history-beginning-search-backward
