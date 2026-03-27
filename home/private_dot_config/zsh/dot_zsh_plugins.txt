@@ -1,9 +1,6 @@
 # Prompt (sourced immediately for instant prompt)
 romkatv/powerlevel10k
 
-# Completions (sourced immediately to populate fpath before compinit)
-zsh-users/zsh-completions
-
 # Completion initialization (sourced immediately, defers actual compinit to precmd)
 mattmc3/ez-compinit
 
