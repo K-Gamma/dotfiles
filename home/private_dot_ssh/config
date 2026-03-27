@@ -2,20 +2,20 @@ Include ~/.ssh/config.d/*.conf
 
 # https://man.openbsd.org/ssh_config
 Host *
-    # ssh-agent に鍵情報を保存
+    # Automatically add keys to the running ssh-agent
     AddKeysToAgent yes
-    # ssh-agent への接続をリモートマシンから転送
+    # Forward the authentication agent connection to the remote machine
     ForwardAgent yes
-    # X11を転送
+    # Forward X11 connections over the secure channel
     ForwardX11 yes
     ForwardX11Trusted yes
-    # ホスト鍵を known_hosts へ自動的に追加
+    # Automatically add new host keys to known_hosts
     StrictHostKeyChecking no
-    # パスワード認証を無効化
+    # Disable password authentication
     PasswordAuthentication no
-    # キーボードインタラクティブ認証を無効化
+    # Disable keyboard-interactive authentication
     KbdInteractiveAuthentication no
-    # 1分でタイムアウト
+    # Send keepalive message every 60 seconds
     ServerAliveInterval 60
-    # OpenSSH 8.8 以降、SHA-1 ハッシュ アルゴリズムを使用した RSA 署名がデフォルトでは無効になるため有効化
+    # Enable legacy ssh-rsa (SHA-1) algorithm, disabled by default since OpenSSH 8.8
     HostkeyAlgorithms +ssh-rsa
