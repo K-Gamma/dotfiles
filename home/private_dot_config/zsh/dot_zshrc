@@ -206,7 +206,6 @@ setopt zle
 # ++ }}}
 # + }}}
 
-# TODO: adjustment
 # + Typeset {{{
 # An array to note missing features to ease diagnosis in case of problems
 typeset -ga debian_missing_features
