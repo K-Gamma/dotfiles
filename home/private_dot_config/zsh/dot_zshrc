@@ -380,6 +380,7 @@ else
   alias clip='xsel --clipboard --input'
 fi
 alias relogin='exec ${SHELL} -l'
+alias path='echo $PATH | tr ":" "\n"'
 # + }}}
 
 # + Named Directories {{{
