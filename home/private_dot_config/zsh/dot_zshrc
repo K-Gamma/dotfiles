@@ -214,7 +214,6 @@ typeset -ga debian_missing_features
 typeset -U path cdpath fpath manpath
 # + }}}
 
-# TODO: adjustment
 # + Zstyle (The zsh/zutil Module Settings) {{{
 if [[ ! -d "${XDG_CACHE_HOME}/zsh" ]]; then
   mkdir -p "${XDG_CACHE_HOME}/zsh"
@@ -233,8 +232,6 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 # Keep prefix containing tilde or parameter expansion (e.g. ~/f -> ~/foo, not /home/usr/foo).
 zstyle ':completion:*' keep-prefix
-
-#zstyle ':completion:*' recent-dirs-insert ???
 
 ### Completers:
 ### _oldlist: Reuse the previous completion result.
@@ -268,7 +265,7 @@ zstyle ':completion:*:sudo:*' command-path \
   "/usr/X11R6/bin"
 
 # Enable completion caching.
-zstyle ':completion:*' use-cache true #yes?
+zstyle ':completion:*' use-cache true
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 
 # Disable verbose completion listings.
