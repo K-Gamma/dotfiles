@@ -314,6 +314,9 @@ alias -s hs=runhaskell
 alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
 alias -s {mp3,frac}=audacious
 alias -s {html,htm,md}=firefox
+alias -s json='jq .'
+alias -s {yml,yaml}='yq .'
+alias -s toml='yq -p toml .'
 function extract() {
   case $1 in
     *.tar.gz|*.tgz) tar xzvf $1;;
