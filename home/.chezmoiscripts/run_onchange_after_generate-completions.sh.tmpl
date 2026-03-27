@@ -8,15 +8,42 @@ mkdir -p "$COMPLETIONS_DIR"
 {{ if lookPath "bat" -}}
 bat --completion zsh > "$COMPLETIONS_DIR/_bat"
 {{ end -}}
+{{ if lookPath "bun" -}}
+bun completions > "$COMPLETIONS_DIR/_bun"
+{{ end -}}
+{{ if lookPath "chezmoi" -}}
+chezmoi completion zsh > "$COMPLETIONS_DIR/_chezmoi"
+{{ end -}}
 {{ if lookPath "delta" -}}
 delta --generate-completion zsh > "$COMPLETIONS_DIR/_delta"
 {{ end -}}
 {{ if lookPath "docker" -}}
 docker completion zsh > "$COMPLETIONS_DIR/_docker"
 {{ end -}}
+{{ if lookPath "fd" -}}
+fd --gen-completions zsh > "$COMPLETIONS_DIR/_fd"
+{{ end -}}
 {{ if lookPath "gh" -}}
 gh completion -s zsh > "$COMPLETIONS_DIR/_gh"
 {{ end -}}
+{{ if lookPath "golangci-lint" -}}
+golangci-lint completion zsh > "$COMPLETIONS_DIR/_golangci-lint"
+{{ end -}}
+{{ if lookPath "lefthook" -}}
+lefthook completion zsh > "$COMPLETIONS_DIR/_lefthook"
+{{ end -}}
 {{ if lookPath "mise" -}}
 mise completions zsh > "$COMPLETIONS_DIR/_mise"
+{{ end -}}
+{{ if lookPath "pnpm" -}}
+pnpm completion zsh > "$COMPLETIONS_DIR/_pnpm"
+{{ end -}}
+{{ if lookPath "rg" -}}
+rg --generate complete-zsh > "$COMPLETIONS_DIR/_rg"
+{{ end -}}
+{{ if lookPath "tree-sitter" -}}
+tree-sitter complete --shell zsh > "$COMPLETIONS_DIR/_tree-sitter"
+{{ end -}}
+{{ if lookPath "yq" -}}
+yq completion zsh > "$COMPLETIONS_DIR/_yq"
 {{ end -}}
