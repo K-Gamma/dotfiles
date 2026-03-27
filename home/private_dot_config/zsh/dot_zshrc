@@ -302,6 +302,10 @@ alias -g @t='| tail'
 alias -g @s='| sed'
 alias -g @c='| cat'
 alias -g @f='| fzf'
+alias -g @j='| jq .'
+alias -g @w='| wc -l'
+alias -g @y='| yq .'
+alias -g @n='2>/dev/null'
 alias -g @clip='| clip'
 
 # suffix
