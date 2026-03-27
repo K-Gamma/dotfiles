@@ -26,9 +26,6 @@ fd --gen-completions zsh > "$COMPLETIONS_DIR/_fd"
 {{ if lookPath "gh" -}}
 gh completion -s zsh > "$COMPLETIONS_DIR/_gh"
 {{ end -}}
-{{ if lookPath "golangci-lint" -}}
-golangci-lint completion zsh > "$COMPLETIONS_DIR/_golangci-lint"
-{{ end -}}
 {{ if lookPath "lefthook" -}}
 lefthook completion zsh > "$COMPLETIONS_DIR/_lefthook"
 {{ end -}}
