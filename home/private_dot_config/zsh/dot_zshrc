@@ -410,12 +410,56 @@ if is-at-least 4.3.10; then
   bindkey '^R' history-incremental-pattern-search-backward
   bindkey '^S' history-incremental-pattern-search-forward
 fi
+
+# Toggle Ctrl-Z between suspend and fg
+fancy-ctrl-z() {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line -w
+  else
+    zle push-input -w
+    zle clear-screen -w
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
 # + }}}
 
-# TODO: addition
 # + Functions {{{
 # cd to git root
 cdg() { cd "$(git rev-parse --show-toplevel)" }
+
+# mkdir + cd, or git clone + cd
+take() {
+  if [[ $1 =~ ^([A-Za-z0-9]+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
+    git clone "$1" && cd "$(basename "${1%%.git}")"
+  else
+    mkdir -p "$@" && cd "${@:$#}"
+  fi
+}
+
+# Kill processes interactively with fzf
+fkill() {
+  local pid
+  if [[ "$UID" != "0" ]]; then
+    pid=$(ps -f -u "$UID" | sed 1d | fzf -m | awk '{print $2}')
+  else
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  fi
+  if [[ -n "$pid" ]]; then
+    echo "$pid" | xargs kill -"${1:-9}"
+  fi
+}
+
+# Interactive ripgrep with fzf, open result in $EDITOR
+frg() {
+  rg --color=always --line-number --no-heading --smart-case "${*:-}" |
+    fzf --ansi \
+        --delimiter : \
+        --preview 'bat --color=always {1} --highlight-line {2}' \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+        --bind "enter:become(${EDITOR:-nvim} {1} +{2})"
+}
 
 # + }}}
 # }}}
