@@ -22,7 +22,6 @@ fi
 #}}}
 
 # Build-in Function Settings {{{
-# TODO: adjustment
 # + Autoload {{{
 autoload -Uz is-at-least
 autoload -Uz add-zsh-hook
@@ -33,7 +32,6 @@ if (( ${+aliases[run-help]} )); then
 fi
 autoload -Uz run-help
 autoload -Uz run-help-git
-autoload -Uz run-help-svn
 # + }}}
 
 # + Options {{{
