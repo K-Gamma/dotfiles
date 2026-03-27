@@ -280,7 +280,6 @@ zstyle ':completion:*' list-separator '-->'
 # ++ }}}
 # + }}}
 
-# TODO: addition
 # + Aliases {{{
 alias less='less -MN'
 
@@ -349,7 +348,9 @@ alias l='eza --group-directories-first -F'
 alias ll='eza --group-directories-first -laF --git'
 alias la='eza --group-directories-first -aF'
 
-# rm aliases
+# Safety aliases
+alias cp='cp -i'
+alias mv='mv -i'
 alias rm='rm -i -v'
 if type trash-put &> "/dev/null"; then
   alias tp='trash-put'
@@ -361,11 +362,6 @@ alias df='df -h'
 alias du='du -hs'
 if [[ "$(uname)" == "Linux" ]]; then
   alias ps='ps --sort=start_time'
-fi
-if [[ -f "/usr/local/bin/vim" ]]; then
-  alias ov="/usr/local/bin/vim"  # own vim
-elif type trash-put &> "/dev/null"; then
-  alias ov="/usr/bin/vim"  # original vim
 fi
 if [[ ${OSTYPE} == darwin* ]]; then
   alias clip='pbcopy'
