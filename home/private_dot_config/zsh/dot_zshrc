@@ -112,9 +112,6 @@ setopt extended_history
 # if conflict occurred, delete the old one.
 setopt hist_ignore_all_dups
 
-# Erase extra blanks.
-setopt hist_ignore_dups
-
 # If there is a space at the beginning, don't record history.
 setopt hist_ignore_space
 
@@ -138,9 +135,6 @@ setopt no_flow_control
 # Do not exit on end-of-file.
 setopt ignore_eof
 
-# Print a warning message if a mail file has been accessed since the shell last checked.
-setopt mail_warning
-
 # Perform a path search even on command names with slashes in them.
 setopt path_dirs
 
@@ -160,14 +154,8 @@ setopt long_list_jobs
 # ++ }}}
 
 # ++ Prompting {{{
-# Even if there isn't line feed code at the end of the output string, it is displayed.
-unsetopt prompt_cr
-
 # Evaluate PROMPT variable expansion, command substitution, arithmetic operation etc for each display.
 setopt prompt_subst
-
-# Delete the right prompt after executing the command.
-setopt transient_rprompt
 # ++ }}}
 
 # ++ Scripts and Functions {{{
