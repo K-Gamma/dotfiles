@@ -37,14 +37,15 @@
   # Zsh >= 5.1 is required.
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
-  # Prompt colors.
-  local grey='#414868'
-  local red='#F7768E'
-  local yellow='#E0AF68'
-  local blue='#7AA2F7'
-  local magenta='#BB9AF7'
-  local cyan='#7DCFFF'
-  local white='#C0CAF5'
+  # Prompt colors (tokyonight-day).
+  # https://github.com/folke/tokyonight.nvim/blob/main/extras/lua/tokyonight_day.lua
+  local grey='#8990b3'      # dark3
+  local red='#f52a65'       # red
+  local yellow='#8c6c3e'    # yellow
+  local blue='#2e7de9'      # blue
+  local magenta='#9854f1'   # magenta
+  local cyan='#007197'      # cyan
+  local white='#3760bf'     # fg
 
   # Left prompt segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
