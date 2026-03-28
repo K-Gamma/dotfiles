@@ -224,15 +224,12 @@ zstyle ':completion:*:sudo:*' command-path \
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 
-# Disable verbose completion listings.
-zstyle ':completion:*' verbose no
-
 # Format string displayed above completion matches.
 zstyle ':completion:*:descriptions' format '%BCompleting%b %U%d%u'
 zstyle ':completion:*' group-name ''
 
-# Separator between completion string and description.
-zstyle ':completion:*' list-separator '-->'
+# Remove separator between completion string and description.
+zstyle ':completion:*' list-separator ''
 
 # Show warning when no matches found.
 zstyle ':completion:*:warnings' format '%F{#8990b3}-- no matches found --%f'
@@ -240,7 +237,7 @@ zstyle ':completion:*:warnings' format '%F{#8990b3}-- no matches found --%f'
 # Treat // as / instead of /*/
 zstyle ':completion:*' squeeze-slashes true
 
-# Allow 1 error per 3 characters for approximate completion.
+# Allow up to 1 error; numeric lets universal-argument override the limit.
 zstyle ':completion:*:approximate:*' max-errors 1 numeric
 
 # Don't complete the same argument twice for rm, kill, diff.
