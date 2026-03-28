@@ -161,9 +161,9 @@ fi
 
 # + for GCC {{{
 # Add include path and library path.
-export CPATH="${CPATH}:/usr/local/include"
-export LIBRARY_PATH="${LIBRARY_PATH}:/usr/local/lib:"
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib"
+export CPATH="${CPATH:+${CPATH}:}/usr/local/include"
+export LIBRARY_PATH="${LIBRARY_PATH:+${LIBRARY_PATH}:}/usr/local/lib"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}/usr/local/lib"
 
 # Colored GCC warnings and errors.
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
