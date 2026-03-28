@@ -66,44 +66,17 @@ setopt pushd_ignore_dups
 # ++ }}}
 
 # ++ Completion {{{
-# Don't change the position of prompt when completing.
-setopt always_last_prompt
-
 # Move the cursor to the end after complete completion.
 setopt always_to_end
 
-# Automatically list choices on an ambiguous completion.
-setopt auto_list
-
-# Toggle completion candidate by tab.
-setopt auto_menu
-
-# Complement variable name and correspondence of parentheses.
-setopt auto_param_keys
-
-# If a parameter is completed whose content is the name of a directory, then add a trailing slash instead of a space.
-setopt auto_param_slash
-
-# Remove slash added a trailing by auto_param_slash.
-setopt auto_remove_slash
-
 # Expand aliases and complement it.
 setopt complete_aliases
-
-# Complement even if the cursor is in the middle of word.
-unsetopt complete_in_word
 
 # Don't beep on an ambiguous completion.
 unsetopt list_beep
 
 # Try to make the completion list smaller.
 setopt list_packed
-
-# Show the type of each file with a trailing identifying mark.
-setopt list_types
-
-# If can completion the continuation of a word, it isn't accepted yet.
-unsetopt rec_exact
 # ++ }}}
 
 # ++ Expansion and Globbing {{{
@@ -156,12 +129,6 @@ setopt share_history
 # ++ }}}
 
 # ++ Input/Output {{{
-# Expand aliases.
-setopt aliases
-
-# Don't overwrite with redirect.
-setopt clobber
-
 # Try to correct the spelling of commands.
 setopt correct
 
@@ -211,13 +178,6 @@ setopt multios
 # ++ Zsh Line Editor {{{
 # Don't sound a beep.
 unsetopt beep
-
-# Emacs like key bind.
-setopt emacs
-#setopt vi
-
-# Use ZLE.
-setopt zle
 # ++ }}}
 # + }}}
 
