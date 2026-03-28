@@ -144,7 +144,7 @@ fi
 export HISTFILE="${XDG_STATE_HOME}/zsh/.zsh_history"
 
 # Set the number of history stored in memory.
-export HISTSIZE=1000
+export HISTSIZE=100000
 
 # Set the number of history stored in history file.
 export SAVEHIST=100000
