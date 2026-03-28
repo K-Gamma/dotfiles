@@ -373,6 +373,11 @@ alias man=' man'
 # Enable aliases when 'sudo'
 alias sudo='sudo '
 
+# Prevent glob expansion for commands that handle their own patterns.
+alias find='noglob find'
+alias rsync='noglob rsync'
+alias scp='noglob scp'
+
 # Enable color support
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
