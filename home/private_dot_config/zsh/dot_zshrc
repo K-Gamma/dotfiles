@@ -69,9 +69,6 @@ setopt pushd_ignore_dups
 # Move the cursor to the end after complete completion.
 setopt always_to_end
 
-# Expand aliases and complement it.
-setopt complete_aliases
-
 # Don't beep on an ambiguous completion.
 unsetopt list_beep
 
@@ -85,9 +82,6 @@ setopt brace_ccl
 
 # Use additional characters for globs.
 setopt extended_glob
-
-# Don't require a leading '.' in a filename to be matched explicit.
-setopt glob_dots
 
 # Substitutions using the :s and :& history modifiers are performed with pattern matching instead of string matching.
 setopt hist_subst_pattern
