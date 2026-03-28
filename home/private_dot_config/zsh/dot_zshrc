@@ -23,7 +23,6 @@ fi
 
 # Build-in Function Settings {{{
 # + Autoload {{{
-autoload -Uz is-at-least
 autoload -Uz add-zsh-hook
 
 # Can execute man with the Esc-h
@@ -165,9 +164,6 @@ unsetopt beep
 # + }}}
 
 # + Typeset {{{
-# An array to note missing features to ease diagnosis in case of problems
-typeset -ga debian_missing_features
-
 # Avoid duplication of ${PATH}
 typeset -U path cdpath fpath manpath
 
