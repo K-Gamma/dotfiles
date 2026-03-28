@@ -122,6 +122,7 @@ setopt share_history
 # ++ Input/Output {{{
 # Try to correct the spelling of commands.
 setopt correct
+SPROMPT='Correct %F{red}%R%f to %F{green}%r%f? [%By%bes/%Bn%bo/%Be%bdit/%Ba%bbort] '
 
 # Don't use 'C-q' and 'C-s'.
 setopt no_flow_control
