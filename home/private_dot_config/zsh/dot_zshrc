@@ -259,7 +259,7 @@ zstyle ':completion:*' keep-prefix
 ### _ignored: Reinstate matches excluded by ignored-patterns.
 ### _approximate: Allow completions to undergo corrections.
 ### _prefix: Complete with the suffix (everything after cursor) ignored.
-zstyle ':completion:*' completer _complete _ignored _prefix
+zstyle ':completion:*' completer _complete _ignored _prefix _approximate
 
 # Colorize completion candidates using LS_COLORS.
 if [[ -n "${LS_COLORS}" ]]; then
@@ -295,6 +295,27 @@ zstyle ':completion:*' group-name ''
 
 # Separator between completion string and description.
 zstyle ':completion:*' list-separator '-->'
+
+# Show warning when no matches found.
+zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
+
+# Treat // as / instead of /*/
+zstyle ':completion:*' squeeze-slashes true
+
+# Allow 1 error per 3 characters for approximate completion.
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+
+# Don't complete the same argument twice for rm, kill, diff.
+zstyle ':completion:*:(rm|kill|diff):*' ignore-line other
+
+# Colorize and force menu for kill completion.
+zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;36=0=01'
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:kill:*' force-list always
+
+# Hide internal functions (_*) and precmd/preexec from command completion.
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # ++ }}}
 # + }}}
 
