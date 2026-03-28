@@ -357,10 +357,6 @@ alias la='eza --group-directories-first -aF'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i -v'
-if type trash-put &> "/dev/null"; then
-  alias tp='trash-put'
-fi
-
 # other aliases
 alias x='exit'
 alias df='df -h'
