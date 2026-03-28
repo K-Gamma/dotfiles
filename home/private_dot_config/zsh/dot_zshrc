@@ -523,17 +523,17 @@ ZSH_AUTOSUGGEST_STRATEGY=(abbreviations history completion)
 # Applications Settings {{{
 # + fzf {{{
 export FZF_DEFAULT_OPTS='
---multi --layout=reverse --border --info=inline
---prompt="> " --pointer="◆" --marker="* " --exit-0 --select-1
+  --multi --exit-0 --select-1
+  --layout=reverse --border=none
+  --info=inline-right --highlight-line
+  --height=~50% --cycle --scroll-off=3
+  --walker-skip=.git,node_modules,target
+  --prompt="> " --pointer="◆" --marker="* "
 '
 
-# fzf color scheme
+# fzf color scheme: tokyonight-day
+# https://github.com/folke/tokyonight.nvim
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
-  --highlight-line \
-  --info=inline-right \
-  --ansi \
-  --layout=reverse \
-  --border=none \
   --color=bg+:#b7c1e3 \
   --color=bg:#d0d5e3 \
   --color=border:#4094a3 \
