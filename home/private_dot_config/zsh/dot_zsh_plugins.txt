@@ -5,7 +5,7 @@ romkatv/powerlevel10k
 mattmc3/ez-compinit
 
 # Deferred plugins
-zsh-users/zsh-autosuggestions kind:defer branch:develop
+zsh-users/zsh-autosuggestions kind:defer
 junegunn/fzf-git.sh kind:defer
 Aloxaf/fzf-tab kind:defer
 olets/zsh-abbr kind:defer
