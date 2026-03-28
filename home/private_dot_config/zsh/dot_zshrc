@@ -68,6 +68,9 @@ setopt pushd_ignore_dups
 # Move the cursor to the end after complete completion.
 setopt always_to_end
 
+# Allow completion from within a word (not just at the end).
+setopt complete_in_word
+
 # Don't beep on an ambiguous completion.
 unsetopt list_beep
 
