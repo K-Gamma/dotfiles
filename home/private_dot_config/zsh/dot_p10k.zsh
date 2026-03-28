@@ -101,8 +101,25 @@
   typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
   typeset -g POWERLEVEL9K_VIRTUALENV_{LEFT,RIGHT}_DELIMITER=
 
-  # Blue current directory.
+  # Blue current directory with smart truncation.
   typeset -g POWERLEVEL9K_DIR_FOREGROUND=$blue
+  typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+  typeset -g POWERLEVEL9K_SHORTEN_DELIMITER='…'
+  typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=80
+  # Dimmed color for truncated segments, bright for anchor segments.
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=$grey
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=$blue
+  typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+  # Directories with these files are never truncated.
+  local anchor_files=(
+    .git .hg .svn .terraform .mise.toml .tool-versions .claude
+    Cargo.toml composer.json go.mod package.json
+  )
+  typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchor_files})"
+  typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=false
+  typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS=40
+  typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS_PCT=50
 
   # Context format when root: user@host. The first part white, the rest grey.
   typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%F{$white}%n%f%F{$grey}@%m%f"
