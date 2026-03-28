@@ -284,9 +284,16 @@ alias -g @clip='| clip'
 # suffix
 alias -s py=python
 alias -s hs=runhaskell
-alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
-alias -s {mp3,frac}=audacious
-alias -s {html,htm,md}=firefox
+alias -s md="${EDITOR:-nvim}"
+if [[ ${OSTYPE} == darwin* ]]; then
+  alias -s {png,jpg,bmp,PNG,JPG,BMP}=open
+  alias -s {mp3,flac}=open
+  alias -s {html,htm}=open
+else
+  alias -s {png,jpg,bmp,PNG,JPG,BMP}=eog
+  alias -s {mp3,flac}=audacious
+  alias -s {html,htm}=google-chrome
+fi
 alias -s json='jq .'
 alias -s {yml,yaml}='yq .'
 alias -s toml='yq -p toml .'
