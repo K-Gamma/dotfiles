@@ -348,10 +348,10 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 
 # eza aliases
-alias ls='eza --group-directories-first -F'
-alias l='eza --group-directories-first -F'
-alias ll='eza --group-directories-first -laF --git'
-alias la='eza --group-directories-first -aF'
+alias ls='eza --group-directories-first --classify=auto'
+alias l='eza --group-directories-first --classify=auto'
+alias ll='eza --group-directories-first -la --classify=auto --git'
+alias la='eza --group-directories-first -a --classify=auto'
 
 # Safety aliases
 alias cp='cp -i'
@@ -495,6 +495,8 @@ fi
 source ${zsh_plugins}.zsh
 unset zsh_plugins
 ZSH_AUTOSUGGEST_STRATEGY=(abbreviations history completion)
+# Alias completions (compdef requires ez-compinit's shim loaded above)
+compdef _eza ls l ll la
 # }}}
 
 # Applications Settings {{{
