@@ -227,6 +227,9 @@ typeset -ga debian_missing_features
 
 # Avoid duplication of ${PATH}
 typeset -U path cdpath fpath manpath
+
+# Ignore junk files in filename completion.
+fignore=(.DS_Store .pyc .o .zwc .swp '~')
 # + }}}
 
 # + Zstyle (The zsh/zutil Module Settings) {{{
