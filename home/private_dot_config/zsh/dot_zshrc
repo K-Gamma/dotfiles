@@ -262,7 +262,7 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # + }}}
 
 # + Aliases {{{
-alias less='less -MN'
+alias less='less -M'
 
 # global
 alias -g ...='cd ../..'
@@ -396,8 +396,8 @@ function name_dir()
 }
 
 name_dir "$XDG_DATA_HOME/chezmoi" dotfiles
-name_dir "${ZDOTDIR}/" .zsh
-name_dir "${HOME}/.vim/" .vim
+name_dir "${ZDOTDIR}" .zsh
+name_dir "${HOME}/.vim" .vim
 
 unfunction name_dir
 # + }}}
