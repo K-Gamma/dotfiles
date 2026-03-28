@@ -265,9 +265,9 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 alias less='less -M'
 
 # global
-alias -g ...='cd ../..'
-alias -g ....='cd ../../..'
-alias -g .....='cd ../../../..'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
 alias -g @g='| grep'
 alias -g @l='| less'
 alias -g @h='| head'
