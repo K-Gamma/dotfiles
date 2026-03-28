@@ -481,14 +481,15 @@ command_not_found_handler() {
 # Plugin Settings {{{
 zsh_plugins=${ZDOTDIR}/.zsh_plugins
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-if [[ -d /opt/homebrew/opt/antidote/share/antidote ]]; then
-  fpath=(/opt/homebrew/opt/antidote/share/antidote/functions $fpath)
-elif [[ -d ${ZDOTDIR}/.antidote ]]; then
-  fpath=(${ZDOTDIR}/.antidote/functions $fpath)
-fi
-autoload -Uz antidote
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+  (
+    if [[ -d /opt/homebrew/opt/antidote/share/antidote ]]; then
+      source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+    elif [[ -d ${ZDOTDIR}/.antidote ]]; then
+      source ${ZDOTDIR}/.antidote/antidote.zsh
+    fi
+    antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+  )
 fi
 source ${zsh_plugins}.zsh
 unset zsh_plugins
