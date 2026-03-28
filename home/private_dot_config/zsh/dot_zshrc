@@ -403,8 +403,6 @@ bindkey '^X^E' edit-command-line
 # History search (using up-line-or-beginning-search for multiline support)
 bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
-bindkey '^R' history-incremental-pattern-search-backward
-bindkey '^S' history-incremental-pattern-search-forward
 
 # Toggle Ctrl-Z between suspend and fg
 fancy-ctrl-z() {
@@ -530,6 +528,9 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
 
 if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+  # Bind ^S to fzf history search as a symmetric pair with ^R.
+  # Requires no_flow_control to free ^S from terminal XOFF.
+  bindkey '^S' fzf-history-widget
 fi
 
 # Alt-G: fzf directory navigation from git root
