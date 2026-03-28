@@ -562,6 +562,35 @@ bindkey -M vicmd '\eg' fzf-cdg-widget
 bindkey -M viins '\eg' fzf-cdg-widget
 
 # + }}}
+# + fzf-tab {{{
+local _ftb_flags=(
+  --highlight-line
+  --info=inline-right
+  --scroll-off=3
+  --prompt='> ' --pointer='◆' --marker='* '
+)
+# fzf-tab color scheme: tokyonight-day
+# https://github.com/folke/tokyonight.nvim
+_ftb_flags+=(
+  --color=bg+:#b7c1e3
+  --color=bg:#d0d5e3
+  --color=border:#4094a3
+  --color=fg:#3760bf
+  --color=gutter:#d0d5e3
+  --color=header:#b15c00
+  --color=hl+:#188092
+  --color=hl:#188092
+  --color=info:#8990b3
+  --color=marker:#d20065
+  --color=pointer:#d20065
+  --color=prompt:#188092
+  --color=query:#3760bf:regular
+  --color=scrollbar:#4094a3
+  --color=separator:#b15c00
+  --color=spinner:#d20065
+)
+zstyle ':fzf-tab:*' fzf-flags $_ftb_flags
+# + }}}
 # + mise {{{
 export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
 # + }}}
