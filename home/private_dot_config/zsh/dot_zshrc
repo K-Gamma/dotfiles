@@ -444,6 +444,24 @@ frg() {
         --bind "enter:become(${EDITOR:-nvim} {1} +{2})"
 }
 
+# Suggest package installation when command is not found.
+command_not_found_handler() {
+  local cmd="$1"
+  if [[ ${OSTYPE} == darwin* ]]; then
+    local txt
+    txt="$(brew which-formula --skip-update --explain "$cmd" 2>/dev/null)"
+    if [[ -n "$txt" ]]; then
+      print -P "%F{yellow}$txt%f" >&2
+      return 127
+    fi
+  elif [[ -x /usr/lib/command-not-found ]]; then
+    /usr/lib/command-not-found -- "$cmd" 2>&1
+    return 127
+  fi
+  print -P "%F{red}command not found:%f $cmd" >&2
+  return 127
+}
+
 # + }}}
 # }}}
 
