@@ -21,7 +21,7 @@ if [[ ! -f "${ZDOTDIR}/.zshrc.zwc" ]] || [[ "${ZDOTDIR}/.zshrc" -nt "${ZDOTDIR}/
 fi
 #}}}
 
-# Build-in Function Settings {{{
+# Built-in Function Settings {{{
 # + Autoload {{{
 autoload -Uz add-zsh-hook
 
