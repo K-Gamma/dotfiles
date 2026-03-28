@@ -235,7 +235,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-separator '-->'
 
 # Show warning when no matches found.
-zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
+zstyle ':completion:*:warnings' format '%F{#8990b3}-- no matches found --%f'
 
 # Treat // as / instead of /*/
 zstyle ':completion:*' squeeze-slashes true
