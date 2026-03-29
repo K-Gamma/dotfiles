@@ -366,6 +366,12 @@ if [[ "$(uname)" == "Linux" ]]; then
 fi
 if [[ ${OSTYPE} == darwin* ]]; then
   alias clip='pbcopy'
+elif [[ -n "$SSH_CONNECTION" ]]; then
+  # OSC 52 clipboard (works over SSH with supporting terminals)
+  clip() {
+    local data=$(base64 | tr -d '\n')
+    printf '\033]52;c;%s\a' "$data" > /dev/tty
+  }
 else
   alias clip='xsel --clipboard --input'
 fi
