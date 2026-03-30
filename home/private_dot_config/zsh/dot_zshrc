@@ -619,6 +619,11 @@ export MISE_CACHE_DIR="${XDG_CACHE_HOME}/mise"
 # + zoxide {{{
 eval "$(zoxide init zsh)"
 # + }}}
+# + gtr {{{
+if (( $+commands[git-gtr] )); then
+  eval "$(git gtr completion zsh)"
+fi
+# + }}}
 # }}}
 
 # Local Settings {{{
