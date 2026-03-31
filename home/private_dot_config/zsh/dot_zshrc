@@ -549,8 +549,8 @@ export FZF_ALT_C_OPTS="
   --preview 'eza --tree --level=2 --color=always --group-directories-first {}'
 "
 
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]]; then
-  source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+if (( $+commands[fzf] )); then
+  source <(fzf --zsh)
   # Bind ^S to fzf history search as a symmetric pair with ^R.
   # Requires no_flow_control to free ^S from terminal XOFF.
   bindkey '^S' fzf-history-widget
