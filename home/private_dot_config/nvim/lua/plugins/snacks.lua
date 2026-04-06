@@ -88,6 +88,29 @@ return {
         desc = '相対パスをコピー ([R]elative)',
       },
 
+      -- git browse
+      {
+        '<leader>go',
+        function() Snacks.gitbrowse() end,
+        desc = 'GitHub を開く ([O]pen)',
+        mode = { 'n', 'v' },
+      },
+
+      -- yank GitHub URL
+      {
+        '<leader>yg',
+        function()
+          Snacks.gitbrowse({
+            open = function(url)
+              vim.fn.setreg('+', url)
+              Snacks.notify(url, { title = 'Copied GitHub URL' })
+            end,
+          })
+        end,
+        desc = 'GitHub URL をコピー ([G]itHub)',
+        mode = { 'n', 'v' },
+      },
+
       -- explorer
       { '<leader>e', function() Snacks.explorer { cwd = vim.fs.root(0, '.git') } end, desc = 'ファイルエクスプローラ ([E]xplorer)' },
 
