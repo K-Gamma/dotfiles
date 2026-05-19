@@ -135,6 +135,35 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        vue = { 'prettier' },
+        css = { 'prettier' },
+        scss = { 'prettier' },
+        less = { 'prettier' },
+        html = { 'prettier' },
+        json = { 'prettier' },
+        jsonc = { 'prettier' },
+        yaml = { 'prettier' },
+        markdown = { 'prettier' },
+        ['markdown.mdx'] = { 'prettier' },
+        graphql = { 'prettier' },
+        handlebars = { 'prettier' },
+      },
+      formatters = {
+        -- プロジェクトに prettier がローカルインストールされている場合のみ実行
+        -- .prettierignore と設定ファイルは prettier 本体が --stdin-filepath 経由で尊重する
+        prettier = {
+          condition = function(_, ctx)
+            return vim.fs.find({ 'node_modules/.bin/prettier' }, {
+              upward = true,
+              path = ctx.dirname,
+              type = 'file',
+            })[1] ~= nil
+          end,
+        },
       },
     },
   },
