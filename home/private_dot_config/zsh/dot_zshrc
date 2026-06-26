@@ -584,6 +584,33 @@ bindkey -M vicmd '\eg' fzf-cdg-widget
 bindkey -M viins '\eg' fzf-cdg-widget
 
 # + }}}
+# + fzf-git.sh extensions {{{
+# Ctrl-G P: GitHub PR selection (requires gh CLI)
+# fzf-git.sh is loaded with kind:defer, so register widget/bindings directly.
+_fzf_git_prs() {
+  _fzf_git_check || return
+  gh pr list --state open --limit 100 \
+    --json number,title,author,headRefName,updatedAt \
+    --template '{{range .}}{{tablerow .number .title .author.login .headRefName (timeago .updatedAt)}}{{end}}' |
+  _fzf_git_fzf --no-multi --ansi \
+    --border-label '🔀 Pull Requests' \
+    --header 'CTRL-O (open in browser)' \
+    --bind "ctrl-o:execute-silent(gh pr view {1} --web)" \
+    --preview 'gh pr view {1} | glow -s light -' |
+  awk '{print $1}'
+}
+fzf-git-prs-widget() {
+  local result=$(_fzf_git_prs | while read -r item; do echo -n -E "${(q)item} "; done)
+  zle reset-prompt
+  LBUFFER+=$result
+}
+zle -N fzf-git-prs-widget
+for _m in emacs vicmd viins; do
+  bindkey -M $_m '^g^p' fzf-git-prs-widget
+  bindkey -M $_m '^gp' fzf-git-prs-widget
+done
+unset _m
+# + }}}
 # + fzf-tab {{{
 local _ftb_flags=(
   --highlight-line
