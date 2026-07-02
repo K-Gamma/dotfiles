@@ -610,6 +610,31 @@ for _m in emacs vicmd viins; do
   bindkey -M $_m '^gp' fzf-git-prs-widget
 done
 unset _m
+
+# Ctrl-G I: GitHub Issue selection (requires gh CLI)
+_fzf_git_issues() {
+  _fzf_git_check || return
+  gh issue list --state open --limit 100 \
+    --json number,title,author,labels,updatedAt \
+    --template '{{range .}}{{tablerow .number .title .author.login (pluck "name" .labels | join ",") (timeago .updatedAt)}}{{end}}' |
+  _fzf_git_fzf --no-multi --ansi \
+    --border-label '🐛 Issues' \
+    --header 'CTRL-O (open in browser)' \
+    --bind "ctrl-o:execute-silent(gh issue view {1} --web)" \
+    --preview 'gh issue view {1} | glow -s light -' |
+  awk '{print $1}'
+}
+fzf-git-issues-widget() {
+  local result=$(_fzf_git_issues | while read -r item; do echo -n -E "${(q)item} "; done)
+  zle reset-prompt
+  LBUFFER+=$result
+}
+zle -N fzf-git-issues-widget
+for _m in emacs vicmd viins; do
+  bindkey -M $_m '^g^i' fzf-git-issues-widget
+  bindkey -M $_m '^gi' fzf-git-issues-widget
+done
+unset _m
 # + }}}
 # + fzf-tab {{{
 local _ftb_flags=(
