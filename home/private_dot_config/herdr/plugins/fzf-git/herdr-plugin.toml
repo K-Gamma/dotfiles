@@ -1,0 +1,77 @@
+id = "fzf-git"
+name = "fzf-git"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "fzf-git.sh (files/branches/tags/... + PR/Issue) を herdr の overlay ペインで実行するピッカー"
+platforms = ["linux", "macos"]
+
+# 各エントリポイントは共通の picker.sh を kind 引数付きで実行する。
+# command のパスはプラグインルート (このディレクトリ) を作業ディレクトリとして解決される。
+# 選択結果は picker.sh 内で `herdr pane send-text` を使い、呼び出し元ペイン
+# (--env HERDR_ORIGIN_PANE=... で渡される) のコマンドラインへ挿入される。
+
+[[panes]]
+id = "files"
+title = "Git files"
+placement = "overlay"
+command = ["bash", "picker.sh", "files"]
+
+[[panes]]
+id = "branches"
+title = "Git branches"
+placement = "overlay"
+command = ["bash", "picker.sh", "branches"]
+
+[[panes]]
+id = "tags"
+title = "Git tags"
+placement = "overlay"
+command = ["bash", "picker.sh", "tags"]
+
+[[panes]]
+id = "remotes"
+title = "Git remotes"
+placement = "overlay"
+command = ["bash", "picker.sh", "remotes"]
+
+[[panes]]
+id = "hashes"
+title = "Git hashes"
+placement = "overlay"
+command = ["bash", "picker.sh", "hashes"]
+
+[[panes]]
+id = "stashes"
+title = "Git stashes"
+placement = "overlay"
+command = ["bash", "picker.sh", "stashes"]
+
+[[panes]]
+id = "lreflogs"
+title = "Git reflogs"
+placement = "overlay"
+command = ["bash", "picker.sh", "lreflogs"]
+
+[[panes]]
+id = "worktrees"
+title = "Git worktrees"
+placement = "overlay"
+command = ["bash", "picker.sh", "worktrees"]
+
+[[panes]]
+id = "each_ref"
+title = "Git each-ref"
+placement = "overlay"
+command = ["bash", "picker.sh", "each_ref"]
+
+[[panes]]
+id = "prs"
+title = "GitHub Pull Requests"
+placement = "overlay"
+command = ["bash", "picker.sh", "prs"]
+
+[[panes]]
+id = "issues"
+title = "GitHub Issues"
+placement = "overlay"
+command = ["bash", "picker.sh", "issues"]
