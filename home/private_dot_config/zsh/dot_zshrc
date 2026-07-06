@@ -636,6 +636,75 @@ for _m in emacs vicmd viins; do
 done
 unset _m
 # + }}}
+# + herdr fzf-git overlay plugin {{{
+# herdr (https://herdr.dev) 管理下では、上のブロックが定義する fzf-git.sh 系
+# ウィジェット（fzf-git.sh 本体が定義する fzf-git-<kind>-widget、および直上の
+# fzf-git-prs-widget / fzf-git-issues-widget）を、herdr の overlay プラグイン
+# 機構を使った非同期ピッカーに差し替える。プラグイン本体は
+# home/private_dot_config/herdr/plugins/fzf-git を参照。
+# herdr の外（プレーンな端末や他のマルチプレクサ）では HERDR_ENV が立たないため
+# 何もせず、上のブロックで定義された従来のウィジェットがそのまま使われる。
+# 現在はオプトイン（FZF_GIT_HERDR_OVERLAY=1 のときのみ有効、既定は無効）。
+# herdr の overlay は tmux popup のようなフローティング表示ができず画面全面を
+# 覆うため、通常はペイン内で完結する素の fzf-git.sh を使う。
+# 有効化する場合は herdr 側でも `herdr plugin enable fzf-git` が必要。
+if [[ $HERDR_ENV == 1 && ${FZF_GIT_HERDR_OVERLAY:-0} == 1 ]]; then
+  # antidote の既定キャッシュ先 (${XDG_CACHE_HOME:-$HOME/.cache}/antidote) 配下の
+  # fzf-git.sh の絶対パス。ANTIDOTE_HOME が明示されていればそちらを優先する。
+  __fzf_git_herdr_sh_path() {
+    local antidote_home="${ANTIDOTE_HOME:-${XDG_CACHE_HOME:-$HOME/.cache}/antidote}"
+    print -r -- "${antidote_home}/github.com/junegunn/fzf-git.sh/fzf-git.sh"
+  }
+
+  # overlay ペインで fzf-git プラグインの該当 entrypoint を開き、即座に呼び出し元へ
+  # 制御を戻す（非同期モデル）。選択結果は overlay 側の picker.sh が
+  # `herdr pane send-text` で本ペインのコマンドラインへ後から挿入する。
+  #
+  # 注意: `--cwd` は付けない。overlay の対象ペイン（呼び出し元自身）に対して
+  # `--cwd` を指定すると、実行中の自ペイン自身の作業ディレクトリ変更が競合し、
+  # overlay が開いた直後に閉じてしまう（実機検証で確認済み）。作業ディレクトリは
+  # `--env FZF_GIT_CWD=$PWD` 経由で picker.sh 側の `cd` に委ねる。
+  __fzf_git_herdr_open() {
+    local kind=$1
+    [[ -z ${HERDR_PANE_ID:-} ]] && return 1
+    herdr plugin pane open --plugin fzf-git --entrypoint "$kind" --placement overlay \
+      --env "FZF_GIT_CWD=$PWD" \
+      --env "HERDR_ORIGIN_PANE=$HERDR_PANE_ID" \
+      --env "FZF_GIT_SH=$(__fzf_git_herdr_sh_path)" \
+      > /dev/null 2>&1
+  }
+
+  __fzf_git_herdr_init() {
+    local kind
+    # fzf-git.sh 本体の __fzf_git_init 呼び出し (fzf-git.sh 側) が登録する
+    # kind 一覧と一致させる。'?list_bindings' 用ウィジェットは対象外（変更不要）。
+    for kind in files branches tags remotes hashes stashes lreflogs each_ref worktrees; do
+      eval "fzf-git-${kind}-widget() { __fzf_git_herdr_open ${kind}; zle redisplay }"
+      zle -N "fzf-git-${kind}-widget"
+    done
+
+    fzf-git-prs-widget() {
+      __fzf_git_herdr_open prs
+      zle redisplay
+    }
+    zle -N fzf-git-prs-widget
+
+    fzf-git-issues-widget() {
+      __fzf_git_herdr_open issues
+      zle redisplay
+    }
+    zle -N fzf-git-issues-widget
+  }
+
+  if (( $+functions[zsh-defer] )); then
+    # fzf-git.sh は kind:defer で読み込まれるため、そのウィジェット登録より後に
+    # 上書きが走るよう同じ zsh-defer の FIFO キューに積む。
+    zsh-defer -c '__fzf_git_herdr_init'
+  else
+    __fzf_git_herdr_init
+  fi
+fi
+# + }}}
 # + fzf-tab {{{
 local _ftb_flags=(
   --highlight-line
