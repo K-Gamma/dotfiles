@@ -1,0 +1,46 @@
+[theme]
+name = "tokyo-night-day"
+auto_switch = false
+
+[ui.sound]
+enabled = false
+
+[ui.toast]
+delivery = "terminal"
+
+[ui.toast.clipboard]
+position = "top-right"
+
+[ui]
+show_agent_labels_on_pane_borders = true
+mouse_capture = true
+agent_panel_sort = "priority"
+
+# tmux の prefix なし Alt ショートカット相当を追加する
+# （prefix ベースのデフォルトバインドはそのまま残す）
+[keys]
+next_tab = ["prefix+n", "alt+n"]
+previous_tab = ["prefix+p", "alt+p"]
+new_tab = ["prefix+c", "alt+t"]
+new_workspace = ["alt+c"]
+open_worktree = ["alt+o"]
+copy_mode = ["prefix+[", "alt+["]
+swap_pane_left = "alt+left"
+swap_pane_down = "alt+down"
+swap_pane_up = "alt+up"
+swap_pane_right = "alt+right"
+rename_tab = ["prefix+shift+t", "alt+shift+t"]
+rename_workspace = ["alt+comma"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+goto = ["prefix+g", "alt+w"]
+previous_workspace = "alt+shift+k"
+next_workspace = "alt+shift+j"
+focus_pane_left = ["prefix+h", "alt+h"]
+focus_pane_down = ["prefix+j", "alt+j"]
+focus_pane_up = ["prefix+k", "alt+k"]
+focus_pane_right = ["prefix+l", "alt+l"]
+zoom = ["prefix+z", "alt+z"]
+split_vertical = ["prefix+v", "alt+\\"]
+split_horizontal = ["prefix+minus", "alt+minus"]
+reload_config = ["prefix+shift+r", "alt+r"]
+toggle_sidebar = ["prefix+b", "alt+e"]
