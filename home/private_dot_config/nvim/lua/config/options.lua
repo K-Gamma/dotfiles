@@ -2,17 +2,30 @@ local opt = vim.opt
 
 -- クリップボードの同期（SSH 接続時は OSC 52 経由でローカルに転送）
 if vim.env.SSH_CONNECTION then
-  vim.g.clipboard = {
+  local osc52 = require('vim.ui.clipboard.osc52')
+  local clipboard = {
     name = 'OSC 52',
     copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+      ['+'] = osc52.copy('+'),
+      ['*'] = osc52.copy('*'),
     },
     paste = {
-      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+      ['+'] = osc52.paste('+'),
+      ['*'] = osc52.paste('*'),
     },
   }
+  -- herdr は OSC 52 read の応答を返さないため paste がタイムアウト待ちで遅くなる。
+  -- copy 側の OSC 52 は保ちつつ、paste は内部レジスタから返す。
+  if vim.env.HERDR_ENV then
+    local function paste()
+      return {
+        vim.fn.split(vim.fn.getreg(''), '\n'),
+        vim.fn.getregtype(''),
+      }
+    end
+    clipboard.paste = { ['+'] = paste, ['*'] = paste }
+  end
+  vim.g.clipboard = clipboard
 end
 opt.clipboard = 'unnamedplus'
 
