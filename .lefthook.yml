@@ -14,3 +14,7 @@ pre-commit:
       glob: "home/private_dot_config/nvim/**/*.lua"
       run: stylua --config-path .stylua.toml {staged_files}
       stage_fixed: true
+    verify-dotfiles:
+      priority: 4
+      glob: "{.lefthook.yml,home/**/*.tmpl,home/**/*.sh,home/**/executable_*,home/**/dot_zsh*,scripts/**}"
+      run: bash scripts/verify.sh
