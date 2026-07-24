@@ -19,8 +19,8 @@ agent_panel_sort = "priority"
 # tmux の prefix なし Alt ショートカット相当を追加する
 # （prefix ベースのデフォルトバインドはそのまま残す）
 [keys]
-next_tab = ["prefix+n", "alt+n"]
-previous_tab = ["prefix+p", "alt+p"]
+next_tab = ["prefix+n", "alt+shift+n"]
+previous_tab = ["prefix+p", "alt+shift+p"]
 new_tab = ["prefix+c", "alt+t"]
 new_workspace = ["alt+c"]
 open_worktree = ["alt+o"]
@@ -33,8 +33,8 @@ rename_tab = ["prefix+shift+t", "alt+shift+t"]
 rename_workspace = ["alt+comma"]
 switch_tab = ["prefix+1..9", "alt+1..9"]
 goto = ["prefix+g", "alt+w"]
-previous_workspace = "alt+shift+k"
-next_workspace = "alt+shift+j"
+previous_workspace = "alt+p"
+next_workspace = "alt+n"
 focus_pane_left = ["prefix+h", "alt+h"]
 focus_pane_down = ["prefix+j", "alt+j"]
 focus_pane_up = ["prefix+k", "alt+k"]
@@ -44,6 +44,26 @@ split_vertical = ["prefix+v", "alt+\\"]
 split_horizontal = ["prefix+minus", "alt+minus"]
 reload_config = ["prefix+shift+r", "alt+r"]
 toggle_sidebar = ["prefix+b", "alt+e"]
+
+[[keys.command]]
+key = "alt+shift+h"
+type = "shell"
+command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh left"
+
+[[keys.command]]
+key = "alt+shift+j"
+type = "shell"
+command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh down"
+
+[[keys.command]]
+key = "alt+shift+k"
+type = "shell"
+command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh up"
+
+[[keys.command]]
+key = "alt+shift+l"
+type = "shell"
+command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh right"
 
 [experimental]
 switch_ascii_input_source_in_prefix = true
