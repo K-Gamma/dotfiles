@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# fzf-git.sh 代替 overlay ピッカー (herdr プラグイン fzf-git のエントリポイント実体)
+# fzf-git.sh 代替 popup ピッカー (herdr プラグイン fzf-git のエントリポイント実体)
 #
 # 呼び出し元 (zshrc の __fzf_git_herdr_init、home/private_dot_config/zsh/dot_zshrc)
-# が `herdr plugin pane open` で overlay ペインを開く際、以下を --env で渡す:
+# が `herdr plugin pane open` で popup ペインを開く際、以下を --env で渡す:
 #   FZF_GIT_CWD        - 呼び出し元シェルの $PWD (git リポジトリの探索起点)
 #   HERDR_ORIGIN_PANE  - 選択結果を挿入する呼び出し元ペインの ID
 #   FZF_GIT_SH         - fzf-git.sh の絶対パス (antidote キャッシュ配下)
@@ -34,8 +34,16 @@ fzf_git_sh="${FZF_GIT_SH:-$DEFAULT_FZF_GIT_SH}"
 
 # fzf-git.sh 本体が使うデフォルトの fzf ラッパー（_fzf_git_fzf の初期実装を移植）。
 # 引用元: fzf-git.sh (junegunn/fzf-git.sh) の _fzf_git_fzf 定義。
+# herdr popup ペイン自体がフローティング表示 (width=90%/height=70%、
+# herdr-plugin.toml の [[panes]] 宣言) を提供するため、本家が使う
+# `--tmux 90%,70%` (tmux popup 委譲) は不要で除去した。
+# `--height 100%` はユーザーの FZF_DEFAULT_OPTS が持つ `--height=~50%` を
+# 上書きし、popup 専用端末の全面を fzf に使わせるために明示している
+# (fzf は同名オプションの後勝ちマージのため、FZF_DEFAULT_OPTS より後に
+# 展開されるこの引数が優先される)。手元の fzf 0.73.1 には `--no-height`
+# が存在しないため `--height 100%` を採用した。
 _picker_fzf() {
-  fzf --height 50% --tmux 90%,70% \
+  fzf --height 100% \
     --layout reverse --multi --min-height 20+ --border \
     --no-separator --header-border horizontal \
     --border-label-pos 2 \
@@ -69,6 +77,15 @@ case "$kind" in
       exit 1
     fi
     git rev-parse > /dev/null 2>&1 || exit 0
+    # fzf-git.sh 本体は --run 実行時、環境変数 __fzf_git_fzf が設定されて
+    # いればそれを eval して自身の _fzf_git_fzf (デフォルト実装は
+    # --height 50% --tmux 90%,70%) を上書きするフックを持つ
+    # (引用元: fzf-git.sh の `if [[ $__fzf_git_fzf ]]; then eval
+    # "$__fzf_git_fzf"` 分岐)。files/branches/... 系エントリポイントは
+    # このフックを経由するため、上の _picker_fzf と同じ全面表示設定を
+    # ここでも適用する。
+    __fzf_git_fzf_def="$(declare -f _picker_fzf)"
+    export __fzf_git_fzf="${__fzf_git_fzf_def/_picker_fzf/_fzf_git_fzf}"
     selection="$(bash "$fzf_git_sh" --run "$kind" || true)"
     send_result "$selection"
     ;;
