@@ -1,0 +1,216 @@
+#!/usr/bin/env bash
+# Claude Code のプロンプト履歴を fzf で TUI 閲覧する
+#
+# Usage:
+#   claude-history-tui [keyword]   # 初期フィルタにキーワードを指定可能
+#
+# Keybindings (fzf 内):
+#   ↑/↓, C-n/C-p   選択移動
+#   Enter          プロンプト全文を stdout に出力して終了
+#   y              選択中のプロンプトをクリップボードへコピー（OSC52 経由）
+#   C-/            プレビュー表示の ON/OFF
+#   Esc            キャンセル
+#
+# キャッシュ:
+#   履歴ファイルパスごとに ${XDG_CACHE_HOME:-~/.cache}/claude-history/<hash>/ に置く。
+#   起動時に履歴ファイルの inode と行数を比較し、追記分のみ jq に通す（インクリメンタル）。
+#   キャッシュは list.tsv（fzf 表示用） + displays（base64 ルックアップ）で構成。
+#
+# 環境変数:
+#   CLAUDE_HISTORY_TUI_TMUX   fzf --tmux のサイズ指定 (デフォルト 90%,70%)。
+#                             空文字を設定すると --tmux を使わず全画面表示になる
+#                             (herdr popup など、外側がフローティング表示を提供する場合)。
+
+set -euo pipefail
+
+HISTORY_FILE="${CLAUDE_HISTORY_FILE:-$HOME/.claude/history.jsonl}"
+SELF="$(readlink -f "$0")"
+DEFAULT_HEADER='Enter:出力 | y:コピー | C-/:プレビュー切替 | Esc:キャンセル'
+
+# キャッシュ先（履歴ファイルパスごとに分離）
+cache_root="${XDG_CACHE_HOME:-$HOME/.cache}/claude-history"
+if command -v sha1sum >/dev/null 2>&1; then
+  hist_key=$(printf '%s' "$HISTORY_FILE" | sha1sum | cut -c1-12)
+else
+  hist_key=$(printf '%s' "$HISTORY_FILE" | shasum | cut -c1-12)
+fi
+CACHE_DIR="$cache_root/$hist_key"
+LIST_FILE="$CACHE_DIR/list.tsv"
+DISPLAYS_FILE="$CACHE_DIR/displays"
+META_FILE="$CACHE_DIR/meta"
+LOCK_DIR="$CACHE_DIR/.lock"
+
+# ---- サブコマンド: プレビュー（display 本文を出力） ----
+# キャッシュの base64 ルックアップから該当行を引き当てて復号する。
+if [[ "${1:-}" == "__preview__" ]]; then
+  LINE_NO="${2:-}"
+  if [[ "$LINE_NO" =~ ^[0-9]+$ && -f "$DISPLAYS_FILE" ]]; then
+    awk -F'\t' -v ln="$LINE_NO" '$1==ln {print $2; exit}' "$DISPLAYS_FILE" | base64 -d
+  fi
+  exit 0
+fi
+
+# ---- サブコマンド: クリップボードへコピー ----
+if [[ "${1:-}" == "__copy__" ]]; then
+  LINE_NO="${2:-}"
+  [[ "$LINE_NO" =~ ^[0-9]+$ ]] || exit 0
+  CONTENT=$("$SELF" __preview__ "$LINE_NO")
+
+  copied=0
+  # tmux 内では tmux load-buffer -w 経由で OSC52 をホスト端末に送る
+  # （fzf の tmux popup から /dev/tty への直接 OSC52 は中継されないため）
+  if [[ -n "${TMUX:-}" ]] && command -v tmux >/dev/null 2>&1; then
+    printf '%s' "$CONTENT" | tmux load-buffer -w - && copied=1
+  elif [[ -n "${WAYLAND_DISPLAY:-}" ]] && command -v wl-copy >/dev/null 2>&1; then
+    printf '%s' "$CONTENT" | wl-copy && copied=1
+  elif [[ -n "${DISPLAY:-}" ]] && command -v xclip >/dev/null 2>&1; then
+    printf '%s' "$CONTENT" | xclip -selection clipboard && copied=1
+  elif command -v pbcopy >/dev/null 2>&1; then
+    printf '%s' "$CONTENT" | pbcopy && copied=1
+  elif command -v clip.exe >/dev/null 2>&1; then
+    printf '%s' "$CONTENT" | clip.exe && copied=1
+  fi
+
+  if [[ "$copied" -eq 0 ]]; then
+    B64=$(printf '%s' "$CONTENT" | base64 -w0 2>/dev/null || printf '%s' "$CONTENT" | base64 | tr -d '\n')
+    printf '\033]52;c;%s\a' "$B64" > /dev/tty
+  fi
+  exit 0
+fi
+
+# ---- メイン ----
+for cmd in jq fzf base64; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Error: $cmd is required" >&2
+    exit 1
+  fi
+done
+
+if [[ ! -f "$HISTORY_FILE" ]]; then
+  echo "Error: history file not found: $HISTORY_FILE" >&2
+  exit 1
+fi
+
+INITIAL_QUERY="${1:-}"
+
+mkdir -p "$CACHE_DIR"
+
+# 履歴ファイルの inode（ローテーション検知用）と行数を取得
+if hist_inode=$(stat -c '%i' "$HISTORY_FILE" 2>/dev/null); then
+  :
+else
+  hist_inode=$(stat -f '%i' "$HISTORY_FILE")
+fi
+hist_lines=$(wc -l < "$HISTORY_FILE")
+
+# meta から path/inode を読む（無ければ空）
+read_meta_value() {
+  local key="$1"
+  [[ -f "$META_FILE" ]] || return 0
+  awk -F= -v k="$key" '$1==k {print $2; exit}' "$META_FILE"
+}
+
+# キャッシュの妥当性チェック:
+# - 履歴ファイルパスと inode が meta と一致
+# - list.tsv と displays の行数が一致（書き込み途中で死んだら不一致になるので検知できる）
+# - キャッシュ行数 <= 履歴行数（履歴が縮んだ場合はフル再構築）
+cache_valid=0
+cached_lines=0
+if [[ -f "$LIST_FILE" && -f "$DISPLAYS_FILE" && -f "$META_FILE" ]]; then
+  cached_file=$(read_meta_value file)
+  cached_inode=$(read_meta_value inode)
+  ll=$(wc -l < "$LIST_FILE")
+  dl=$(wc -l < "$DISPLAYS_FILE")
+  if [[ "$cached_file" == "$HISTORY_FILE" \
+     && "$cached_inode" == "$hist_inode" \
+     && "$ll" == "$dl" \
+     && "$ll" -le "$hist_lines" ]]; then
+    cache_valid=1
+    cached_lines=$ll
+  fi
+fi
+
+# 必要なら更新（ロックを取れない場合は古いキャッシュをそのまま使う）
+needs_full_rebuild=0
+needs_incremental=0
+if [[ "$cache_valid" -eq 0 ]]; then
+  needs_full_rebuild=1
+elif [[ "$cached_lines" -lt "$hist_lines" ]]; then
+  needs_incremental=1
+fi
+
+if [[ "$needs_full_rebuild" -eq 1 || "$needs_incremental" -eq 1 ]]; then
+  if mkdir "$LOCK_DIR" 2>/dev/null; then
+    trap 'rm -rf "$LOCK_DIR"' EXIT
+
+    if [[ "$needs_full_rebuild" -eq 1 ]]; then
+      # フル再構築: キャッシュを空にして履歴全件を流す
+      : > "$LIST_FILE"
+      : > "$DISPLAYS_FILE"
+      tail_arg="+1"
+      offset=0
+    else
+      # インクリメンタル: 既存キャッシュへ差分を直接 append（O(差分)）。
+      # クラッシュ時は次回起動で wc -l 不一致を検知してフル再構築されるため、
+      # mv による atomic 化は不要。
+      tail_arg="+$((cached_lines + 1))"
+      offset=$cached_lines
+    fi
+
+    tail -n "$tail_arg" "$HISTORY_FILE" | jq -r --argjson off "$offset" '
+      def pad(n): (. + (" " * n))[0:n];
+      "L\t\(input_line_number + $off)\t\(.timestamp/1000|strftime("%Y-%m-%d %H:%M"))\t\((.project|split("/")|last)|pad(14))\t\(.display|gsub("\\s+"; " ")|.[0:200])",
+      "D\t\(input_line_number + $off)\t\(.display|@base64)"
+    ' | awk -F'\t' -v OFS='\t' -v lfile="$LIST_FILE" -v dfile="$DISPLAYS_FILE" '
+      $1=="L" { print $2, $3, $4, $5 >> lfile }
+      $1=="D" { print $2, $3 >> dfile }
+    '
+
+    # meta は最後に書く（list/displays より新しい状態を示してしまわないように）
+    tmp_meta="$META_FILE.$$.tmp"
+    {
+      printf 'file=%s\n' "$HISTORY_FILE"
+      printf 'inode=%s\n' "$hist_inode"
+    } > "$tmp_meta"
+    mv "$tmp_meta" "$META_FILE"
+  fi
+  # ロック取れず、かつキャッシュも無いケースは fzf に空リストを渡すことになる。
+  # 競合相手が rebuild 中なので、ユーザは数秒後にリトライすればキャッシュが効く。
+fi
+
+# CLAUDE_HISTORY_TUI_TMUX を空文字に明示設定すると --tmux を使わず全画面
+# (--height 100%) で起動する。herdr popup ペインのように、呼び出し側が既に
+# フローティング表示を提供している環境向け。
+tui_tmux="${CLAUDE_HISTORY_TUI_TMUX-90%,70%}"
+if [[ -n "$tui_tmux" ]]; then
+  fzf_display_args=(--tmux "$tui_tmux")
+else
+  fzf_display_args=(--height 100%)
+fi
+
+# fzf 起動: キャッシュをそのまま流し、選択された行番号だけ受け取る
+selected_line_no=$(fzf \
+  "${fzf_display_args[@]}" \
+  --delimiter=$'\t' \
+  --with-nth=2,3,4 \
+  --nth=2,3,4 \
+  --query="$INITIAL_QUERY" \
+  --tac \
+  --no-sort \
+  --no-hscroll \
+  --tabstop=2 \
+  --layout=reverse \
+  --border=rounded \
+  --preview="$SELF __preview__ {1}" \
+  --preview-window='right,60%,wrap,border-left' \
+  --header="$DEFAULT_HEADER" \
+  --bind="y:execute-silent($SELF __copy__ {1})+transform-header(printf '✓ コピーしました: %s [%s]' {2} {3})" \
+  --bind="focus:transform-header(printf '%s' '$DEFAULT_HEADER')" \
+  --bind='ctrl-/:toggle-preview' \
+  < "$LIST_FILE" \
+  | cut -f1)
+
+# 選択時のみ display 本文を出力（__preview__ 再呼び出しを廃止し fork を削減）
+if [[ "$selected_line_no" =~ ^[0-9]+$ ]]; then
+  awk -F'\t' -v ln="$selected_line_no" '$1==ln {print $2; exit}' "$DISPLAYS_FILE" | base64 -d
+fi

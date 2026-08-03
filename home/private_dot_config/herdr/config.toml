@@ -46,11 +46,6 @@ reload_config = ["prefix+shift+r", "alt+r"]
 toggle_sidebar = ["prefix+b", "alt+e"]
 
 [[keys.command]]
-key = "alt+shift+h"
-type = "shell"
-command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh left"
-
-[[keys.command]]
 key = "alt+shift+j"
 type = "shell"
 command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh down"
@@ -73,6 +68,15 @@ command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh right"
 key = "alt+f"
 type = "shell"
 command = "~/.local/bin/herdr-open-claude-skills.sh"
+
+# Alt+Shift+H: フォーカス中のペインで claude-history プラグインの popup を開く。
+# 選択したプロンプト本文を picker.sh が `herdr pane send-text` で挿入する。
+# alt+h は focus_pane_left として温存するため alt+shift+h を割り当てている。
+# 元々 alt+shift+h に紐付いていた pane fork left は廃止した。
+[[keys.command]]
+key = "alt+shift+h"
+type = "shell"
+command = "~/.local/bin/herdr-open-claude-history.sh"
 
 [experimental]
 switch_ascii_input_source_in_prefix = true

@@ -1,0 +1,18 @@
+id = "claude-history"
+name = "claude-history"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "~/.claude/history.jsonl を fzf popup で選び、選んだプロンプトを呼び出し元ペインに挿入する"
+platforms = ["linux", "macos"]
+
+# 選択結果は picker.sh 内で `herdr pane send-text` を使い、呼び出し元ペイン
+# (--env HERDR_ORIGIN_PANE=... で渡される) のコマンドラインへ挿入する。
+# 呼び出し元は herdr のキーバインド (config.toml の [[keys.command]] alt+h)。
+
+[[panes]]
+id = "picker"
+title = "Claude history"
+placement = "popup"
+width = "80%"
+height = "70%"
+command = ["bash", "picker.sh"]
