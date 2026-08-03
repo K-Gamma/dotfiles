@@ -65,5 +65,14 @@ key = "alt+shift+l"
 type = "shell"
 command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh right"
 
+# Alt+F: フォーカス中のペインで claude-skills プラグインの popup を開く。
+# 選択したスキルは picker.sh が `/name ` として `herdr pane send-text` で挿入する。
+# Claude Code のプロンプト入力中でも、herdr が自身のキーバインドとして先取り
+# するためペインに Alt+F は渡らない。
+[[keys.command]]
+key = "alt+f"
+type = "shell"
+command = "~/.local/bin/herdr-open-claude-skills.sh"
+
 [experimental]
 switch_ascii_input_source_in_prefix = true
