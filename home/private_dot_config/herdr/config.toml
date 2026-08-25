@@ -1,3 +1,7 @@
+# herdr が初回起動時のオンボーディング完了後に書き込むフラグ。
+# chezmoi ソースに持たせないと apply のたびに差分（ドリフト）になる
+onboarding = false
+
 [theme]
 name = "tokyo-night-day"
 auto_switch = false
