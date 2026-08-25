@@ -17,6 +17,9 @@
 #
 #   前提: herdr v0.8.0 以降（`agent read` の alternate-screen 履歴自動収集を利用）。
 #   0.8 未満では長い出力の先頭が欠落しうるため、警告だけ出して続行する。
+#   v0.8.2 の挙動（start の busy 内蔵リトライ / 起動中 blocked の agent_not_ready /
+#   blocked 中 prompt の agent_blocked）に対応済み。v0.8.0〜0.8.1 でも動くが、
+#   これらのエラーコードは返らないだけで害はない。
 #   依存: bash / jq / herdr のみ（他は sed・mktemp 等の標準ユーティリティ）。
 #   state・ログ・ロックの各ファイルは作らない。
 #
@@ -90,13 +93,13 @@
 #     このとき transcript は未生成なので、本ツールは Enter のみを最大3回送り直し、
 #     transcript の出現（実測: Enter 1回から 779〜1199ms）を送信成立の判定に使う。
 #     本文は再送しない（入力欄に残っているため二重入力になる）
-#   - 既知の制限: trust 未承諾の cwd での初回実行は失敗する（実測 2/2）。claude が初回起動時に
-#     出す trust ダイアログがプロンプト本文を吸ってしまい、本文は入力欄に残らないため
-#     Enter 再送では回復できない（リカバリの Enter は trust の承諾として消費される）。
-#     その回は exit 1 になるが、trust は承諾済みになるため同じ cwd での再実行は成功する。
+#   - 既知の制限: trust 未承諾の cwd での初回実行は失敗する。v0.8.2 では agent start が
+#     起動中の blocked（trust ダイアログ等）を検知して agent_not_ready で即失敗するため、
+#     プロンプト本文がダイアログに吸われることはなくなった（v0.8.0 実測時代の挙動。当時は
+#     start が成功し、本文がダイアログに消えていた）。本ツールはこの場合 exit 3 で pane を
+#     残すので、pane を開いて trust を承諾してから再実行すれば成功する。
 #     claude -p は非対話実行時に trust ダイアログ自体をスキップするので、この差は claude -p には無い。
-#     programmatic に使う場合は、初回のみリトライするか、対象 cwd で一度 claude を
-#     対話起動して trust を済ませておくこと。
+#     ※ v0.8.2 でのこの経路は未実測（ソース・公式ドキュメントの記載に基づく）
 #   - プログラマティック運用の実測（claude v2.1.221〜2.1.222 / herdr v0.8.0）:
 #     - 承認で止めたくない場合は `-- --permission-mode dontAsk` を渡す。TUI でも承認プロンプトを
 #       出さず自動 deny してセッションは完走し exit 0 になる（claude -p と同一の意味論。
@@ -110,6 +113,9 @@
 #       本ツールを外部 timeout で包むと後片付け経路を通らず workspace が残るため、内蔵 --timeout を使う。
 #     - claude -p --output-format json 相当の envelope（total_cost_usd / permission_denials /
 #       num_turns 等）は本ツールでは取得できない。response モードで得られるのは最終テキストのみ。
+#     - herdr v0.8.2 から Unix の CLI はパイプ先が閉じたとき panic（exit 101）ではなく
+#       SIGPIPE（$? は 141）で静かに終了する。本ツールの stdout を head 等に繋いでも
+#       herdr 側の panic メッセージは出ない。
 #
 # exit code:
 #   0    完了。結果を stdout に出力済み
@@ -117,6 +123,7 @@
 #        などその他のエラー
 #   2    引数エラー（依存コマンド不足を含む）
 #   3    blocked（承認待ちで停止）。pane を残すので人間が pane を開いて確認する
+#        起動中 blocked（agent_not_ready）・prompt 拒否（agent_blocked）を含む
 #   124  タイムアウト。pane を残す
 #
 # 異常終了で pane を残すときは、後片付け用の `herdr workspace close <WS_ID>` を stderr に表示する。
@@ -324,12 +331,12 @@ if [[ -z "$ws_id" || -z "$pane_id" ]]; then
 fi
 
 # --- 3. agent 起動 ---
-# workspace create 直後は pane 内のシェルが rc/プロンプト初期化中のことがあり、
-# herdr はその瞬間のプロセスツリー判定で agent_pane_busy を返す（v0.8.0 ソース確認済み:
-# app/agents.rs available_shell_name）。「シェルが利用可能になるまで待つ」プリミティブは
-# herdr に存在しない（pane wait-output はテキストマッチのみ）ため、この一時的エラーに
-# 限って agent start 自体を期限付きでリトライする。それが権威ある判定（herdr 自身の
-# チェック）を直接ポーリングする唯一の方法。busy 以外のエラーは即座に失敗させる。
+# workspace create 直後は pane 内のシェルが rc/プロンプト初期化中のことがあり、herdr は
+# その瞬間のプロセスツリー判定で agent_pane_busy を返す。v0.8.2 から CLI の agent start
+# 自体が busy を内蔵リトライするが、上限2秒・Unix のみ・--timeout が 3s超300s以下のとき
+# だけ（v0.8.2 ソース確認済み: src/cli/agent.rs PANE_SHELL_READINESS_RETRY_TIMEOUT）。
+# シェル初期化が2秒を超える環境の安全網として、この外側の期限付きリトライ（15秒）は
+# 残す。busy 以外のエラーは即座に失敗させる。
 START_RETRY_SEC=15
 start_args=(agent start "$NAME" --kind "$KIND" --pane "$pane_id")
 if ((${#AGENT_ARGS[@]} > 0)); then
@@ -348,6 +355,12 @@ while :; do
   sleep 0.5
 done
 if ((start_rc != 0)); then
+  if [[ "$(herdr_err_code)" == "agent_not_ready" ]]; then
+    warn "起動中に blocked を検知しました（初回起動の trust/セットアップダイアログ等）。pane を開いてダイアログに応答してから再実行してください"
+    warn "pane を残しました pane=${pane_id}"
+    hint_cleanup
+    exit 3
+  fi
   warn "agent 起動に失敗しました（trust プロンプト等の可能性）: $(herdr_err_text)"
   warn "pane を残しました pane=${pane_id}"
   hint_cleanup
@@ -435,6 +448,11 @@ else
       warn "${TIMEOUT_SEC}s でタイムアウトしました。pane を残します pane=${pane_id}"
       hint_cleanup
       exit 124
+      ;;
+    agent_blocked)
+      warn "agent が承認待ち（blocked）のため、プロンプトは送信されていません（v0.8.2 は blocked 中の prompt で本文も Enter も送らない）。pane を開いて何が承認待ちか確認してください pane=${pane_id}"
+      hint_cleanup
+      exit 3
       ;;
     agent_prompt_stalled)
       # 根本原因: herdr の agent prompt は本文（bracketed paste）と Enter を 300ms 間隔の
