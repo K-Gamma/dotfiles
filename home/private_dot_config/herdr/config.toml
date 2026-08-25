@@ -15,6 +15,10 @@ position = "top-right"
 show_agent_labels_on_pane_borders = true
 mouse_capture = true
 agent_panel_sort = "priority"
+# agent 状態インジケータを色だけでなく形でも区別する（既定は色付きドットのみ）
+status_indicators = "symbols"
+# タブバー右端に zoom 中であることを示す ZOOM ピルを表示する（alt+z 多用のため）
+tab_bar_right = [{ type = "zoom" }]
 
 # tmux の prefix なし Alt ショートカット相当を追加する
 # （prefix ベースのデフォルトバインドはそのまま残す）
