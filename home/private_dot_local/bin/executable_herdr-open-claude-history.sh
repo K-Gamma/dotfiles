@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# herdr の keybind (config.toml alt+h) から呼ばれるラッパー。
+# herdr の keybind (config.toml alt+shift+h) から呼ばれるラッパー。
 # フォーカス中ペインの id と cwd を herdr pane list から解決し、
 # claude-history プラグインの popup を開く。
 #
