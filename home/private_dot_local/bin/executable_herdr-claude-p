@@ -1,0 +1,612 @@
+#!/usr/bin/env bash
+#
+# herdr-claude-p — `claude -p`（headless 実行）を herdr の pane 内 agent で再現する汎用ツール
+#
+# 何をするか:
+#   1. herdr の workspace/pane を1つ作る（cwd 指定）
+#   2. その pane で agent（既定は claude）を起動する
+#   3. プロンプトを1回投げて完了まで待つ
+#   4. 結果を **stdout にそのまま** 流す（診断・警告はすべて stderr。パイプで後段に渡せる）
+#      --output response（既定）: `claude -p` と同じ「最終レスポンスのみ」。claude の
+#        transcript（JSONL）から最後の assistant メッセージの text ブロックを抽出する
+#      --output pane: pane の画面ダンプそのまま（TUI の枠線やツール実行ログを含む）
+#   5. 正常終了なら workspace を閉じる。異常時は pane を残す（pane の表示が唯一の診断材料）
+#
+#   `claude -p` と違い pane 内の TUI セッションとして動くため、承認待ち（blocked）が
+#   人間の目に見える状態で残る／終了後も pane を残して続きを追える、という運用ができる。
+#
+#   前提: herdr v0.8.0 以降（`agent read` の alternate-screen 履歴自動収集を利用）。
+#   0.8 未満では長い出力の先頭が欠落しうるため、警告だけ出して続行する。
+#   依存: bash / jq / herdr のみ（他は sed・mktemp 等の標準ユーティリティ）。
+#   state・ログ・ロックの各ファイルは作らない。
+#
+# 使い方:
+#   herdr-claude-p [OPTIONS] <PROMPT> [-- <AGENT_ARGS>...]
+#     PROMPT が "-" のときは stdin から読む
+#     オプションの値はスペース区切りで渡す（--timeout 600。--timeout=600 の形式は不可）
+#     `--` 以降は agent プロセス（claude 等）へのネイティブ引数として素通しされる
+#     ハイフン始まりのプロンプト（例: '-1件目を要約して'）は位置引数では渡せない。
+#     オプションの typo を黙ってプロンプトとして送らないため、stdin モード（PROMPT に "-"）を使う:
+#       printf '%s\n' '-1件目を要約して' | herdr-claude-p -
+#
+# OPTIONS:
+#   --session NAME   herdr セッション名（省略時は herdr の既定解決に任せる）
+#   --cwd DIR        pane の作業ディレクトリ（既定: $PWD）
+#   --kind KIND      agent の種類（既定: claude）
+#   --timeout SEC    完了待ちの秒数（既定: 900）
+#   --output MODE    response（既定）= 最終レスポンスのみ / pane = pane の画面ダンプ
+#   --lines N        pane ダンプの読み取り行数（既定: 2000。--output pane のときだけ使う）
+#   --keep-pane      正常終了時も workspace を残す
+#   --name NAME      agent 名（既定: hcp-<PID>。制約 [a-z][a-z0-9_-]{0,31}）
+#   -h, --help       この使い方を表示
+#
+# 使用例:
+#   # 1) カレントディレクトリで実行して最終レスポンスだけを stdout で受け取る
+#   herdr-claude-p 'このリポジトリのテスト戦略を3行で要約して'
+#
+#   # 1-b) 構造化出力を後段でパースする（response モードなので JSON 以外は混ざらない）
+#   herdr-claude-p '{"ok":true} という JSON だけを返して' | jq .
+#
+#   # 1-c) ツール実行の様子込みで画面をそのまま見たい場合
+#   herdr-claude-p --output pane --lines 4000 'テストを実行して結果を報告して'
+#
+#   # 2) 権限を --settings の JSON で渡す（herdr 経由では --allowedTools より確実に効く）
+#   herdr-claude-p --cwd ~/src/myrepo --timeout 1800 \
+#     '/review-renovate-pr 123 を実行して結論を最終行に1行で書いて' \
+#     -- --settings "$(jq -cn '{permissions:{defaultMode:"default",allow:["Read","Grep","Bash(gh pr view:*)"]}}')" \
+#        --model opus
+#
+#   # 3) 長いプロンプトを stdin から渡し、出力を後段で加工する
+#   printf '%s\n' "$long_prompt" | herdr-claude-p - | tee result.txt
+#
+#   # 4) モデルと effort は claude 自身のフラグとして -- 以降で渡す
+#   #    (--model: fable/opus/sonnet/haiku かフルネーム。--effort: low/medium/high/xhigh/max)
+#   herdr-claude-p 'このdiffを要約して' -- --model sonnet --effort medium
+#
+# 注意点:
+#   - agent 固有の設定（モデル・effort・権限・アカウント切替等）はすべて `--` の後ろに
+#     claude のネイティブ引数として渡す。本ツール側には対応オプションを設けない方針
+#     （アカウント切替は --settings の {"env":{"CLAUDE_CONFIG_DIR":"..."}}）
+#   - 同期サブエージェント（Agent/Task ツール）実行中は working 扱いのままなので
+#     完了判定は誤発火しない（実機確認済み）。ただしバックグラウンド実行
+#     （Bash run_in_background 等）を使うと親のターン終了時点で「完了」となり、
+#     中間応答を返して workspace を閉じる。**close された時点で裏の作業は打ち切られる**
+#     （実測: close 後、バックグラウンドの sleep && echo は成果物を残さなかった）。
+#     これは claude -p と同じ意味論（実測: claude -p v2.1.221 もターン終了で即 exit し、
+#     バックグラウンドの子プロセスは道連れに終了する）。
+#     最終結果をこのツールの stdout で受け取りたいなら、プロンプトで
+#     「バックグラウンド実行を使わず完了まで待って報告して」と同期実行に誘導する
+#     （同期実行なら最終結果が返ることは実機確認済み）。
+#     --keep-pane は待たない: 中間応答を返して exit 0 する点は同じ。workspace を
+#     閉じないため裏の作業は生き残り、完了通知で claude が pane 内に最終報告を出す
+#     （ここまで実測済み）。agent 名も残るため herdr agent get/read で手動回収できる。
+#     workspace close は手動
+#   - --output pane の画面ダンプには TUI の装飾（バナー・ステータスバー）が含まれる。
+#     また先頭欠落（truncated）は CLI 経由では検知できない
+#   - プロンプトの取りこぼしとリカバリ: herdr の agent prompt は本文（bracketed paste）と
+#     Enter を 300ms 間隔の別々の pty write で送り、到達確認をしない。claude の起動直後や
+#     CPU 競合で stdin 処理が遅れると Enter だけが空振りし、本文は入力欄に残ったまま
+#     status=idle になる（herdr は 5000ms 状態が動かないと agent_prompt_stalled を返す）。
+#     このとき transcript は未生成なので、本ツールは Enter のみを最大3回送り直し、
+#     transcript の出現（実測: Enter 1回から 779〜1199ms）を送信成立の判定に使う。
+#     本文は再送しない（入力欄に残っているため二重入力になる）
+#   - 既知の制限: trust 未承諾の cwd での初回実行は失敗する（実測 2/2）。claude が初回起動時に
+#     出す trust ダイアログがプロンプト本文を吸ってしまい、本文は入力欄に残らないため
+#     Enter 再送では回復できない（リカバリの Enter は trust の承諾として消費される）。
+#     その回は exit 1 になるが、trust は承諾済みになるため同じ cwd での再実行は成功する。
+#     claude -p は非対話実行時に trust ダイアログ自体をスキップするので、この差は claude -p には無い。
+#     programmatic に使う場合は、初回のみリトライするか、対象 cwd で一度 claude を
+#     対話起動して trust を済ませておくこと。
+#   - プログラマティック運用の実測（claude v2.1.221〜2.1.222 / herdr v0.8.0）:
+#     - 承認で止めたくない場合は `-- --permission-mode dontAsk` を渡す。TUI でも承認プロンプトを
+#       出さず自動 deny してセッションは完走し exit 0 になる（claude -p と同一の意味論。
+#       claude -p 側でも deny は is_error:false / exit 0 で、拒否は permission_denials に記録されるのみ）。
+#       deny されても exit 0 なので exit code では検出できない。stdout の応答文面で判定すること。
+#       ツールを実際に使わせる場合は使用例2のように --settings の permissions.allow で事前認可する。
+#       exit 3 (blocked) は allow 漏れのシグナルとして使える。
+#     - exit code の対応: claude -p は引数エラーも max-turns 到達も exit 1、権限 deny 完走は exit 0。
+#       本ツールの 2(引数エラー)/3(blocked)/124(timeout) は claude -p に存在しない区別。
+#     - claude -p にビルトインのタイムアウトフラグは無い（外部 timeout コマンドで包む）。逆に
+#       本ツールを外部 timeout で包むと後片付け経路を通らず workspace が残るため、内蔵 --timeout を使う。
+#     - claude -p --output-format json 相当の envelope（total_cost_usd / permission_denials /
+#       num_turns 等）は本ツールでは取得できない。response モードで得られるのは最終テキストのみ。
+#
+# exit code:
+#   0    完了。結果を stdout に出力済み
+#   1    agent 起動失敗 / 完了しなかった / 最終レスポンスの抽出失敗 / pane 読み取り失敗
+#        などその他のエラー
+#   2    引数エラー（依存コマンド不足を含む）
+#   3    blocked（承認待ちで停止）。pane を残すので人間が pane を開いて確認する
+#   124  タイムアウト。pane を残す
+#
+# 異常終了で pane を残すときは、後片付け用の `herdr workspace close <WS_ID>` を stderr に表示する。
+#
+set -euo pipefail
+
+warn() { printf '%s\n' "herdr-claude-p: $*" >&2; }
+die2() {
+  warn "$*"
+  warn "使い方は herdr-claude-p --help を参照"
+  exit 2
+}
+
+usage() {
+  sed -n '/^# 使い方:/,/^# 異常終了で pane/p' "$0" | sed 's/^# \{0,1\}//'
+}
+
+# --- -h/--help は依存チェックより先に処理する（usage は sed だけで動くため jq/herdr 不要） ---
+# `--` 以降は agent への引数なので走査しない（claude 自身の --help を横取りしないため）
+for arg in "$@"; do
+  case "$arg" in
+    --) break ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+  esac
+done
+
+# --- 依存チェック ---
+for cmd in herdr jq; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    warn "依存コマンドが見つかりません: ${cmd}"
+    exit 2
+  fi
+done
+
+# herdr の stderr（エラー時の JSON）を stdout と混ぜずに受けるための一時バッファ
+ERR_FILE=$(mktemp "${TMPDIR:-/tmp}/herdr-claude-p.XXXXXX") ||
+  die2 "一時ファイルの作成に失敗しました（TMPDIR=${TMPDIR:-/tmp}）"
+trap 'rm -f "$ERR_FILE"' EXIT
+
+# --- 引数パース ---
+SESSION=""
+CWD="$PWD"
+KIND="claude"
+TIMEOUT_SEC=900
+LINES=2000
+OUTPUT="response"
+KEEP_PANE=0
+NAME=""
+PROMPT=""
+prompt_set=0
+AGENT_ARGS=()
+
+while (($# > 0)); do
+  case "$1" in
+    --session)
+      (($# >= 2)) || die2 "--session に値が必要です"
+      SESSION="$2"
+      shift 2
+      ;;
+    --cwd)
+      (($# >= 2)) || die2 "--cwd に値が必要です"
+      CWD="$2"
+      shift 2
+      ;;
+    --kind)
+      (($# >= 2)) || die2 "--kind に値が必要です"
+      KIND="$2"
+      shift 2
+      ;;
+    --timeout)
+      (($# >= 2)) || die2 "--timeout に値が必要です"
+      TIMEOUT_SEC="$2"
+      shift 2
+      ;;
+    --lines)
+      (($# >= 2)) || die2 "--lines に値が必要です"
+      LINES="$2"
+      shift 2
+      ;;
+    --output)
+      (($# >= 2)) || die2 "--output に値が必要です"
+      OUTPUT="$2"
+      shift 2
+      ;;
+    --name)
+      (($# >= 2)) || die2 "--name に値が必要です"
+      NAME="$2"
+      shift 2
+      ;;
+    --keep-pane)
+      KEEP_PANE=1
+      shift
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      AGENT_ARGS=("$@")
+      break
+      ;;
+    -?*)
+      # 単独の "-"（stdin から PROMPT を読む指定）は下の位置引数として扱う。
+      # ハイフン始まりの文字列はプロンプトとして受け付けない（オプションの typo を
+      # 黙ってプロンプトとして送信してしまう方が危険なため、パーサは緩めない）
+      warn "不明なオプション: $1"
+      die2 "ハイフン始まりのプロンプトを渡したい場合は stdin モードを使う: printf '%s\\n' \"\$prompt\" | herdr-claude-p -"
+      ;;
+    *)
+      ((prompt_set == 0)) || die2 "位置引数が多すぎます: $1（agent への引数は -- の後に置く）"
+      PROMPT="$1"
+      prompt_set=1
+      shift
+      ;;
+  esac
+done
+
+((prompt_set == 1)) || die2 "PROMPT が指定されていません"
+[[ "$TIMEOUT_SEC" =~ ^[1-9][0-9]*$ ]] || die2 "--timeout は正の整数（秒）で指定してください: ${TIMEOUT_SEC}"
+[[ "$LINES" =~ ^[1-9][0-9]*$ ]] || die2 "--lines は正の整数で指定してください: ${LINES}"
+[[ "$OUTPUT" == "response" || "$OUTPUT" == "pane" ]] ||
+  die2 "--output は response か pane で指定してください: ${OUTPUT}"
+[[ -n "$KIND" ]] || die2 "--kind に空文字は指定できません"
+[[ -d "$CWD" ]] || die2 "--cwd がディレクトリではありません: ${CWD}"
+
+if [[ "$PROMPT" == "-" ]]; then
+  PROMPT=$(cat)
+fi
+[[ -n "$PROMPT" ]] || die2 "PROMPT が空です"
+
+[[ -n "$NAME" ]] || NAME="hcp-$$"
+[[ "$NAME" =~ ^[a-z][a-z0-9_-]{0,31}$ ]] ||
+  die2 "--name は [a-z][a-z0-9_-]{0,31} を満たす必要があります: ${NAME}"
+
+TIMEOUT_MS=$((TIMEOUT_SEC * 1000))
+# herdr の agent prompt は --timeout が 5000ms 以下だと未送信（stalled）を timeout として返すため、
+# 短すぎる指定は誤診断の元になる
+if ((TIMEOUT_MS <= 5000)); then
+  warn "警告: --timeout ${TIMEOUT_SEC}s は短すぎます（5s 以下ではプロンプト未送信も timeout として報告されます）"
+fi
+
+# --- herdr ラッパー ---
+# 値として使う出力に stderr を混ぜない。stderr は $ERR_FILE に落として別途 JSON を読む
+hd() {
+  if [[ -n "$SESSION" ]]; then
+    command herdr --session "$SESSION" "$@" 2>"$ERR_FILE"
+  else
+    command herdr "$@" 2>"$ERR_FILE"
+  fi
+}
+herdr_err_code() { jq -r '.error.code // ""' <"$ERR_FILE" 2>/dev/null || true; }
+herdr_err_text() { tr '\n' ' ' <"$ERR_FILE" 2>/dev/null || true; }
+
+ws_id=""
+# herdr が契約外の応答（不正 JSON 等）を返した場合。生の jq 終了コードで即死させず、
+# 後片付けコマンドを案内してから exit 1 に揃える
+die1_unparsable() {
+  warn "herdr の応答を解析できません（$1）: $2"
+  hint_cleanup
+  exit 1
+}
+hint_cleanup() {
+  if [[ -z "$ws_id" ]]; then
+    warn "workspace ID が不明です。label=${NAME} の workspace が残っていないか確認してください: herdr workspace list"
+    return 0
+  fi
+  if [[ -n "$SESSION" ]]; then
+    warn "後片付け: herdr --session $(printf '%q' "$SESSION") workspace close ${ws_id}"
+  else
+    warn "後片付け: herdr workspace close ${ws_id}"
+  fi
+}
+
+# --- 1. バージョン確認（0.8 未満は警告のみ） ---
+herdr_version=$(command herdr --version 2>/dev/null | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+' || true)
+if [[ -z "$herdr_version" ]]; then
+  warn "警告: herdr のバージョンを判定できませんでした。v0.8.0 以降を想定しています"
+else
+  v_major="${herdr_version%%.*}"
+  v_rest="${herdr_version#*.}"
+  v_minor="${v_rest%%.*}"
+  if ((v_major == 0 && v_minor < 8)); then
+    warn "警告: herdr ${herdr_version} は v0.8.0 未満です。alternate-screen の履歴収集が使えないため、長い出力は先頭が欠落しえます"
+  fi
+fi
+
+# --- 2. workspace / pane 作成 ---
+# agent start に --cwd は無いため、cwd は workspace 作成時に決める
+if ! ws_json=$(hd workspace create --cwd "$CWD" --label "$NAME" --no-focus); then
+  warn "workspace 作成に失敗しました: $(herdr_err_text)"
+  exit 1
+fi
+ws_id=$(jq -r '.result.workspace.workspace_id // ""' <<<"$ws_json") ||
+  die1_unparsable "workspace create" "$ws_json"
+pane_id=$(jq -r '.result.root_pane.pane_id // ""' <<<"$ws_json") ||
+  die1_unparsable "workspace create" "$ws_json"
+if [[ -z "$ws_id" || -z "$pane_id" ]]; then
+  warn "workspace 作成結果を解析できません: ${ws_json}"
+  hint_cleanup
+  exit 1
+fi
+
+# --- 3. agent 起動 ---
+# workspace create 直後は pane 内のシェルが rc/プロンプト初期化中のことがあり、
+# herdr はその瞬間のプロセスツリー判定で agent_pane_busy を返す（v0.8.0 ソース確認済み:
+# app/agents.rs available_shell_name）。「シェルが利用可能になるまで待つ」プリミティブは
+# herdr に存在しない（pane wait-output はテキストマッチのみ）ため、この一時的エラーに
+# 限って agent start 自体を期限付きでリトライする。それが権威ある判定（herdr 自身の
+# チェック）を直接ポーリングする唯一の方法。busy 以外のエラーは即座に失敗させる。
+START_RETRY_SEC=15
+start_args=(agent start "$NAME" --kind "$KIND" --pane "$pane_id")
+if ((${#AGENT_ARGS[@]} > 0)); then
+  start_args+=(-- "${AGENT_ARGS[@]}")
+fi
+start_rc=1
+start_out=""
+start_deadline=$((SECONDS + START_RETRY_SEC))
+while :; do
+  if start_out=$(hd "${start_args[@]}"); then
+    start_rc=0
+    break
+  fi
+  [[ "$(herdr_err_code)" == "agent_pane_busy" ]] || break
+  ((SECONDS < start_deadline)) || break
+  sleep 0.5
+done
+if ((start_rc != 0)); then
+  warn "agent 起動に失敗しました（trust プロンプト等の可能性）: $(herdr_err_text)"
+  warn "pane を残しました pane=${pane_id}"
+  hint_cleanup
+  exit 1
+fi
+# claude のセッション UUID（transcript のファイル名になる）。start 応答で既に入っているが、
+# セッションが途中で切り替わる可能性を考えて完了後の agent get を優先し、これは保険にする
+start_session_uuid=$(jq -r '.result.agent.agent_session.value // ""' <<<"$start_out" 2>/dev/null || true)
+
+# --- transcript の探索（結果取得だけでなく stalled リカバリの成否判定にも使う） ---
+# claude は transcript を <CONFIG_DIR>/projects/<cwd の非英数字を '-' に置換>/<UUID>.jsonl に
+# 書く。UUID はグローバル一意なのでプロジェクトディレクトリ名は推測せず glob で探す。
+# サブエージェント（Task）の発話は <UUID>/subagents/agent-*.jsonl という別ファイルなので
+# メインスレッドの transcript には混ざらない（実機の transcript で確認済み）
+
+# 呼び出し側が `-- --settings` で CLAUDE_CONFIG_DIR を注入している場合、transcript は
+# そのディレクトリ配下に出る。--settings の値は JSON 文字列でもファイルパスでもよい
+settings_config_dir=""
+for ((i = 0; i < ${#AGENT_ARGS[@]}; i++)); do
+  [[ "${AGENT_ARGS[i]}" == "--settings" ]] || continue
+  ((i + 1 < ${#AGENT_ARGS[@]})) || break
+  settings_value="${AGENT_ARGS[i + 1]}"
+  if [[ -f "$settings_value" ]]; then
+    settings_dir=$(jq -r '.env.CLAUDE_CONFIG_DIR // ""' "$settings_value" 2>/dev/null || true)
+  else
+    settings_dir=$(jq -r '.env.CLAUDE_CONFIG_DIR // ""' <<<"$settings_value" 2>/dev/null || true)
+  fi
+  [[ -n "$settings_dir" ]] && settings_config_dir="$settings_dir"
+done
+
+transcript_globs=()
+# 探索パスは session UUID ごとに変わるため、UUID を引数に取って組み直す
+build_transcript_globs() {
+  local uuid="$1"
+  transcript_globs=()
+  [[ -n "$settings_config_dir" ]] && transcript_globs+=("$settings_config_dir/projects/"*"/${uuid}.jsonl")
+  [[ -n "${CLAUDE_CONFIG_DIR:-}" ]] && transcript_globs+=("${CLAUDE_CONFIG_DIR}/projects/"*"/${uuid}.jsonl")
+  transcript_globs+=("${HOME}/.claude/projects/"*"/${uuid}.jsonl")
+  transcript_globs+=("${HOME}/".claude*"/projects/"*"/${uuid}.jsonl")
+}
+
+find_transcript() {
+  local cand
+  for cand in "${transcript_globs[@]}"; do
+    [[ -f "$cand" ]] && {
+      printf '%s\n' "$cand"
+      return 0
+    }
+  done
+  return 1
+}
+
+# 完了ステータスの判定。herdr では done と idle は同じ「完了」状態
+finish_or_exit() {
+  local status="$1"
+  case "$status" in
+    done | idle)
+      return 0
+      ;;
+    blocked)
+      warn "承認待ち（blocked）で停止しています。pane を開いて何が承認待ちか確認してください pane=${pane_id}"
+      hint_cleanup
+      exit 3
+      ;;
+    *)
+      warn "完了しませんでした (agent_status=${status:-unknown})。pane を残します pane=${pane_id}"
+      hint_cleanup
+      exit 1
+      ;;
+  esac
+}
+
+# --- 4. プロンプト送信と完了待ち ---
+prompt_rc=0
+prompt_out=$(hd agent prompt "$NAME" "$PROMPT" --wait --timeout "$TIMEOUT_MS") || prompt_rc=$?
+
+if ((prompt_rc == 0)); then
+  prompt_status=$(jq -r '.result.agent.agent_status // ""' <<<"$prompt_out") ||
+    die1_unparsable "agent prompt" "$prompt_out"
+  finish_or_exit "$prompt_status"
+else
+  err_code=$(herdr_err_code)
+  case "$err_code" in
+    timeout)
+      warn "${TIMEOUT_SEC}s でタイムアウトしました。pane を残します pane=${pane_id}"
+      hint_cleanup
+      exit 124
+      ;;
+    agent_prompt_stalled)
+      # 根本原因: herdr の agent prompt は本文（bracketed paste）と Enter を 300ms 間隔の
+      # 別々の pty write で送り、到達確認をしない（v0.8.0 ソース確認済み: app/api/agents.rs）。
+      # claude の stdin 処理が 300ms より遅れると Enter だけが空振りし、本文は入力欄に無傷で
+      # 残る（status=idle、transcript 未生成）。「transcript 未生成 = プロンプト未処理」は
+      # 実測で確定済みなので、Enter を送って transcript の出現を送信成立の判定に使う。
+      # 本文の再送は絶対にしない（入力欄に残っているので二重入力になる）。送るのは Enter のみ。
+      # 旧実装は Enter 1回の後に `agent wait --until idle/done/blocked` で待っていたが、
+      # 送信前の status が既に idle のため wait が即時リターンし（v0.8.0: api/wait.rs は
+      # 現在状態が until に一致すれば即成功）、完了を待てていなかった
+      STALL_RETRY_MAX=3
+      STALL_TRANSCRIPT_WAIT_SEC=5
+      STALL_WORKING_WAIT_MS=15000
+      warn "プロンプト未送信の可能性（agent_prompt_stalled）。Enter の再送でリカバリします（最大 ${STALL_RETRY_MAX} 回）"
+      recovered=0
+      for ((attempt = 1; attempt <= STALL_RETRY_MAX; attempt++)); do
+        # blocked では絶対に送らない（承認プロンプトの選択肢を意図せず確定させるため）。
+        # 承認プロンプトへの遷移は試行と試行の間にも起こりうるので、毎回送信の直前に取り直す
+        recovery_uuid=""
+        if get_out=$(hd agent get "$NAME"); then
+          cur_status=$(jq -r '.result.agent.agent_status // ""' <<<"$get_out") ||
+            die1_unparsable "agent get" "$get_out"
+          recovery_uuid=$(jq -r '.result.agent.agent_session.value // ""' <<<"$get_out" 2>/dev/null || true)
+          if [[ "$cur_status" == "blocked" ]]; then
+            warn "リカバリ ${attempt}/${STALL_RETRY_MAX}: 現在 blocked です。Enter は送りません（承認プロンプトの誤確定を防ぐため）"
+            finish_or_exit "$cur_status"
+          fi
+        else
+          warn "現在状態の再確認に失敗しました（続行して Enter を送ります）: $(herdr_err_text)"
+        fi
+        hd agent send-keys "$NAME" Enter >/dev/null ||
+          warn "警告: send-keys Enter が失敗しました（続行します）: $(herdr_err_text)"
+        # transcript が出現すれば送信成立が確定する
+        # （実測: stall 後の Enter 1回で 779〜1199ms 後に必ず出現。6KB のプロンプトでも同様）
+        stall_deadline=$((SECONDS + STALL_TRANSCRIPT_WAIT_SEC))
+        while :; do
+          # この時点で参照できる UUID は agent get の値と start 応答の値のみ。両方試す
+          for uuid in "$recovery_uuid" "$start_session_uuid"; do
+            [[ -n "$uuid" ]] || continue
+            build_transcript_globs "$uuid"
+            if find_transcript >/dev/null; then
+              recovered=1
+              break
+            fi
+          done
+          ((recovered == 0)) || break
+          ((SECONDS < stall_deadline)) || break
+          sleep 0.5
+        done
+        if ((recovered == 1)); then
+          warn "リカバリ ${attempt}/${STALL_RETRY_MAX}: transcript を確認しました（プロンプトの送信成立）"
+          break
+        fi
+        warn "リカバリ ${attempt}/${STALL_RETRY_MAX}: ${STALL_TRANSCRIPT_WAIT_SEC}s 待っても transcript が現れません（Enter は空振り）"
+      done
+      if ((recovered == 0)); then
+        warn "Enter を ${STALL_RETRY_MAX} 回送ってもプロンプトが処理されませんでした。pane を残します pane=${pane_id}"
+        hint_cleanup
+        exit 1
+      fi
+      # working への遷移待ちは失敗を許容する。ごく短いターンでは working を通り過ぎて
+      # 既に完了していることがあり、その場合 timeout になるが問題はない
+      hd agent wait "$NAME" --until working --timeout "$STALL_WORKING_WAIT_MS" >/dev/null ||
+        warn "working への遷移は確認できませんでした（既に完了している可能性。続行します）"
+      warn "リカバリ後の完了待ちに入ります（最大 ${TIMEOUT_SEC}s）"
+      wait_rc=0
+      wait_out=$(hd agent wait "$NAME" --until idle --until 'done' --until blocked --timeout "$TIMEOUT_MS") || wait_rc=$?
+      if ((wait_rc != 0)); then
+        wait_err=$(herdr_err_code)
+        if [[ "$wait_err" == "timeout" ]]; then
+          warn "リカバリ後も ${TIMEOUT_SEC}s で完了しませんでした。pane を残します pane=${pane_id}"
+          hint_cleanup
+          exit 124
+        fi
+        warn "リカバリ後の待機が失敗しました (error=${wait_err:-unknown}): $(herdr_err_text)"
+        hint_cleanup
+        exit 1
+      fi
+      wait_status=$(jq -r '.result.agent.agent_status // ""' <<<"$wait_out") ||
+        die1_unparsable "agent wait" "$wait_out"
+      finish_or_exit "$wait_status"
+      ;;
+    *)
+      warn "完了待ちが失敗しました (error=${err_code:-unknown}): $(herdr_err_text)"
+      hint_cleanup
+      exit 1
+      ;;
+  esac
+fi
+
+# --- 5. 結果を stdout へ ---
+if [[ "$OUTPUT" == "pane" ]]; then
+  # pane の画面ダンプ。agent が完了（idle/done）してから読む（working/blocked 中は
+  # agent_not_idle エラー）。
+  # 注意: v0.8.0 の CLI は read の成功時、JSON エンベロープではなく .result.read.text を
+  # 展開したプレーンテキストを stdout に出す（src/cli.rs print_read_response）。
+  # そのまま素通しする。truncated フラグは CLI 経由では取得できない
+  if ! text=$(hd agent read "$NAME" --source recent-unwrapped --lines "$LINES"); then
+    warn "pane の読み取りに失敗しました: $(herdr_err_text)"
+    hint_cleanup
+    exit 1
+  fi
+  if [[ -z "$text" ]]; then
+    warn "警告: pane の出力が空です"
+  else
+    printf '%s\n' "$text"
+  fi
+else
+  # --- 最終レスポンスのみ（claude -p 相当） ---
+  # transcript の探索パス組み立てとファイル探索は前方の build_transcript_globs /
+  # find_transcript を使う（stalled リカバリと共用）
+  session_uuid=""
+  get_out=""
+  if get_out=$(hd agent get "$NAME"); then
+    session_uuid=$(jq -r '.result.agent.agent_session.value // ""' <<<"$get_out" 2>/dev/null || true)
+  else
+    warn "agent get に失敗しました（start 応答のセッションIDで続行します）: $(herdr_err_text)"
+  fi
+  [[ -n "$session_uuid" ]] || session_uuid="$start_session_uuid"
+  if [[ -z "$session_uuid" ]]; then
+    warn "claude のセッションIDを取得できませんでした（agent get 応答: ${get_out:-なし}）"
+    warn "--output pane を指定すれば pane の画面ダンプは取得できます"
+    hint_cleanup
+    exit 1
+  fi
+
+  build_transcript_globs "$session_uuid"
+
+  # text ブロックを持つ最後の assistant 行を JSON 文字列1個として取り出す。
+  # -r を使わず JSON のまま1行に載せることで「どこが1レコードか」を tail で確定できる
+  # （最終レスポンスは複数行になりうるため）
+  jq_last_text='select(.type == "assistant") | select((.isSidechain // false) == false)
+    | [ (.message.content // []) | (if type == "array" then .[] else empty end)
+        | select(.type? == "text") | .text ]
+    | join("\n") | select(. != "")'
+
+  # 完了直後は transcript の書き込みが未フラッシュのことがあるので期限付きで再試行する
+  RESPONSE_WAIT_SEC=10
+  response_deadline=$((SECONDS + RESPONSE_WAIT_SEC))
+  response_json=""
+  transcript=""
+  while :; do
+    if transcript=$(find_transcript); then
+      response_json=$({ jq -c "$jq_last_text" "$transcript" 2>/dev/null || true; } | tail -n 1)
+      [[ -n "$response_json" ]] && break
+    fi
+    ((SECONDS < response_deadline)) || break
+    sleep 0.5
+  done
+
+  if [[ -z "$response_json" ]]; then
+    if [[ -z "$transcript" ]]; then
+      warn "transcript が見つかりません（session=${session_uuid}）。探索パス: ${transcript_globs[*]}"
+    else
+      warn "transcript から assistant の text ブロックを取得できません: ${transcript}"
+    fi
+    warn "--output pane を指定すれば pane の画面ダンプは取得できます"
+    hint_cleanup
+    exit 1
+  fi
+  text=$(jq -r '.' <<<"$response_json") ||
+    die1_unparsable "transcript 抽出" "$response_json"
+  printf '%s\n' "$text"
+fi
+
+# --- 6. 後片付け ---
+if ((KEEP_PANE == 1)); then
+  warn "--keep-pane 指定のため workspace を残します ws=${ws_id} pane=${pane_id}"
+elif ! hd workspace close "$ws_id" >/dev/null; then
+  warn "警告: workspace のクローズに失敗しました: $(herdr_err_text)"
+  hint_cleanup
+fi
+
+exit 0
