@@ -13,10 +13,18 @@
 # Requirements: run from inside a Herdr-managed pane (HERDR_ENV=1). The session
 # ID comes from CLAUDE_CODE_SESSION_ID; if that is unset, it falls back to the
 # session ID of the currently focused Herdr Claude agent. Needs python3 for JSON.
+# The pane to split off from is HERDR_ACTIVE_PANE_ID (set for keybinding-triggered
+# detached shell commands) or, when run manually inside a pane, HERDR_PANE_ID.
 set -euo pipefail
 
 if [ "${HERDR_ENV:-}" != "1" ]; then
     echo "herdr-fork-claude-session: not running inside Herdr (HERDR_ENV != 1)" >&2
+    exit 1
+fi
+
+pane_id="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
+if [ -z "$pane_id" ]; then
+    echo "herdr-fork-claude-session: HERDR_ACTIVE_PANE_ID or HERDR_PANE_ID is required" >&2
     exit 1
 fi
 
@@ -60,7 +68,8 @@ case "$direction" in
         ;;
 esac
 
-pane=$(herdr pane split --current --direction "$split_dir" --cwd "$PWD" --no-focus |
+# --pane (not --current): detached keybinding execution never has HERDR_PANE_ID.
+pane=$(herdr pane split --pane "$pane_id" --direction "$split_dir" --cwd "$PWD" --no-focus |
     python3 -c "import sys, json; print(json.load(sys.stdin)['result']['pane']['pane_id'])")
 
 if [ -n "$swap_dir" ]; then
