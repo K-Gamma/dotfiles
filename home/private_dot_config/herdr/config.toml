@@ -57,16 +57,19 @@ toggle_sidebar = ["prefix+b", "alt+e"]
 key = "alt+shift+j"
 type = "shell"
 command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh down"
+description = "Fork Claude session below"
 
 [[keys.command]]
 key = "alt+shift+k"
 type = "shell"
 command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh up"
+description = "Fork Claude session above"
 
 [[keys.command]]
 key = "alt+shift+l"
 type = "shell"
 command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh right"
+description = "Fork Claude session to the right"
 
 # Alt+F: フォーカス中のペインで claude-skills プラグインの popup を開く。
 # 選択したスキルは picker.sh が `/name ` として `herdr pane send-text` で挿入する。
@@ -76,6 +79,7 @@ command = "HERDR_ENV=1 ~/.local/bin/herdr-fork.sh right"
 key = "alt+f"
 type = "shell"
 command = "~/.local/bin/herdr-open-claude-skills.sh"
+description = "Pick Claude skill"
 
 # Alt+Shift+H: フォーカス中のペインで claude-history プラグインの popup を開く。
 # 選択したプロンプト本文を picker.sh が `herdr pane send-text` で挿入する。
@@ -85,6 +89,7 @@ command = "~/.local/bin/herdr-open-claude-skills.sh"
 key = "alt+shift+h"
 type = "shell"
 command = "~/.local/bin/herdr-open-claude-history.sh"
+description = "Pick Claude prompt history"
 
 [experimental]
 switch_ascii_input_source_in_prefix = true
