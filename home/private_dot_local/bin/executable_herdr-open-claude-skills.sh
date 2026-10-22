@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # herdr の keybind (config.toml alt+f) から呼ばれるラッパー。
-# フォーカス中ペインの id と cwd を herdr pane list から解決し、
+# キーを押したペインの id（HERDR_ACTIVE_PANE_ID。手動実行時は HERDR_PANE_ID）と、
+# その foreground_cwd を herdr pane get から解決し、
 # claude-skills プラグインの popup を開く。
 #
 # picker 側 (home/private_dot_config/herdr/plugins/claude-skills/picker.sh) が
@@ -8,22 +9,20 @@
 
 set -uo pipefail
 
-# NUL 区切りで pane_id と cwd を受け取り、`read -d ''` で安全に取り込む。
-# cwd はユーザーがフォーカス中ペインで `cd` した任意のパスであり得るため、
-# `eval` で展開すると任意コード実行になり得る点に注意 (このスキーマで回避)。
-{
-  IFS= read -r -d '' pane
-  IFS= read -r -d '' cwd
-} < <(herdr pane list | python3 -c '
-import sys, json
-ps = json.load(sys.stdin)["result"]["panes"]
-p = next((x for x in ps if x.get("focused")), None)
-if p:
-    sys.stdout.write(p["pane_id"] + "\0")
-    sys.stdout.write((p.get("foreground_cwd") or p.get("cwd") or "") + "\0")
-') || true
+pane="${HERDR_ACTIVE_PANE_ID:-${HERDR_PANE_ID:-}}"
+[[ -z "$pane" ]] && exit 0
 
-[[ -z "${pane:-}" ]] && exit 0
+# NUL 区切りで cwd を受け取り、`read -d ''` で安全に取り込む。
+# cwd はユーザーがペインで `cd` した任意のパスであり得るため、
+# `eval` で展開すると任意コード実行になり得る点に注意 (このスキーマで回避)。
+# HERDR_ACTIVE_PANE_CWD はシェルの cwd でフォアグラウンドプロセスの cwd と意味が違うため使わない。
+{
+  IFS= read -r -d '' cwd || exit 0
+} < <(herdr pane get "$pane" 2>/dev/null | python3 -c '
+import sys, json
+p = json.load(sys.stdin)["result"]["pane"]
+sys.stdout.write((p.get("foreground_cwd") or p.get("cwd") or "") + "\0")
+' 2>/dev/null)
 
 herdr plugin pane open \
   --plugin claude-skills \
