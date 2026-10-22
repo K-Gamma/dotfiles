@@ -2,12 +2,12 @@ id = "claude-skills"
 name = "claude-skills"
 version = "0.1.0"
 min_herdr_version = "0.7.0"
-description = "~/.claude/skills 配下のスキルを fzf popup で選び、/<name> として呼び出し元ペインに挿入する"
+description = "~/.claude/skills と有効なプラグインのスキルを fzf popup で選び、/<name> として呼び出し元ペインに挿入する"
 platforms = ["linux", "macos"]
 
 # 選択結果は picker.sh 内で `herdr pane send-text` を使い、呼び出し元ペイン
 # (--env HERDR_ORIGIN_PANE=... で渡される) のコマンドラインへ挿入する。
-# 呼び出し元は herdr のキーバインド (config.toml の [[keys.command]] ctrl+f)。
+# 呼び出し元は herdr のキーバインド (config.toml の [[keys.command]] alt+f)。
 
 [[panes]]
 id = "picker"
