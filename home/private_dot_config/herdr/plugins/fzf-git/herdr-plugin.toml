@@ -1,7 +1,7 @@
 id = "fzf-git"
 name = "fzf-git"
 version = "0.1.0"
-min_herdr_version = "0.7.0"
+min_herdr_version = "0.7.4"
 description = "fzf-git.sh (files/branches/tags/... + PR/Issue) を herdr の popup ペインで実行するピッカー"
 platforms = ["linux", "macos"]
 

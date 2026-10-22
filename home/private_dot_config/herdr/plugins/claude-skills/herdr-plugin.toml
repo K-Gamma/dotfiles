@@ -1,7 +1,7 @@
 id = "claude-skills"
 name = "claude-skills"
 version = "0.1.0"
-min_herdr_version = "0.7.0"
+min_herdr_version = "0.7.4"
 description = "~/.claude/skills と有効なプラグインのスキルを fzf popup で選び、/<name> として呼び出し元ペインに挿入する"
 platforms = ["linux", "macos"]
 
