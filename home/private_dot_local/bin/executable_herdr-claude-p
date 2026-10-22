@@ -20,6 +20,9 @@
 #   v0.8.2 の挙動（start の busy 内蔵リトライ / 起動中 blocked の agent_not_ready /
 #   blocked 中 prompt の agent_blocked）に対応済み。v0.8.0〜0.8.1 でも動くが、
 #   これらのエラーコードは返らないだけで害はない。
+#   v0.9.4 以降の macOS は、シェルが canonical mode の間に長い引数（約1024バイト超）を
+#   渡すと agent_start_input_failed で拒否する（pane は汚れない）。busy と同じ期限付き
+#   リトライで吸収し、期限切れなら「引数が長すぎる」案内で失敗させる（Linux は検査なし）。
 #   依存: bash / jq / herdr のみ（他は sed・mktemp 等の標準ユーティリティ）。
 #   state・ログ・ロックの各ファイルは作らない。
 #
@@ -336,7 +339,7 @@ fi
 # 自体が busy を内蔵リトライするが、上限2秒・Unix のみ・--timeout が 3s超300s以下のとき
 # だけ（v0.8.2 ソース確認済み: src/cli/agent.rs PANE_SHELL_READINESS_RETRY_TIMEOUT）。
 # シェル初期化が2秒を超える環境の安全網として、この外側の期限付きリトライ（15秒）は
-# 残す。busy 以外のエラーは即座に失敗させる。
+# 残す。busy と canonical mode 起因の入力拒否（冒頭「前提」参照）以外のエラーは即座に失敗させる。
 START_RETRY_SEC=15
 start_args=(agent start "$NAME" --kind "$KIND" --pane "$pane_id")
 if ((${#AGENT_ARGS[@]} > 0)); then
@@ -344,17 +347,29 @@ if ((${#AGENT_ARGS[@]} > 0)); then
 fi
 start_rc=1
 start_out=""
+start_canon=0
 start_deadline=$((SECONDS + START_RETRY_SEC))
 while :; do
   if start_out=$(hd "${start_args[@]}"); then
     start_rc=0
     break
   fi
-  [[ "$(herdr_err_code)" == "agent_pane_busy" ]] || break
+  start_err_code=$(herdr_err_code)
+  start_canon=0
+  if [[ "$start_err_code" == "agent_start_input_failed" && "$(herdr_err_text)" == *"canonical mode"* ]]; then
+    start_canon=1
+  fi
+  [[ "$start_err_code" == "agent_pane_busy" || $start_canon -eq 1 ]] || break
   ((SECONDS < start_deadline)) || break
   sleep 0.5
 done
 if ((start_rc != 0)); then
+  if ((start_canon == 1)); then
+    warn "シェル起動中に引数が長すぎて拒否されました（macOS の canonical mode 制限）。引数を短くするか再実行してください: $(herdr_err_text)"
+    warn "pane を残しました pane=${pane_id}"
+    hint_cleanup
+    exit 1
+  fi
   if [[ "$(herdr_err_code)" == "agent_not_ready" ]]; then
     warn "起動中に blocked を検知しました（初回起動の trust/セットアップダイアログ等）。pane を開いてダイアログに応答してから再実行してください"
     warn "pane を残しました pane=${pane_id}"
